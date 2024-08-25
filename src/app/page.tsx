@@ -4,10 +4,10 @@ import { useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 // ---- Components ----
-import Controler from '@components/layouts/Controler';
-import PendingLog from '@components/layouts/PendingLog';
-import ConfirmedLogs from '@components/layouts/ConfirmedLogs';
-import VisitRepositoryButton from '@components/ui-parts/VisitRepositoryButton';
+import Controler from '@layouts/Controler';
+import PendingLogs from '@layouts/PendingLogs';
+import ConfirmedLogs from '@layouts/ConfirmedLogs';
+import VisitRepositoryButton from '@ui-parts/VisitRepositoryButton';
 
 export default function Home() {
   const [status, setStatus] = useState<AppStatus>('StandbyMode');
@@ -17,7 +17,7 @@ export default function Home() {
       <h1>DoneTimeLogger</h1>
       <p>がんばる社会人のための活動時間記録アプリ</p>
       <Controler status={status} />
-      <PendingLog status={status} />
+      <PendingLogs status={status} />
       <ConfirmedLogs status={status} />
       {/* ---- GitHub ---- */}
       <VisitRepositoryButton />
