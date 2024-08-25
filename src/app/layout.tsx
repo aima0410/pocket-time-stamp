@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
-import { Noto_Sans_JP } from "next/font/google";
-import "public/globals.css";
+import type { Metadata } from 'next';
+import { Noto_Sans_JP } from 'next/font/google';
+import 'public/globals.css';
 // import "public/reset.css";
 
-const notoSansJP = Noto_Sans_JP({ subsets: ["latin"] });
+const notoSansJP = Noto_Sans_JP({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Done Time Logger",
-  description: "がんばる社会人のための活動時間記録アプリです。",
+  title: 'Done Time Logger',
+  description: 'がんばる社会人のための活動時間記録アプリです。',
 };
 
 export default function RootLayout({
