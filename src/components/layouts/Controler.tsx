@@ -1,24 +1,18 @@
 'use client';
+import { link } from 'fs';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 
-export function StartTimeRecordPanel() {
+export function StartTimeRecordPanel({ activities }: { activities: Array<string> }) {
   return (
     <>
       <p>ボタンをクリックすると開始時刻が記録されます。記録内容はあとから編集可能です。</p>
       <ul>
-        <li>
-          <button>運動</button>
-        </li>
-        <li>
-          <button>語学学習</button>
-        </li>
-        <li>
-          <button>個人開発</button>
-        </li>
-        <li>
-          <button>読書</button>
-        </li>
+        {activities.map((activity) => (
+          <li>
+            <button>{activity}</button>
+          </li>
+        ))}
         <li>
           <button>+ 新規作成</button>
         </li>
@@ -51,13 +45,14 @@ export function CreateNewActivity() {
 
 interface Props {
   status: AppStatus;
+  activities: Array<string>;
 }
 
-export default function Controler({ status }: Props) {
+export default function Controler({ status, activities }: Props) {
   return (
     <section>
       <fieldset>
-        <StartTimeRecordPanel />
+        <StartTimeRecordPanel activities={activities} />
       </fieldset>
       {status === 'PlayMode' && <EndTimeRecordPanel />}
       {status === 'CreateActivityMode' && <CreateNewActivity />}

@@ -1,4 +1,4 @@
-export default function EditLog() {
+export default function EditLog({ activities }: { activities: Array<string> }) {
   return (
     <fieldset>
       <legend>編集</legend>
@@ -23,10 +23,9 @@ export default function EditLog() {
         <li>
           内容
           <select name="" id="">
-            <option value="運動">運動</option>
-            <option value="語学学習">語学学習</option>
-            <option value="個人開発">個人開発</option>
-            <option value="読書">読書</option>
+            {activities.map((activity) => (
+              <option value={activity}>{activity}</option>
+            ))}
           </select>
         </li>
         <li>

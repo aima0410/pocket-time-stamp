@@ -8,9 +8,10 @@ import IndividualPendingLog from '@ui-elements/IndividualPendingLog';
 
 interface Props {
   status: AppStatus;
+  activities: Array<string>;
 }
 
-export default function PendingLogs({ status }: Props) {
+export default function PendingLogs({ status, activities }: Props) {
   return (
     <section>
       <h2>未確定の活動記録</h2>
@@ -55,7 +56,7 @@ export default function PendingLogs({ status }: Props) {
           />
         </tbody>
       </table>
-      {status === 'EditLogMode' && <EditLog />}
+      {status === 'EditLogMode' && <EditLog activities={activities} />}
     </section>
   );
 }
