@@ -1,3 +1,5 @@
+'use client';
+
 export default function EditLog({ activities }: { activities: Array<string> }) {
   return (
     <fieldset>

@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';

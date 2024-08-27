@@ -1,3 +1,5 @@
+'use client';
+
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 // ---- Components ----
