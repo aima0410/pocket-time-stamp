@@ -15,6 +15,7 @@ export default function CreateNewActivity({
   activities,
   updateActivitiesState,
 }: Props) {
+  const [isComposing, setIsComposing] = useState(false);
   const [newActivity, setNewActivity] = useState('');
 
   const handleChangeNewActivityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,12 +34,12 @@ export default function CreateNewActivity({
     addNewActivity();
   };
 
-  const handleClickCloseModalButton = () => {
+  const handleClickCloseModal = () => {
     switchStatusState('StandbyMode');
   };
 
   return (
-    <section onClick={handleClickCloseModalButton}>
+    <section onClick={handleClickCloseModal}>
       <fieldset onClick={(e: React.MouseEvent<HTMLFieldSetElement>) => e.stopPropagation()}>
         <legend>活動内容の新規作成</legend>
         <input
@@ -46,9 +47,13 @@ export default function CreateNewActivity({
           name=""
           onClick={(e: React.MouseEvent<HTMLInputElement>) => e.stopPropagation()}
           onChange={handleChangeNewActivityInput}
-          onKeyDown={(e) => e.key === 'Enter' && addNewActivity()}
+          onCompositionStart={() => setIsComposing(true)}
+          onCompositionEnd={() => setIsComposing(false)}
+          onKeyDown={(e: React.KeyboardEvent) =>
+            e.key === 'Enter' && isComposing === false && addNewActivity()
+          }
         />
-        <button onClick={handleClickCloseModalButton}>キャンセル</button>
+        <button onClick={handleClickCloseModal}>キャンセル</button>
         <button onClick={handleClickAddButton}>追加</button>
       </fieldset>
     </section>
