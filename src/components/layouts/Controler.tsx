@@ -3,8 +3,8 @@
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 // ---- Components ----
-import StartTimeRecordPanel from './StartTimeRecordPanel';
-import EndTimeRecordPanel from './EndTimeRecordPanel';
+import StartTimeRecordPanel from '@ui-elements/StartTimeRecordPanel';
+import EndTimeRecordPanel from '@ui-elements/EndTimeRecordPanel';
 import CreateNewActivity from '@ui-elements/CreateNewActivity';
 
 interface Props {
