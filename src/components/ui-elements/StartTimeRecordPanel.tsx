@@ -9,10 +9,6 @@ interface Props {
 }
 
 export default function StartTimeRecordPanel({ activities, switchStatusState }: Props) {
-  const handleClickCreateNewActivityButton = () => {
-    switchStatusState('CreateActivityMode');
-  };
-
   return (
     <>
       <p>ボタンをクリックすると開始時刻が記録されます。記録内容はあとから編集可能です。</p>
@@ -23,7 +19,7 @@ export default function StartTimeRecordPanel({ activities, switchStatusState }: 
           </li>
         ))}
         <li>
-          <button onClick={handleClickCreateNewActivityButton}>+ 新規作成</button>
+          <button onClick={() => switchStatusState('CreateActivityMode')}>+ 新規作成</button>
         </li>
       </ul>
     </>
