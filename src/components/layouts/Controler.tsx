@@ -1,9 +1,19 @@
 'use client';
-import { link } from 'fs';
+
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 
-export function StartTimeRecordPanel({ activities }: { activities: Array<string> }) {
+export function StartTimeRecordPanel({
+  activities,
+  switchStatusState,
+}: {
+  activities: Array<string>;
+  switchStatusState: (newMode: AppStatus) => void;
+}) {
+  const handleClickCreateNewActivity = () => {
+    switchStatusState('CreateActivityMode');
+  };
+
   return (
     <>
       <p>ボタンをクリックすると開始時刻が記録されます。記録内容はあとから編集可能です。</p>
@@ -14,7 +24,7 @@ export function StartTimeRecordPanel({ activities }: { activities: Array<string>
           </li>
         ))}
         <li>
-          <button>+ 新規作成</button>
+          <button onClick={handleClickCreateNewActivity}>+ 新規作成</button>
         </li>
       </ul>
     </>
@@ -31,13 +41,26 @@ export function EndTimeRecordPanel() {
   );
 }
 
-export function CreateNewActivity() {
+export function CreateNewActivity({
+  switchStatusState,
+}: {
+  switchStatusState: (newMode: AppStatus) => void;
+}) {
+  const handleClickAddNewActivity = () => {
+    switchStatusState('StandbyMode');
+  };
+
+  const handleClickCloseModal = () => {
+    switchStatusState('StandbyMode');
+  };
+
   return (
-    <section>
+    <section onClick={handleClickCloseModal}>
       <fieldset>
         <legend>活動内容の新規作成</legend>
         <input type="text" name="" />
-        <button>追加</button>
+        <button onClick={handleClickCloseModal}>キャンセル</button>
+        <button onClick={handleClickAddNewActivity}>追加</button>
       </fieldset>
     </section>
   );
@@ -46,16 +69,19 @@ export function CreateNewActivity() {
 interface Props {
   status: AppStatus;
   activities: Array<string>;
+  switchStatusState: (newMode: AppStatus) => void;
 }
 
-export default function Controler({ status, activities }: Props) {
+export default function Controler({ status, activities, switchStatusState }: Props) {
   return (
     <section>
       <fieldset>
-        <StartTimeRecordPanel activities={activities} />
+        <StartTimeRecordPanel activities={activities} switchStatusState={switchStatusState} />
       </fieldset>
       {status === 'PlayMode' && <EndTimeRecordPanel />}
-      {status === 'CreateActivityMode' && <CreateNewActivity />}
+      {status === 'CreateActivityMode' && (
+        <CreateNewActivity switchStatusState={switchStatusState} />
+      )}
     </section>
   );
 }
