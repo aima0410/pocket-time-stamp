@@ -3,6 +3,7 @@ type AppStatus =
   | 'PlayMode'
   | 'DoneMode'
   | 'CreateActivityMode'
+  | 'EditActivitiesMode'
   | 'EditLogMode'
   | 'DeleteMode';
 
