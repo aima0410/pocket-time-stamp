@@ -55,7 +55,7 @@ export default function StartTimeRecordPanel({
                 }
               />
             ) : (
-              <button onClick={() => {}}>{activity}</button>
+              <button onClick={() => {switchStatusState('PlayMode')}}>{activity}</button>
             )}
             {activity !== activityUnderEditing && (
               <button
