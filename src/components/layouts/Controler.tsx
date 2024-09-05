@@ -23,9 +23,14 @@ export default function Controler({
   return (
     <section>
       <fieldset>
-        <StartTimeRecordPanel activities={activities} switchStatusState={switchStatusState} />
+        <StartTimeRecordPanel
+          activities={activities}
+          updateActivitiesState={updateActivitiesState}
+          status={status}
+          switchStatusState={switchStatusState}
+        />
       </fieldset>
-      {status === 'PlayMode' && <EndTimeRecordPanel />}
+      {status === 'PlayMode' && <EndTimeRecordPanel switchStatusState={switchStatusState} />}
       {status === 'CreateActivityMode' && (
         <CreateNewActivity
           switchStatusState={switchStatusState}
