@@ -6,3 +6,4 @@ out/
 public/
 package-lock.json
 next.config.js
+_backup
