@@ -1,14 +1,14 @@
 // ---- Components ----
-import DoneTimeLogger from '@layouts/DoneTimeLogger';
+import PocketTimeStamp from '@layouts/PocketTimeStamp';
 import VisitRepositoryButton from '@ui-parts/VisitRepositoryButton';
 
 export default function Home() {
   return (
     <main>
-      <h1>DoneTimeLogger</h1>
-      <p>がんばる社会人のための活動時間記録アプリ</p>
+      <h1>PocketTimeStamp</h1>
+      <p>タイムスタンプアプリ</p>
       {/* ---- アプリ ---- */}
-      <DoneTimeLogger />
+      <PocketTimeStamp />
       {/* ---- 外部リンク ---- */}
       <VisitRepositoryButton />
     </main>
