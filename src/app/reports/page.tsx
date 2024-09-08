@@ -2,9 +2,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Pocket Time Stamp',
+  title: 'レポート｜Pocket Time Stamp',
 };
 
-export default function Home() {
+export default function Reports() {
   return <></>;
 }
