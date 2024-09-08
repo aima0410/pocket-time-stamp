@@ -1,4 +1,4 @@
-export default function Reports() {
+export default function Histories() {
   return (
     <>
       <section></section>
