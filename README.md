@@ -3,12 +3,15 @@
 ```sh
 npx create-next-app@latest
 ```
-
-フレームワーク `Next.js（App Router）`
-言語 `TypeScript`
-スタイル `kuma-ui`
-フォント `next/font`
-画像 `next/image`
+| 項目 |  |
+| -- | -- |
+| フレームワーク | `Next.js（App Router）` |
+| 言語 | `TypeScript` |
+| スタイル | `kuma-ui` |
+| フォント | `next/font` |
+| 画像 | `next/image` |
+| ルーティング | `next/link` |
+| URL取得 | `next/navigation` |
 
 ## ディレクトリ構成
 ```sh
