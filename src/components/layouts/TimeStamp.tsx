@@ -3,8 +3,8 @@ import { useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 // ---- Components ----
-import StartTimerPanel from '@ui-elements/StartTimerPanel';
-import EndTimerPanel from '@ui-elements/EndTimerPanel';
+import StandbyPanel from '@ui-elements/StandbyPanel';
+import StampingPanel from '@ui-elements/StampingPanel';
 import EditActivityPanel from '@ui-elements/EditActivityPanel';
 
 interface Props {
@@ -35,7 +35,7 @@ export default function TimeStamp({
     <>
       <section>
         {appStatus === 'StandbyMode' && (
-          <StartTimerPanel
+          <StandbyPanel
             handleClickSwitchingAppStatus={handleClickSwitchingAppStatus}
             activities={activities}
             handleClickTimedActivity={handleClickTimedActivity}
@@ -43,7 +43,7 @@ export default function TimeStamp({
           />
         )}
         {appStatus === 'PlayMode' && (
-          <EndTimerPanel
+          <StampingPanel
             handleClickSwitchingAppStatus={handleClickSwitchingAppStatus}
             timedActivity={timedActivity}
             handleClickTimedActivity={handleClickTimedActivity}

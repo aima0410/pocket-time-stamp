@@ -62,7 +62,14 @@ export default function PocketTimeStamp() {
       <TabNav currentTab={currentTab} />
       <section>
         {currentTab === 'Home' && <Home />}
-        {/* {currentTab === 'CreateTimeStamp' && <TimeStamp />} */}
+        {currentTab === 'CreateTimeStamp' && (
+          <TimeStamp
+            appStatus={appStatus}
+            handleClickSwitchingAppStatus={handleClickSwitchingAppStatus}
+            activities={activities}
+            handleClickUpdateActivities={handleClickUpdateActivities}
+          />
+        )}
         {currentTab === 'RecentHistories' && <Histories />}
         {currentTab === 'Reports' && <Reports />}
         {currentTab === 'Collection' && <Collection />}
