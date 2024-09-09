@@ -22,7 +22,7 @@ export default function TabNav({ currentTab }: Props) {
     <nav>
       <ul>
         {tabList.map((tab) => (
-          <li>
+          <li key={tab.type}>
             <Link href={tab.url} className={currentTab === tab.type ? 'selected-tab' : ''}>
               {tab.name}
             </Link>
