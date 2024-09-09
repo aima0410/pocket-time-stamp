@@ -5,14 +5,12 @@ interface Props {
   handleClickSwitchingAppStatus: (newMode: AppStatus) => void;
   activities: Array<string>;
   handleClickTimedActivity: (newTimedActivity: string | null) => void;
-  handleClickEditedActivity: (newEditedActivity: string | null) => void;
 }
 
 export default function StandbyPanel({
   handleClickSwitchingAppStatus,
   activities,
   handleClickTimedActivity,
-  handleClickEditedActivity,
 }: Props) {
   const activitiesList = activities.map((activity) => {
     return (
@@ -32,7 +30,17 @@ export default function StandbyPanel({
   return (
     <>
       <section>
+        <h2>新規タイムスタンプを作成</h2>
         <ul>{activitiesList}</ul>
+        <a
+          href=""
+          onClick={(e) => {
+            e.preventDefault();
+            handleClickSwitchingAppStatus('EditActivitiesMode');
+          }}
+        >
+          アクティビティを編集する
+        </a>
       </section>
     </>
   );
