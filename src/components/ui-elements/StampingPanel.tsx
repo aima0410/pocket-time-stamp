@@ -17,7 +17,7 @@ export default function StampingPanel({
   timedActivity,
   trackTimedActivity,
 }: Props) {
-  // -------- state --------
+  // -------- useState：宣言 --------
   const [isHoverMessage, setIsHoverMessage] = useState(false);
   // {isHoverMessage && <p>記録後に履歴から編集できるよ！</p>}
   const [enteredEndTime, setEnteredEndTime] = useState<string>('');
@@ -30,31 +30,30 @@ export default function StampingPanel({
     restTime: undefined,
   });
 
-  // -------- set関数 --------
-  const updateEnteredEndTime = (latestEnteredEndTime: string) => {
-    setEnteredEndTime(latestEnteredEndTime);
-  };
-
-  const updateTimedLog = (newTimedLog: LogData) => {
-    setTimedLog(newTimedLog);
-  };
-
-  const handleMouseIsHoverMessage = (boo: boolean) => {
+  // -------- イベントハンドラ --------
+  const handleMouseHover = (boo: boolean) => {
     setIsHoverMessage(boo);
   };
 
-  // 終了時刻を現在時刻に
-  const handleClickNowTimeButton = () => {
+  const handleChangeEndTimeInput = (newEndTime: string) => {
+    setEnteredEndTime(newEndTime);
+  };
+
+  const handleClickGetNowTimeButton = () => {
     const currentDate = new Date();
     const nowTime = currentDate.toLocaleTimeString('ja-JP', {
       hour: '2-digit',
       minute: '2-digit',
     });
-    updateEnteredEndTime(nowTime);
+    setEnteredEndTime(nowTime);
   };
 
-  // 終了のスタンプボタン
-  const handleClickExitTimerButton = () => {
+  const handleClickCancelTimerButton = () => {
+    trackTimedActivity(null);
+    switchAppStatus('StandbyMode');
+  };
+
+  const handleClickCompleteTimerButton = () => {
     const endTime = enteredEndTime;
     const newLog = { ...timedLog, endTime: endTime };
 
@@ -68,7 +67,7 @@ export default function StampingPanel({
     switchAppStatus('StandbyMode');
   };
 
-  // -------- useEffect --------
+  // -------- useEffect：初回マウント時の処理 --------
   useEffect(() => {
     // ---- 日時 ----
     const currentDate = new Date();
@@ -90,7 +89,7 @@ export default function StampingPanel({
     };
 
     setEnteredEndTime(defaultEnteredEndTime);
-    updateTimedLog(newLog);
+    setTimedLog(newLog);
   }, []);
 
   // -------- JSX --------
@@ -99,10 +98,10 @@ export default function StampingPanel({
       <section>
         <table
           onMouseEnter={() => {
-            handleMouseIsHoverMessage(true);
+            handleMouseHover(true);
           }}
           onMouseLeave={() => {
-            handleMouseIsHoverMessage(false);
+            handleMouseHover(false);
           }}
         >
           <tbody>
@@ -126,20 +125,14 @@ export default function StampingPanel({
             type="time"
             value={enteredEndTime}
             onChange={(e) => {
-              updateEnteredEndTime(e.target.value);
+              const newEndTime = e.target.value;
+              handleChangeEndTimeInput(newEndTime);
             }}
           />
-          <button onClick={handleClickNowTimeButton}>いま</button>
+          <button onClick={handleClickGetNowTimeButton}>いま</button>
         </div>
-        <button
-          onClick={() => {
-            trackTimedActivity(null);
-            switchAppStatus('StandbyMode');
-          }}
-        >
-          キャンセル
-        </button>
-        <button onClick={handleClickExitTimerButton}>タイマー終了</button>
+        <button onClick={handleClickCancelTimerButton}>キャンセル</button>
+        <button onClick={handleClickCompleteTimerButton}>タイマー終了</button>
       </section>
     </>
   );
