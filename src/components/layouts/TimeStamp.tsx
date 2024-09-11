@@ -9,23 +9,24 @@ import EditActivityPanel from '@ui-elements/EditActivityPanel';
 
 interface Props {
   appStatus: AppStatus;
-  handleClickSwitchingAppStatus: (newMode: AppStatus) => void;
+  switchAppStatus: (newMode: AppStatus) => void;
   activities: Array<string>;
-  handleClickUpdateActivities: (newActivitiesList: Array<string>) => void;
+  updateActivities: (newActivitiesList: Array<string>) => void;
 }
 
 export default function TimeStamp({
   appStatus,
-  handleClickSwitchingAppStatus,
+  switchAppStatus,
   activities,
-  handleClickUpdateActivities,
+  updateActivities,
 }: Props) {
+  // ----  ----
   const [timedActivity, setTimedActivity] = useState<string | null>(null);
-  const [editedActivity, setEditedActivity] = useState<string | null>(null);
-
-  const handleClickTimedActivity = (newTimedActivity: string | null) => {
+  const trackTimedActivity = (newTimedActivity: string | null) => {
     setTimedActivity(newTimedActivity);
   };
+
+  const [editedActivity, setEditedActivity] = useState<string | null>(null);
 
   const handleClickEditedActivity = (newEditedActivity: string | null) => {
     setEditedActivity(newEditedActivity);
@@ -36,21 +37,20 @@ export default function TimeStamp({
       <section>
         {appStatus === 'StandbyMode' && (
           <StandbyPanel
-            handleClickSwitchingAppStatus={handleClickSwitchingAppStatus}
+            switchAppStatus={switchAppStatus}
             activities={activities}
-            handleClickTimedActivity={handleClickTimedActivity}
-            handleClickEditedActivity={handleClickEditedActivity}
+            trackTimedActivity={trackTimedActivity}
           />
         )}
-        {appStatus === 'PlayMode' && (
+        {appStatus === 'PlayMode' && timedActivity !== null && (
           <StampingPanel
-            handleClickSwitchingAppStatus={handleClickSwitchingAppStatus}
+            switchAppStatus={switchAppStatus}
             timedActivity={timedActivity}
-            handleClickTimedActivity={handleClickTimedActivity}
+            trackTimedActivity={trackTimedActivity}
           />
         )}
-        {appStatus === 'EditActivityMode' && (
-          <EditActivityPanel handleClickSwitchingAppStatus={handleClickSwitchingAppStatus} />
+        {appStatus === 'EditActivitiesMode' && (
+          <EditActivityPanel switchAppStatus={switchAppStatus} />
         )}
       </section>
     </>

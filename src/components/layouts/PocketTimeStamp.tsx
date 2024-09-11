@@ -19,7 +19,7 @@ import Collection from './Collection';
 export default function PocketTimeStamp() {
   // ---- アプリの操作ステータス ----
   const [appStatus, setAppStatus] = useState<AppStatus>('StandbyMode');
-  const handleClickSwitchingAppStatus = (newMode: AppStatus) => {
+  const switchAppStatus = (newMode: AppStatus) => {
     setAppStatus(newMode);
   };
 
@@ -44,7 +44,7 @@ export default function PocketTimeStamp() {
 
   // ---- アクティビティ ----
   const [activities, setActivities] = useState<Array<string>>(['運動', '読書', '個人開発']);
-  const handleClickUpdateActivities = (newActivitiesList: Array<string>) => {
+  const updateActivities = (newActivitiesList: Array<string>) => {
     setActivities(newActivitiesList);
   };
 
@@ -65,9 +65,9 @@ export default function PocketTimeStamp() {
         {currentTab === 'CreateTimeStamp' && (
           <TimeStamp
             appStatus={appStatus}
-            handleClickSwitchingAppStatus={handleClickSwitchingAppStatus}
+            switchAppStatus={switchAppStatus}
             activities={activities}
-            handleClickUpdateActivities={handleClickUpdateActivities}
+            updateActivities={updateActivities}
           />
         )}
         {currentTab === 'RecentHistories' && <Histories />}

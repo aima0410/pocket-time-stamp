@@ -2,23 +2,23 @@
 import AppStatus from 'src/types/AppStatus';
 
 interface Props {
-  handleClickSwitchingAppStatus: (newMode: AppStatus) => void;
+  switchAppStatus: (newMode: AppStatus) => void;
   activities: Array<string>;
-  handleClickTimedActivity: (newTimedActivity: string | null) => void;
+  trackTimedActivity: (newTimedActivity: string | null) => void;
 }
 
 export default function StandbyPanel({
-  handleClickSwitchingAppStatus,
+  switchAppStatus,
   activities,
-  handleClickTimedActivity,
+  trackTimedActivity,
 }: Props) {
   const activitiesList = activities.map((activity) => {
     return (
       <li key={activity}>
         <button
           onClick={() => {
-            handleClickTimedActivity(activity);
-            handleClickSwitchingAppStatus('PlayMode');
+            trackTimedActivity(activity);
+            switchAppStatus('PlayMode');
           }}
         >
           {activity}
@@ -36,7 +36,7 @@ export default function StandbyPanel({
           href=""
           onClick={(e) => {
             e.preventDefault();
-            handleClickSwitchingAppStatus('EditActivitiesMode');
+            switchAppStatus('EditActivitiesMode');
           }}
         >
           アクティビティを編集する

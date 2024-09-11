@@ -2,16 +2,16 @@
 import AppStatus from 'src/types/AppStatus';
 
 interface Props {
-  handleClickSwitchingAppStatus: (newMode: AppStatus) => void;
+  switchAppStatus: (newMode: AppStatus) => void;
 }
 
-export default function EditActivityPanel({ handleClickSwitchingAppStatus }: Props) {
+export default function EditActivityPanel({ switchAppStatus }: Props) {
   return (
     <>
       <section>
         <button
           onClick={() => {
-            handleClickSwitchingAppStatus('StandbyMode');
+            switchAppStatus('StandbyMode');
           }}
         >
           完了
