@@ -26,12 +26,6 @@ export default function TimeStamp({
     setTimedActivity(newTimedActivity);
   };
 
-  const [editedActivity, setEditedActivity] = useState<string | null>(null);
-
-  const handleClickEditedActivity = (newEditedActivity: string | null) => {
-    setEditedActivity(newEditedActivity);
-  };
-
   return (
     <>
       <section>
@@ -50,7 +44,11 @@ export default function TimeStamp({
           />
         )}
         {appStatus === 'EditActivitiesMode' && (
-          <EditActivityPanel switchAppStatus={switchAppStatus} />
+          <EditActivityPanel
+            switchAppStatus={switchAppStatus}
+            activites={activities}
+            updateActivities={updateActivities}
+          />
         )}
       </section>
     </>
