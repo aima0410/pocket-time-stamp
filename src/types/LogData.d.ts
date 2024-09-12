@@ -1,10 +1,10 @@
 type LogData = {
-  date: string | undefined;
-  dayOfWeek: number | undefined;
-  activity: string | undefined;
-  startTime: string | undefined;
-  endTime: string | undefined;
-  restTime: string | undefined;
+  date: string;
+  dayOfWeek: number;
+  activity: string | null;
+  startTime: string;
+  endTime: string;
+  restTime: number;
 };
 
 export default LogData;
