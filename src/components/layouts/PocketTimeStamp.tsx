@@ -17,7 +17,6 @@ import TimeStamp from '@layouts/TimeStamp';
 import Histories from '@layouts/Histories';
 import Reports from '@layouts/Reports';
 import Collection from './Collection';
-import { trackDynamicDataAccessed } from 'next/dist/server/app-render/dynamic-rendering';
 
 // ========== コンポーネント関数 ==========
 export default function PocketTimeStamp() {
@@ -83,7 +82,13 @@ export default function PocketTimeStamp() {
             updateActivities={updateActivities}
           />
         )}
-        {currentTab === 'RecentHistories' && <Histories />}
+        {currentTab === 'RecentHistories' && (
+          <Histories
+            appStatus={appStatus}
+            switchAppStatus={switchAppStatus}
+            activities={activities}
+          />
+        )}
         {currentTab === 'Reports' && <Reports />}
         {currentTab === 'Collection' && <Collection />}
       </section>
