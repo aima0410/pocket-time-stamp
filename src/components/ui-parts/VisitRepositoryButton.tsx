@@ -1,6 +1,6 @@
 // ---- Images ----
 import Image from 'next/image';
-import githubLogo from '@assets/githubLogo.svg';
+import githubLogo from '@images/githubLogo.svg';
 
 export default function VisitRepositoryButton() {
   return (
@@ -42,7 +42,7 @@ export default function VisitRepositoryButton() {
         //   }
         // `}
         >
-          <Image src={githubLogo} alt="GitHubのロゴマーク" />
+          <Image src={githubLogo} alt="GitHubのロゴマーク" width={50} height={50} />
         </button>
       </a>
     </article>
