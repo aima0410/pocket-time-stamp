@@ -1,26 +1,34 @@
 // ---- Types ----
-import PokemonName from 'src/types/PokemonName';
+import DefaultPokemonName from 'src/types/PokemonName';
 
 // 取得したいポケモンの名前リスト
-const pokemonNamesList: Array<PokemonName> = [
-  'ralts',
-  'kirlia',
-  'gardevoir',
-  'cyndaquil',
-  'quilava',
-  'typhlosion',
-  'gastly',
-  'haunter',
-  'gengar',
-  'aron',
-  'lairon',
-  'aggron',
-  'piplup',
-  'prinplup',
-  'empoleon',
-  'gible',
-  'gabite',
-  'garchomp',
-];
+// export const pokemonNameList: Array<PokemonName> = [
+//   'ralts',
+//   'kirlia',
+//   'gardevoir',
+//   'cyndaquil',
+//   'quilava',
+//   'typhlosion',
+//   'gastly',
+//   'haunter',
+//   'gengar',
+//   'aron',
+//   'lairon',
+//   'aggron',
+//   'piplup',
+//   'prinplup',
+//   'empoleon',
+//   'gible',
+//   'gabite',
+//   'garchomp',
+// ];
 
-export default pokemonNamesList;
+const defaultPokemonNameList: Array<DefaultPokemonName> = [
+  'ralts',
+  'cyndaquil',
+  'gastly',
+  'aron',
+  'piplup',
+  'gible',
+];
+export default defaultPokemonNameList;
