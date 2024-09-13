@@ -5,7 +5,7 @@ interface Pokemon {
   japaneseName: string;
   url: string;
   imageUrl: string;
-  evolutionChain: Array<string | null>;
+  evolutionChain: Array<string>;
 }
 
 export default Pokemon;
