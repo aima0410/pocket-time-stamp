@@ -47,12 +47,12 @@ export default function Collection({
       <ul>
         {collectionDataList.map((pokemon) => (
           <li
-            key={pokemon.name}
+            key={pokemon.id}
             onClick={() => {
               trackSelectedPokemon(pokemon.name);
             }}
           >
-            <Image src={pokemon.imageUrl} alt={pokemon.name} width={50} height={50} />
+            <Image src={pokemon.imageUrl} alt={pokemon.japaneseName} width={50} height={50} />
             <h3>{pokemon.japaneseName}</h3>
             <p>レベル{pokemon.level}</p>
           </li>
