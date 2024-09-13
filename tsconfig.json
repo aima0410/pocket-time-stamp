@@ -24,7 +24,8 @@
       "@layouts/*": ["src/components/layouts/*"],
       "@ui-elements/*": ["src/components/ui-elements/*"],
       "@ui-parts/*": ["src/components/ui-parts/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@images/*": ["src/assets/images/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "dist/types/**/*.ts"],
