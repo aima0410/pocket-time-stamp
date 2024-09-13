@@ -110,7 +110,7 @@ export default function PocketTimeStamp() {
       </div>
       <TabNav currentTab={currentTab} />
       <section>
-        {currentTab === 'Home' && <Home />}
+        {currentTab === 'Home' && <Home collectionDataList={collectionDataList} />}
         {currentTab === 'CreateTimeStamp' && (
           <TimeStamp
             appStatus={appStatus}

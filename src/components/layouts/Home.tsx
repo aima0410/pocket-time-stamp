@@ -1,20 +1,48 @@
 // ---- Next ----
 import Image from 'next/image';
-// ---- Images ----
+// ---- React ----
+import { useEffect, useState } from 'react';
 // ---- Components ----
 import Message from '@ui-parts/Message';
 import IdealTimeLine from '@ui-parts/IdealTimeLine';
+// ---- Types ----
+import CollectionData from 'src/types/CollectionData';
 
-export default function Home() {
+// ========== 型定義 ==========
+interface Props {
+  collectionDataList: Array<CollectionData>;
+}
+
+// ========== コンポーネント関数 ==========
+export default function Home({ collectionDataList }: Props) {
+  const [selectedPokemon, setSelectedPokemon] = useState<CollectionData | null>(null);
+
+  useEffect(() => {
+    if (collectionDataList) {
+      const nowSelect = collectionDataList.find((collection) => collection.selected === true);
+      nowSelect && setSelectedPokemon(nowSelect);
+    }
+  }, [collectionDataList]);
   return (
     <>
       Home
-      { <Message />}
+      {<Message />}
       <div>
-        {/* <Image src={} alt={} /> */}
-        <h3>ポケモン</h3>
-        <p>レベル30</p>
-        <div>グラフ</div>
+        {selectedPokemon ? (
+          <>
+            <Image
+              src={selectedPokemon.imageUrl}
+              alt={selectedPokemon.japaneseName}
+              width={100}
+              height={100}
+            />
+            <h3>{selectedPokemon.japaneseName}</h3>
+            <p>レベル{selectedPokemon.level}</p>
+            <div>経験値{selectedPokemon.XP}</div>
+          </>
+        ) : (
+          <p>Now Loading...</p>
+        )}
       </div>
       <IdealTimeLine />
     </>
