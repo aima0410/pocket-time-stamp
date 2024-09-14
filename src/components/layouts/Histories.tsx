@@ -12,34 +12,38 @@ interface Props {
   appStatus: AppStatus;
   switchAppStatus: (newMode: AppStatus) => void;
   activities: Array<string>;
+  logs: Array<LogData>;
+  updateLogs: (newLogs: Array<LogData>) => void;
 }
 
 // ========== コンポーネント関数 ==========
-export default function Histories({ appStatus, switchAppStatus, activities }: Props) {
+export default function Histories({ appStatus, switchAppStatus, activities, logs, updateLogs }: Props) {
   // -------- useState：宣言 --------
-  const [logs, setLogs] = useState<Array<LogData>>([]);
-  const [editedLog, setEditedLog] = useState<LogData>();
+  const [editedLog, setEditedLog] = useState<LogData | null>(null);
 
   // -------- useState：stateの更新管理 --------
   const trackEditedLog = (targetLog: LogData) => {
     setEditedLog(targetLog);
   };
 
-  // -------- useEffect：初回マウント時の処理 --------
-  useEffect(() => {
-    const storedLogs = localStorage.getItem('logs');
-    if (storedLogs) {
-      const existLogs = JSON.parse(storedLogs);
-      setLogs(existLogs);
-    }
-  }, []);
-
   return (
     <>
       <section>
-        <LogsTable switchAppStatus={switchAppStatus} logs={logs} trackEdtidLog={trackEditedLog} />
-        {appStatus === 'EditLogMode' && (
-          <EditLogPanel activities={activities} switchAppStatus={switchAppStatus} />
+        <LogsTable
+          switchAppStatus={switchAppStatus}
+          logs={logs}
+          updateLogs={updateLogs}
+          trackEdtidLog={trackEditedLog}
+        />
+        {appStatus === 'EditLogMode' && editedLog && (
+          <EditLogPanel
+            activities={activities}
+            switchAppStatus={switchAppStatus}
+            logs={logs}
+            updateLogs={updateLogs}
+            editedLog={editedLog}
+            trackEditedLog={trackEditedLog}
+          />
         )}
       </section>
     </>

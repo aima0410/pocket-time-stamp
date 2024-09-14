@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 import Tab from 'src/types/Tab';
+import LogData from 'src/types/LogData';
 import CollectionData from 'src/types/CollectionData';
 // ---- Utils ----
 import getCurrentTab from 'src/utils/getCurrentTab';
@@ -29,6 +30,7 @@ export default function PocketTimeStamp() {
   // -------- useState：宣言 --------
   const [appStatus, setAppStatus] = useState<AppStatus>('StandbyMode');
   const [activities, setActivities] = useState<Array<string>>([]);
+  const [logs, setLogs] = useState<Array<LogData>>([]);
   const [pokemonList, setPokemonList] = useState<Array<Pokemon>>([]);
   const [collectionDataList, setCollectionDataList] = useState<Array<CollectionData>>([]);
 
@@ -47,6 +49,9 @@ export default function PocketTimeStamp() {
       localStorage.setItem('activities', JSON.stringify(newActivitiesList));
       setActivities(newActivitiesList);
     }
+  };
+  const updateLogs = (newLogs: Array<LogData>) => {
+    setLogs(newLogs);
   };
   const getPokemonList = (pokemonList: Array<Pokemon>) => {
     setPokemonList(pokemonList);
@@ -70,18 +75,6 @@ export default function PocketTimeStamp() {
 
   // -------- useEffect：初回マウント時の処理 ---------
   useEffect(() => {
-    // ---- アクティビティのデータセット ----
-    const storedActivities = localStorage.getItem('activities');
-    if (storedActivities) {
-      const activities = JSON.parse(storedActivities);
-      setActivities(activities);
-    } else {
-      // 初期のデモデータをセット
-      const activities = ['運動', '読書', '雑用'];
-      localStorage.setItem('activities', JSON.stringify(activities));
-      setActivities(activities);
-    }
-
     // ---- ポケモンのデータセット ----
     const storedPokemonList = localStorage.getItem('pokemonList');
     const storedCollectionDataList = localStorage.getItem('collectionDataList');
@@ -95,8 +88,28 @@ export default function PocketTimeStamp() {
       // なし：PokemonAPIからデータを取得してセット
       fetchPokemonList(defaultPokemonNameList, getPokemonList, getCollectionDataList);
     }
+
+    // ---- ログデータのセット ----
+    const storedLogs = localStorage.getItem('logs');
+    if (storedLogs) {
+      const existLogs = JSON.parse(storedLogs);
+      setLogs(existLogs);
+    }
+
+    // ---- アクティビティのデータセット ----
+    const storedActivities = localStorage.getItem('activities');
+    if (storedActivities) {
+      const activities = JSON.parse(storedActivities);
+      setActivities(activities);
+    } else {
+      // 初期のデモデータをセット
+      const activities = ['運動', '読書', '雑用'];
+      localStorage.setItem('activities', JSON.stringify(activities));
+      setActivities(activities);
+    }
   }, []);
 
+  // -------- JSX --------
   return (
     <>
       <h2>
@@ -124,9 +137,11 @@ export default function PocketTimeStamp() {
             appStatus={appStatus}
             switchAppStatus={switchAppStatus}
             activities={activities}
+            logs={logs}
+            updateLogs={updateLogs}
           />
         )}
-        {currentTab === 'Reports' && <Reports />}
+        {currentTab === 'Reports' && <Reports logs={logs} updateLogData={updateLogs} />}
         {currentTab === 'Collection' && (
           <Collection
             pokemonList={pokemonList}
