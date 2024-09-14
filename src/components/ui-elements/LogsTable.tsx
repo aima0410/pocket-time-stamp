@@ -8,10 +8,26 @@ import { calculateWorkingTime } from '@utils/calculateTimeUtils';
 interface Props {
   switchAppStatus: (newMode: AppStatus) => void;
   logs: Array<LogData>;
+  updateLogs: (newLogs: Array<LogData>) => void;
   trackEdtidLog: (targetLog: LogData) => void;
 }
 
-export default function LogsTable({ switchAppStatus, logs, trackEdtidLog }: Props) {
+export default function LogsTable({ switchAppStatus, logs, updateLogs, trackEdtidLog }: Props) {
+  // --------- イベントハンドラ --------
+  const handleClickDeleteButton = (logToDelete: LogData) => {
+    if (window.confirm(`本当に削除しますか？`)) {
+      const newLogs = logs.filter((existLog) => {
+        const existData = `${existLog.date} ${existLog.startTime}`;
+        const toDeleteData = `${logToDelete.date} ${logToDelete.startTime}`;
+        return existData !== toDeleteData;
+      });
+
+      updateLogs(newLogs);
+      localStorage.setItem('logs', JSON.stringify(newLogs));
+    }
+  };
+
+  // -------- JSX --------
   return (
     <>
       <table>
@@ -47,7 +63,13 @@ export default function LogsTable({ switchAppStatus, logs, trackEdtidLog }: Prop
                 </button>
               </td>
               <td>
-                <button onClick={() => {}}>削除</button>
+                <button
+                  onClick={() => {
+                    handleClickDeleteButton(log);
+                  }}
+                >
+                  削除
+                </button>
               </td>
             </tr>
           ))}
