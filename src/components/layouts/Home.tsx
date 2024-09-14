@@ -15,6 +15,7 @@ interface Props {
 
 // ========== コンポーネント関数 ==========
 export default function Home({ collectionDataList }: Props) {
+  // -------- useState：宣言 --------
   const [selectedPokemon, setSelectedPokemon] = useState<CollectionData | null>(null);
 
   useEffect(() => {
