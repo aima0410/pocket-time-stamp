@@ -36,5 +36,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# KumaUI
+.kuma
+
 # my ignore
 _backup
