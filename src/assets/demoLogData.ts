@@ -1,8 +1,8 @@
 // ---- Types ----
-import { DayData, MonthData, TotalData } from 'src/types/ReportsData';
+import { DailyData, MonthlyData, TotalData } from 'src/types/ReportsData';
 
 // ========== 日ごと ==========
-export const demoLogsData: Array<DayData> = [
+export const demoDailyData: Array<DailyData> = [
   // -------- 9月分の記録 --------
   {
     date: '2024/09/19',
@@ -372,10 +372,10 @@ export const demoLogsData: Array<DayData> = [
 ];
 
 // ========== 月ごと ==========
-export const monthlyData: Array<MonthData> = [
+export const demoMonthlyData: Array<MonthlyData> = [
   {
     date: '2024/09',
-    MonthData: [
+    recordedTime: [
       { activity: '睡眠', totalTime: 69.5 },
       { activity: '仕事', totalTime: 67 },
       { activity: '学習', totalTime: 11.5 },
@@ -388,7 +388,7 @@ export const monthlyData: Array<MonthData> = [
   },
   {
     date: '2024/08',
-    MonthData: [
+    recordedTime: [
       { activity: '睡眠', totalTime: 100.5 },
       { activity: '仕事', totalTime: 97.5 },
       { activity: '食事', totalTime: 18 },
@@ -400,7 +400,7 @@ export const monthlyData: Array<MonthData> = [
   },
   {
     date: '2024/07',
-    MonthData: [
+    recordedTime: [
       { activity: '睡眠', totalTime: 95 },
       { activity: '仕事', totalTime: 93.5 },
       { activity: '食事', totalTime: 19 },
