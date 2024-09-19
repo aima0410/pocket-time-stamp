@@ -4,7 +4,7 @@ interface Line {
   activity: string;
 }
 
-export interface DayData {
+export interface DailyData {
   date: string;
   timeLine: Array<Line>;
 }
@@ -14,9 +14,9 @@ interface ActivityTime {
   totalTime: number;
 }
 
-export interface MonthData {
+export interface MonthlyData {
   date: string;
-  MonthData: Array<ActivityTime>;
+  recordedTime: Array<ActivityTime>;
 }
 
 export interface TotalData extends ActivityTime {}
