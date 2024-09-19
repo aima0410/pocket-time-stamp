@@ -1,18 +1,23 @@
 'use client';
 
 // ---- Next ----
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 // ---- React ----
 import { useEffect, useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 import Tab from 'src/types/Tab';
-import LogData from 'src/types/LogData';
+import { DailyData, MonthlyData, TotalData } from 'src/types/ReportsData';
+import Pokemon from 'src/types/Pokemon';
 import CollectionData from 'src/types/CollectionData';
 // ---- Utils ----
 import getCurrentTab from 'src/utils/getCurrentTab';
 import { fetchPokemonList } from '@utils/fetchPokemonDataUtils';
+import { sortPokemonCollection } from '@utils/sortUtils';
+import { createDemoCollection } from '@utils/createCollectionUtils';
 // ---- Components ----
+import Loading from '@layouts/Loading';
+import Tutorial from '@layouts/Tutorial';
 import TodayTimeLine from '@ui-parts/TodayTimeLine';
 import TabNav from '@layouts/TabNav';
 import Home from '@layouts/Home';
@@ -20,21 +25,35 @@ import TimeStamp from '@layouts/TimeStamp';
 import Histories from '@layouts/Histories';
 import Reports from '@layouts/Reports';
 import Collection from './Collection';
-// ---- Constant ----
+// ---- Constants ----
 import defaultPokemonNameList from '@assets/pokemonNamesList';
-import Pokemon from 'src/types/Pokemon';
-import { sortPokemonCollection } from '@utils/sortUtils';
+import { demoDailyData, demoMonthlyData, demoTotalData } from '@assets/demoLogData';
 
 // ========== コンポーネント関数 ==========
 export default function PocketTimeStamp() {
   // -------- useState：宣言 --------
+  const [isMounted, setIsMounted] = useState<Boolean>();
+  const [isTutorial, setIsTutorial] = useState<Boolean>(true);
+  const [isDemo, setIsDemo] = useState<Boolean>(false);
   const [appStatus, setAppStatus] = useState<AppStatus>('StandbyMode');
   const [activities, setActivities] = useState<Array<string>>([]);
-  const [logs, setLogs] = useState<Array<LogData>>([]);
+  // ---- ログ ----
+  const [dailyData, setDailyData] = useState<Array<DailyData>>([]);
+  const [monthlyData, setMonthlyData] = useState<Array<MonthlyData>>([]);
+  const [totalData, setTotalData] = useState<Array<TotalData>>([]);
+  // ---- ポケモン情報 ----
   const [pokemonList, setPokemonList] = useState<Array<Pokemon>>([]);
   const [collectionDataList, setCollectionDataList] = useState<Array<CollectionData>>([]);
 
   // -------- useState：stateの更新処理 --------
+  const toggleTutorialMode = (isTutorial: boolean) => {
+    setIsTutorial(isTutorial);
+  };
+
+  const toggleDemo = (isDemo: boolean) => {
+    setIsDemo(isDemo);
+  };
+
   const switchAppStatus = (newMode: AppStatus) => {
     setAppStatus(newMode);
   };
@@ -50,9 +69,18 @@ export default function PocketTimeStamp() {
       setActivities(newActivitiesList);
     }
   };
-  const updateLogs = (newLogs: Array<LogData>) => {
-    setLogs(newLogs);
+  const updateDailyData = (newData: Array<DailyData>) => {
+    setDailyData(newData);
+    !isDemo && localStorage.setItem('logs', JSON.stringify(newData));
   };
+  const updateMonthlyData = (newData: Array<MonthlyData>) => {
+    setMonthlyData(newData);
+    !isDemo && localStorage.setItem('MonthlylyData', JSON.stringify(newData));
+  };
+  const updateTotalData = (newData: Array<TotalData>) => {
+    setTotalData(newData);
+  };
+
   const getPokemonList = (pokemonList: Array<Pokemon>) => {
     setPokemonList(pokemonList);
   };
@@ -64,17 +92,38 @@ export default function PocketTimeStamp() {
 
   const updateCollectionDataList = (collectionDataList: Array<CollectionData>) => {
     const sortedCollectionDataList = sortPokemonCollection(collectionDataList);
-
-    localStorage.setItem('collectionDataList', JSON.stringify(sortedCollectionDataList));
     setCollectionDataList(sortedCollectionDataList);
+    !isDemo && localStorage.setItem('collectionDataList', JSON.stringify(sortedCollectionDataList));
   };
 
   // -------- usePathname：現在選択しているタブを追跡 --------
   const pathname = usePathname();
   const currentTab: Tab = getCurrentTab(pathname);
 
+  // -------- useRouter --------
+  const router = useRouter();
+
   // -------- useEffect：初回マウント時の処理 ---------
   useEffect(() => {
+    // ---- ログデータのセット ----
+    const storedDailyData = localStorage.getItem('dailyData');
+    const storedMonthlyData = localStorage.getItem('monthlyData');
+    const storedTotalData = localStorage.getItem('totalData');
+    if (storedDailyData && storedMonthlyData && storedTotalData) {
+      const existDailyData = JSON.parse(storedDailyData);
+      const existMonthlyData = JSON.parse(storedMonthlyData);
+      const existTotalData = JSON.parse(storedTotalData);
+      updateDailyData(existDailyData);
+      updateMonthlyData(existMonthlyData);
+      updateTotalData(existTotalData);
+      // チュートリアルOFF
+      toggleTutorialMode(false);
+    } else {
+      // チュートリアルON
+      router.push('/')
+      toggleTutorialMode(true);
+    }
+
     // ---- ポケモンのデータセット ----
     const storedPokemonList = localStorage.getItem('pokemonList');
     const storedCollectionDataList = localStorage.getItem('collectionDataList');
@@ -89,13 +138,6 @@ export default function PocketTimeStamp() {
       fetchPokemonList(defaultPokemonNameList, getPokemonList, getCollectionDataList);
     }
 
-    // ---- ログデータのセット ----
-    const storedLogs = localStorage.getItem('logs');
-    if (storedLogs) {
-      const existLogs = JSON.parse(storedLogs);
-      setLogs(existLogs);
-    }
-
     // ---- アクティビティのデータセット ----
     const storedActivities = localStorage.getItem('activities');
     if (storedActivities) {
@@ -103,54 +145,109 @@ export default function PocketTimeStamp() {
       setActivities(activities);
     } else {
       // 初期のデモデータをセット
-      const activities = ['運動', '読書', '雑用'];
+      const activities = [
+        '睡眠',
+        '食事',
+        '運動',
+        '学習',
+        '仕事',
+        '交流',
+        'アウトドア',
+        'SNS/動画/ゲーム',
+      ];
       localStorage.setItem('activities', JSON.stringify(activities));
       setActivities(activities);
     }
+
+    setTimeout(() => {
+      setIsMounted(true);
+    }, 600);
   }, []);
+
+  // -------- useEffect：デモモードON --------
+  useEffect(() => {
+    if (isDemo) {
+      // デモデータをセット
+      updateDailyData(demoDailyData);
+      updateMonthlyData(demoMonthlyData);
+      updateTotalData(demoTotalData);
+      const demoCollectionData = sortPokemonCollection(createDemoCollection(collectionDataList));
+      updateCollectionDataList(demoCollectionData);
+    }
+  }, [isDemo]);
 
   // -------- JSX --------
   return (
-    <>
+    <main>
+      {!isMounted && <Loading />}
       <h2>
         {appStatus}
         <br />
         {currentTab}
       </h2>
-      <div>
-        本日
-        <TodayTimeLine />
-      </div>
-      <TabNav currentTab={currentTab} />
-      <section>
-        {currentTab === 'Home' && <Home collectionDataList={collectionDataList} />}
-        {currentTab === 'CreateTimeStamp' && (
-          <TimeStamp
-            appStatus={appStatus}
-            switchAppStatus={switchAppStatus}
-            activities={activities}
-            updateActivities={updateActivities}
-          />
-        )}
-        {currentTab === 'RecentHistories' && (
-          <Histories
-            appStatus={appStatus}
-            switchAppStatus={switchAppStatus}
-            activities={activities}
-            logs={logs}
-            updateLogs={updateLogs}
-          />
-        )}
-        {currentTab === 'Reports' && <Reports logs={logs} updateLogData={updateLogs} />}
-        {currentTab === 'Collection' && (
-          <Collection
-            pokemonList={pokemonList}
-            collectionDataList={collectionDataList}
-            updateCollectionDataList={updateCollectionDataList}
-          />
-        )}
-      </section>
-    </>
+      {isTutorial ? (
+        <Tutorial toggleTutorialMode={toggleTutorialMode} toggleDemo={toggleDemo} />
+      ) : (
+        <>
+          {isDemo && (
+            <button
+              onClick={() => {
+                toggleDemo(false);
+                toggleTutorialMode(true);
+                router.push('/')
+              }}
+            >
+              デモOFF
+            </button>
+          )}
+          {isDemo && (
+            <button
+              onClick={() => {
+                toggleDemo(true);
+                router.push('/')
+              }}
+            >
+              デモON
+            </button>
+          )}
+          <div>
+            本日
+            <TodayTimeLine />
+          </div>
+          <TabNav currentTab={currentTab} />
+          <section>
+            {currentTab === 'Home' && <Home collectionDataList={collectionDataList} />}
+            {currentTab === 'CreateTimeStamp' && (
+              <TimeStamp
+                appStatus={appStatus}
+                switchAppStatus={switchAppStatus}
+                activities={activities}
+                updateActivities={updateActivities}
+              />
+            )}
+            {currentTab === 'RecentHistories' && (
+              <Histories
+                appStatus={appStatus}
+                switchAppStatus={switchAppStatus}
+                activities={activities}
+                dailyData={dailyData}
+                updateDailyData={updateDailyData}
+              />
+            )}
+            {currentTab === 'Reports' && (
+              <Reports dailyData={dailyData} monthlyData={monthlyData} totalData={totalData} />
+            )}
+            {currentTab === 'Collection' && (
+              <Collection
+                pokemonList={pokemonList}
+                collectionDataList={collectionDataList}
+                updateCollectionDataList={updateCollectionDataList}
+              />
+            )}
+          </section>
+        </>
+      )}
+    </main>
   );
 }
 
