@@ -5,6 +5,7 @@ import 'public/globals.css';
 
 import { KumaRegistry } from '@kuma-ui/next-plugin/registry';
 // ---- Components ----
+import Header from '@layouts/Header';
 import PocketTimeStamp from '@layouts/PocketTimeStamp';
 import VisitRepositoryButton from '@ui-parts/VisitRepositoryButton';
 
@@ -23,9 +24,11 @@ export default function RootLayout({
     <html lang="ja">
       <KumaRegistry>
         <body className={notoSansJP.className}>
-          {children}
+          <Header />
+          <PocketTimeStamp />
           {/* ---- 外部リンク ---- */}
           <VisitRepositoryButton />
+          {children}
         </body>
       </KumaRegistry>
     </html>
