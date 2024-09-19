@@ -2,8 +2,8 @@
 import CollectionData from 'src/types/CollectionData';
 import Pokemon from 'src/types/Pokemon';
 import DefaultPokemonName from 'src/types/PokemonName';
-import createDefaultCollectionDataList from './createDefaultCollectionDataList';
-import { sortPokemonCollection } from './sortUtils';
+import { createDefaultCollection } from '@utils/createCollectionUtils';
+import { sortPokemonCollection } from '@utils/sortUtils';
 
 const fetchPokemonData = async (name: DefaultPokemonName | string) => {
   try {
@@ -57,8 +57,7 @@ export const fetchPokemonList = async (
   getPokemonList(filteredPokemonDataList);
   localStorage.setItem('pokemonList', JSON.stringify(filteredPokemonDataList));
 
-  const defaultCollection = createDefaultCollectionDataList(filteredPokemonDataList);
-
+  const defaultCollection = createDefaultCollection(filteredPokemonDataList);
   const filteredDefaultCollection = defaultCollection.filter(
     (collection: CollectionData) => collection !== null,
   );
