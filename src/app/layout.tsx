@@ -23,16 +23,9 @@ export default function RootLayout({
     <html lang="ja">
       <KumaRegistry>
         <body className={notoSansJP.className}>
-          <header>
-            <h1>PocketTimeStamp</h1>
-            <p>タイムスタンプアプリ</p>
-          </header>
-          <main>
-            <PocketTimeStamp />
-            {/* ---- 外部リンク ---- */}
-            <VisitRepositoryButton />
-            {children}
-          </main>
+          {children}
+          {/* ---- 外部リンク ---- */}
+          <VisitRepositoryButton />
         </body>
       </KumaRegistry>
     </html>

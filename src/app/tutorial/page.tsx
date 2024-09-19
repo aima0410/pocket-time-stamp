@@ -1,8 +1,7 @@
 // ---- Next ----
 import { Metadata } from 'next';
 // ---- Components ----
-import Header from '@layouts/header';
-import PocketTimeStamp from '@layouts/PocketTimeStamp';
+import Tutorial from '@layouts/Tutorial';
 
 export const metadata: Metadata = {
   title: 'Pocket Time Stamp',
@@ -11,8 +10,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <Header />
-      <PocketTimeStamp />
+      <Tutorial />
     </>
   );
 }
