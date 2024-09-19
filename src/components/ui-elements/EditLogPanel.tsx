@@ -26,11 +26,9 @@ export default function EditLogPanel({
   // -------- useState：宣言 --------
   const [unconfirmedNewLog, setUnconfirmedNewLog] = useState<LogData>({
     date: editedLog.date,
-    dayOfWeek: editedLog.dayOfWeek,
     activity: editedLog.activity,
     startTime: editedLog.startTime,
     endTime: editedLog.endTime,
-    restTime: editedLog.restTime,
   });
 
   // -------- useState：stateの更新処理 --------
@@ -97,20 +95,6 @@ export default function EditLogPanel({
               onChange={(e) => {
                 const newEndTime = e.target.value;
                 const newLog = { ...unconfirmedNewLog, endTime: newEndTime };
-                updateUnconfirmedNewLog(newLog);
-              }}
-            />
-          </div>
-        </li>
-        <li>
-          <h3>休息タイム</h3>
-          <div>
-            <input
-              type="number"
-              value={unconfirmedNewLog.restTime}
-              onChange={(e) => {
-                const newRestTime = Number(e.target.value);
-                const newLog = { ...unconfirmedNewLog, restTime: newRestTime };
                 updateUnconfirmedNewLog(newLog);
               }}
             />

@@ -22,12 +22,10 @@ export default function StampingPanel({
   // {isHoverMessage && <p>記録後に履歴から編集できるよ！</p>}
   const [enteredEndTime, setEnteredEndTime] = useState<string>('');
   const [timedLog, setTimedLog] = useState<LogData>({
-    date: undefined,
-    dayOfWeek: undefined,
-    activity: undefined,
-    startTime: undefined,
-    endTime: undefined,
-    restTime: undefined,
+    date: '',
+    activity: '',
+    startTime: '',
+    endTime: '',
   });
 
   // -------- イベントハンドラ --------
@@ -71,19 +69,24 @@ export default function StampingPanel({
   useEffect(() => {
     // ---- 日時 ----
     const currentDate = new Date();
-    const date = currentDate.toLocaleDateString('ja-JP');
-    const dayOfWeek = currentDate.getDay();
+    const date = currentDate.toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
     const defaultTime = currentDate.toLocaleTimeString('ja-JP', {
       hour: '2-digit',
       minute: '2-digit',
     });
+    // ！！！！！ここで本当はログから前回の記録データを引っ張り出して、前回の終了時刻と今回の開始時刻が被らないようにしたい。
     const startTime = defaultTime;
+    // ！！！！！開始時刻より遅い時刻にしたい。
+    // ！！！！！23：59を超える場合はログを2つに分割したい。日付で分ける。
     const defaultEnteredEndTime = defaultTime;
 
     const newLog: LogData = {
       ...timedLog,
       date: date,
-      dayOfWeek: dayOfWeek,
       activity: timedActivity,
       startTime: startTime,
     };
