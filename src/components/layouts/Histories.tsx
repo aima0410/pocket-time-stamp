@@ -6,18 +6,25 @@ import LogData from 'src/types/LogData';
 // ---- Components ----
 import LogsTable from '@ui-elements/LogsTable';
 import EditLogPanel from '@ui-elements/EditLogPanel';
+import { DailyData } from 'src/types/ReportsData';
 
 // ========== 型定義 ==========
 interface Props {
   appStatus: AppStatus;
   switchAppStatus: (newMode: AppStatus) => void;
   activities: Array<string>;
-  logs: Array<LogData>;
-  updateLogs: (newLogs: Array<LogData>) => void;
+  dailyData: Array<DailyData>;
+  updateDailyData: (newData: Array<DailyData>) => void;
 }
 
 // ========== コンポーネント関数 ==========
-export default function Histories({ appStatus, switchAppStatus, activities, logs, updateLogs }: Props) {
+export default function Histories({
+  appStatus,
+  switchAppStatus,
+  activities,
+  dailyData,
+  updateDailyData,
+}: Props) {
   // -------- useState：宣言 --------
   const [editedLog, setEditedLog] = useState<LogData | null>(null);
 
@@ -31,16 +38,16 @@ export default function Histories({ appStatus, switchAppStatus, activities, logs
       <section>
         <LogsTable
           switchAppStatus={switchAppStatus}
-          logs={logs}
-          updateLogs={updateLogs}
-          trackEdtidLog={trackEditedLog}
+          dailyData={dailyData}
+          updateDailyData={updateDailyData}
+          trackEditedLog={trackEditedLog}
         />
         {appStatus === 'EditLogMode' && editedLog && (
           <EditLogPanel
             activities={activities}
             switchAppStatus={switchAppStatus}
-            logs={logs}
-            updateLogs={updateLogs}
+            dailyData={dailyData}
+            updateDailyData={updateDailyData}
             editedLog={editedLog}
             trackEditedLog={trackEditedLog}
           />

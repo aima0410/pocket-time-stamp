@@ -2,6 +2,7 @@
 import { useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
+import { DailyData } from 'src/types/ReportsData';
 // ---- Components ----
 import StandbyPanel from '@ui-elements/StandbyPanel';
 import StampingPanel from '@ui-elements/StampingPanel';
@@ -12,6 +13,8 @@ interface Props {
   switchAppStatus: (newMode: AppStatus) => void;
   activities: Array<string>;
   updateActivities: (newActivitiesList: Array<string>) => void;
+  dailyData: Array<DailyData>;
+  updateDailyData: (newData: Array<DailyData>) => void;
 }
 
 export default function TimeStamp({
@@ -19,6 +22,8 @@ export default function TimeStamp({
   switchAppStatus,
   activities,
   updateActivities,
+  dailyData,
+  updateDailyData,
 }: Props) {
   // ----  ----
   const [timedActivity, setTimedActivity] = useState<string | null>(null);
@@ -41,6 +46,8 @@ export default function TimeStamp({
             switchAppStatus={switchAppStatus}
             timedActivity={timedActivity}
             trackTimedActivity={trackTimedActivity}
+            dailyData={dailyData}
+            updateDailyData={updateDailyData}
           />
         )}
         {appStatus === 'EditActivitiesMode' && (

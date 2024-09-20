@@ -18,12 +18,15 @@ export default function Home({ collectionDataList }: Props) {
   // -------- useState：宣言 --------
   const [selectedPokemon, setSelectedPokemon] = useState<CollectionData | null>(null);
 
+  // -------- useEffect：現在選択中のポケモンを取得 --------
   useEffect(() => {
     if (collectionDataList) {
       const nowSelect = collectionDataList.find((collection) => collection.selected === true);
       nowSelect && setSelectedPokemon(nowSelect);
     }
   }, [collectionDataList]);
+
+  // -------- JSX --------
   return (
     <>
       Home

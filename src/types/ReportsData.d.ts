@@ -1,4 +1,4 @@
-interface Line {
+export interface Line {
   startTime: string;
   endTime: string;
   activity: string;
