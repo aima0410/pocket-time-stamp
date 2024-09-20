@@ -2,34 +2,31 @@
 import { useState, useEffect } from 'react';
 // ---- Types ----
 import ReportTab from 'src/types/ReportTab';
-import { DayData, MonthData, TotalData } from 'src/types/ReportsData';
+import { DailyData, MonthlyData, TotalData } from 'src/types/ReportsData';
 // ---- Components ----
 import DayReport from '@ui-elements/DayReports';
 import MonthReport from '@ui-elements/MonthReports';
 import TotalReport from '@ui-elements/TotalReport';
 
+// =========== 型定義 ==========
+interface Props {
+  dailyData: Array<DailyData>;
+  monthlyData: Array<MonthlyData>;
+  totalData: Array<TotalData>;
+}
+
 // =========== コンポーネント関数 ==========
-export default function Reports() {
+export default function Reports({ dailyData, monthlyData, totalData }: Props) {
   // -------- useState：宣言 --------
   const [selectedTab, setSelectedTab] = useState<ReportTab>('DayTab');
-  const [dayData, setDayData] = useState<Array<DayData>>([]);
-  const [monthData, setMonthData] = useState<Array<MonthData>>([]);
-  const [totalData, setTotalData] = useState<Array<TotalData>>([]);
 
   // -------- useState：更新処理 --------
   const trackSelectedTab = (nextTab: ReportTab) => {
     setSelectedTab(nextTab);
   };
 
-  const getReportsData = (Reports: any) => {};
-
-  // -------- useEffect：初回マウント時 --------
-  useEffect(() => {
-    const storedReports = localStorage.getItem('reportsData');
-    if (storedReports) {
-      getReportsData(JSON.parse(storedReports));
-    }
-  }, []);
+  // --------- useEffect：初回マウント時 --------
+  useEffect(() => {}, []);
 
   return (
     <>
