@@ -15,6 +15,7 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
   // -------- useState：宣言 --------
   const [editedActivity, setEdtiedActivity] = useState<string | null>(null);
   const [isCreateNewActivity, setIsCreateNewActivity] = useState(false);
+  const [isSameActivity, setIsSameActivity] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [isComposition, setIsComposition] = useState(false);
   const [unconfirmedActivityList, setUnconfirmedActivityList] = useState([...activites]);
@@ -29,10 +30,17 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
     if (window.confirm(`本当に「${activityToDelete}」を削除しますか？`)) {
       const newActivityList = unconfirmedActivityList.filter((a) => a !== activityToDelete);
       setUnconfirmedActivityList(newActivityList);
+      setEdtiedActivity(null);
     }
   };
 
   const handleChangeActivityInput = (newActivityName: string) => {
+    if (editedActivity !== newActivityName) {
+      const isSameData = unconfirmedActivityList.every((a) => a === newActivityName);
+      if (isSameData !== isSameActivity) {
+        setIsSameActivity(isSameData);
+      } //！！！！！！この処理未完成。同じアクティビティを登録できないようにしたい。
+    }
     setInputValue(newActivityName);
   };
 
@@ -44,15 +52,20 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
     const newActivityList = [...unconfirmedActivityList, inputValue];
     setUnconfirmedActivityList(newActivityList);
     setEdtiedActivity(null);
+    setInputValue('');
     setIsCreateNewActivity(false);
   };
 
   const handleClickUpdateButton = () => {
-    const newActivityList = unconfirmedActivityList.map((a) =>
-      a === editedActivity ? inputValue : a,
-    );
-    setUnconfirmedActivityList(newActivityList);
-    setEdtiedActivity(null);
+    if (inputValue === '' && editedActivity) {
+      handleClickDeleteButton(editedActivity);
+    } else {
+      const newActivityList = unconfirmedActivityList.map((a) =>
+        a === editedActivity ? inputValue : a,
+      );
+      setUnconfirmedActivityList(newActivityList);
+      setEdtiedActivity(null);
+    }
   };
 
   const handleClickCompleteButton = () => {
@@ -74,10 +87,15 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
                   onCompositionStart={() => setIsComposition(true)}
                   onCompositionEnd={() => setIsComposition(false)}
                   onKeyDown={(e) => {
-                    !isComposition && e.key === 'Enter' && handleClickUpdateButton();
+                    !isComposition &&
+                      e.key === 'Enter' &&
+                      isSameActivity &&
+                      handleClickUpdateButton();
                   }}
                 />
-                <button onClick={() => handleClickUpdateButton()}>更新</button>
+                <button onClick={handleClickUpdateButton} disabled={isSameActivity}>
+                  更新
+                </button>
                 <button onClick={handleClickCancelInputButton}>キャンセル</button>
               </li>
             ) : (
@@ -104,11 +122,19 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
                   onCompositionStart={() => setIsComposition(true)}
                   onCompositionEnd={() => setIsComposition(false)}
                   onKeyDown={(e) => {
-                    !isComposition && e.key === 'Enter' && handleClickAddButton();
+                    !isComposition &&
+                      e.key === 'Enter' &&
+                      inputValue !== '' &&
+                      handleClickAddButton();
                   }}
                   autoFocus
                 />
-                <button onClick={() => handleClickAddButton}>追加</button>
+                <button
+                  onClick={handleClickAddButton}
+                  disabled={inputValue === '' || isSameActivity}
+                >
+                  追加
+                </button>
                 <button
                   onClick={() => {
                     setEdtiedActivity(null);
