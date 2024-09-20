@@ -3,13 +3,16 @@ import { useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 import LogData from 'src/types/LogData';
+import { DailyData, Line } from 'src/types/ReportsData';
+// ---- Utils ----
+import { updateLogInDailyData } from '@utils/updateTimeLineUtils';
 
 // ========== 型定義 ==========
 interface Props {
   activities: Array<string>;
   switchAppStatus: (newMode: AppStatus) => void;
-  logs: Array<LogData>;
-  updateLogs: (newLogs: Array<LogData>) => void;
+  dailyData: Array<DailyData>;
+  updateDailyData: (newData: Array<DailyData>) => void;
   editedLog: LogData;
   trackEditedLog: (targetLog: LogData) => void;
 }
@@ -18,8 +21,8 @@ interface Props {
 export default function EditLogPanel({
   activities,
   switchAppStatus,
-  logs,
-  updateLogs,
+  dailyData,
+  updateDailyData,
   editedLog,
   trackEditedLog,
 }: Props) {
@@ -37,6 +40,13 @@ export default function EditLogPanel({
   };
 
   // -------- イベントハンドラ --------
+  const handleClickUpdateButton = () => {
+    // 新しいデータを作成
+    const newData = updateLogInDailyData(dailyData, unconfirmedNewLog, editedLog);
+    // 更新処理
+    updateDailyData(newData);
+    switchAppStatus('StandbyMode');
+  };
 
   // -------- JSX --------
   return (
@@ -101,22 +111,7 @@ export default function EditLogPanel({
           </div>
         </li>
       </ul>
-      <button
-        onClick={() => {
-          const existLogs = logs.filter((existLog) => {
-            const existData = `${existLog.date} ${existLog.startTime}`;
-            const toUpdateData = `${editedLog.date} ${editedLog.startTime}`;
-            return existData !== toUpdateData;
-          });
-          const newLogs = [...existLogs, unconfirmedNewLog];
-          localStorage.setItem('logs', JSON.stringify(newLogs));
-
-          updateLogs(newLogs);
-          switchAppStatus('StandbyMode');
-        }}
-      >
-        更新
-      </button>
+      <button onClick={handleClickUpdateButton}>更新</button>
       <button onClick={() => switchAppStatus('StandbyMode')}>キャンセル</button>
     </section>
   );

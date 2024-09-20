@@ -13,7 +13,7 @@ import CollectionData from 'src/types/CollectionData';
 // ---- Utils ----
 import getCurrentTab from 'src/utils/getCurrentTab';
 import { fetchPokemonList } from '@utils/fetchPokemonDataUtils';
-import { sortPokemonCollection } from '@utils/sortUtils';
+import { sortPokemonCollection, sortDailyDataByDate } from '@utils/sortUtils';
 import { createDemoCollection } from '@utils/createCollectionUtils';
 // ---- Components ----
 import Loading from '@layouts/Loading';
@@ -34,7 +34,7 @@ export default function PocketTimeStamp() {
   // -------- useState：宣言 --------
   const [isMounted, setIsMounted] = useState<Boolean>();
   const [isTutorial, setIsTutorial] = useState<Boolean>(true);
-  const [isDemo, setIsDemo] = useState<Boolean>(false);
+  const [isDemo, setIsDemo] = useState<boolean>(false);
   const [appStatus, setAppStatus] = useState<AppStatus>('StandbyMode');
   const [activities, setActivities] = useState<Array<string>>([]);
   // ---- ログ ----
@@ -69,14 +69,18 @@ export default function PocketTimeStamp() {
       setActivities(newActivitiesList);
     }
   };
+
   const updateDailyData = (newData: Array<DailyData>) => {
-    setDailyData(newData);
-    !isDemo && localStorage.setItem('logs', JSON.stringify(newData));
+    const sortedNewData = [...sortDailyDataByDate(newData)];
+    setDailyData(sortedNewData);
+    !isDemo && localStorage.setItem('dailyData', JSON.stringify(sortedNewData));
   };
+
   const updateMonthlyData = (newData: Array<MonthlyData>) => {
     setMonthlyData(newData);
     !isDemo && localStorage.setItem('MonthlylyData', JSON.stringify(newData));
   };
+
   const updateTotalData = (newData: Array<TotalData>) => {
     setTotalData(newData);
   };
@@ -120,7 +124,7 @@ export default function PocketTimeStamp() {
       toggleTutorialMode(false);
     } else {
       // チュートリアルON
-      router.push('/')
+      router.push('/');
       toggleTutorialMode(true);
     }
 
@@ -194,7 +198,7 @@ export default function PocketTimeStamp() {
               onClick={() => {
                 toggleDemo(false);
                 toggleTutorialMode(true);
-                router.push('/')
+                router.push('/');
               }}
             >
               デモOFF
@@ -204,7 +208,7 @@ export default function PocketTimeStamp() {
             <button
               onClick={() => {
                 toggleDemo(true);
-                router.push('/')
+                router.push('/');
               }}
             >
               デモON
@@ -223,6 +227,8 @@ export default function PocketTimeStamp() {
                 switchAppStatus={switchAppStatus}
                 activities={activities}
                 updateActivities={updateActivities}
+                dailyData={dailyData}
+                updateDailyData={updateDailyData}
               />
             )}
             {currentTab === 'RecentHistories' && (

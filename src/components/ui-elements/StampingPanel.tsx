@@ -3,12 +3,18 @@ import { useState, useEffect } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 import LogData from 'src/types/LogData';
+import { DailyData, Line } from 'src/types/ReportsData';
+// ---- Utils ----
+import { addLogToDailyData } from '@utils/updateTimeLineUtils';
+import { sortTimelineDescending } from '@utils/sortUtils';
 
 // ========== 型定義 ==========
 interface Props {
   switchAppStatus: (newMode: AppStatus) => void;
   timedActivity: string;
   trackTimedActivity: (newTimedActivity: string | null) => void;
+  dailyData: Array<DailyData>;
+  updateDailyData: (newData: Array<DailyData>) => void;
 }
 
 // ========== コンポーネント関数 ==========
@@ -16,6 +22,8 @@ export default function StampingPanel({
   switchAppStatus,
   timedActivity,
   trackTimedActivity,
+  dailyData,
+  updateDailyData,
 }: Props) {
   // -------- useState：宣言 --------
   const [isHoverMessage, setIsHoverMessage] = useState(false);
@@ -27,6 +35,15 @@ export default function StampingPanel({
     startTime: '',
     endTime: '',
   });
+
+  // -------- useState：更新関数 --------
+  const updateEnteredEndTime = (time: string) => {
+    setEnteredEndTime(time);
+  };
+
+  const trackTimedLogInfo = (newLog: LogData) => {
+    setTimedLog(newLog);
+  };
 
   // -------- イベントハンドラ --------
   const handleMouseHover = (boo: boolean) => {
@@ -52,15 +69,52 @@ export default function StampingPanel({
   };
 
   const handleClickCompleteTimerButton = () => {
-    const endTime = enteredEndTime;
-    const newLog = { ...timedLog, endTime: endTime };
+    const comparisonEndTime = new Date(
+      // 入力が'00:00'の場合はDateオブジェクト用に'24:00'に修正
+      `${timedLog.date} ${enteredEndTime === '00:00' ? '24:00' : enteredEndTime}`,
+    ).getTime();
+    const comparisonStartTime = new Date(`${timedLog.date} ${timedLog.startTime}`).getTime();
 
-    // ローカルストレージに保存
-    const storedLogs = localStorage.getItem('logs');
-    const logs = storedLogs ? JSON.parse(storedLogs) : [];
-    logs.push(newLog);
-    localStorage.setItem('logs', JSON.stringify(logs));
+    let endTime: string = enteredEndTime;
+    let newDailyData: Array<DailyData> = [...dailyData];
 
+    // もし終了時刻が開始時刻より早かった場合は「日付を超えた」と判定
+    if (comparisonEndTime < comparisonStartTime) {
+      if (window.confirm('終了時刻が日付を超えていますがよろしかったですか？')) {
+        window.alert('日付を超えた記録は翌日分に保存されました。');
+        // ---- 翌日分のログを作成 ----
+        const nextDate = new Date(timedLog.date);
+        nextDate.setDate(nextDate.getDate() + 1);
+        const nextDateString = nextDate.toLocaleDateString('ja-JP', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        });
+        // ---- 翌日分の新規ログ作成 ----
+        const newLog: LogData = {
+          ...timedLog,
+          date: nextDateString,
+          startTime: '00:00',
+          endTime: endTime,
+        };
+
+        // ---- 翌日分の新規ログをエントリデータに追加 ----
+        newDailyData = addLogToDailyData(dailyData, newLog);
+        endTime = '00:00';
+      } else {
+        return;
+      }
+    }
+    // ---- 本日分の新規ログ作成 ----
+    const newLog: LogData = { ...timedLog, endTime: endTime };
+
+    // ---- 本日分の新規ログをエントリデータに追加 ----
+    newDailyData = addLogToDailyData(newDailyData, newLog);
+
+    // ---- エントリデータを保存 ----
+    updateDailyData(newDailyData);
+
+    // ---- タイムスタンプ終了の後処理 ----
     trackTimedActivity(null);
     switchAppStatus('StandbyMode');
   };
@@ -68,6 +122,7 @@ export default function StampingPanel({
   // -------- useEffect：初回マウント時の処理 --------
   useEffect(() => {
     // ---- 日時 ----
+    // 現在の日時を取得
     const currentDate = new Date();
     const date = currentDate.toLocaleDateString('ja-JP', {
       year: 'numeric',
@@ -78,11 +133,26 @@ export default function StampingPanel({
       hour: '2-digit',
       minute: '2-digit',
     });
-    // ！！！！！ここで本当はログから前回の記録データを引っ張り出して、前回の終了時刻と今回の開始時刻が被らないようにしたい。
-    const startTime = defaultTime;
-    // ！！！！！開始時刻より遅い時刻にしたい。
-    // ！！！！！23：59を超える場合はログを2つに分割したい。日付で分ける。
-    const defaultEnteredEndTime = defaultTime;
+
+    // 現在の時刻より、終了時刻の遅いログを検出
+    const currentTime = currentDate.getTime();
+    // 日付が同じデータを検出
+    const targetData: DailyData | undefined = dailyData.find((data) => data.date === date);
+    let overlappingTimeLine: Array<Line> | undefined = undefined;
+
+    if (targetData) {
+      const filteredTargetTimeLine = targetData.timeLine.filter((log: Line) => {
+        const pastStartTime = new Date(`${date} ${log.startTime}`).getTime();
+        const pastEndTime = new Date(`${date} ${log.endTime}`).getTime();
+        return pastStartTime < currentTime && currentTime < pastEndTime;
+      }) as Array<Line> | undefined;
+      overlappingTimeLine = filteredTargetTimeLine
+        ? sortTimelineDescending(filteredTargetTimeLine)
+        : undefined;
+    }
+
+    // 開始時刻を「現在時刻」または「既存の最新ログの終了時刻」に設定
+    const startTime = overlappingTimeLine ? overlappingTimeLine[0].endTime : defaultTime;
 
     const newLog: LogData = {
       ...timedLog,
@@ -91,8 +161,8 @@ export default function StampingPanel({
       startTime: startTime,
     };
 
-    setEnteredEndTime(defaultEnteredEndTime);
-    setTimedLog(newLog);
+    updateEnteredEndTime(defaultTime);
+    trackTimedLogInfo(newLog);
   }, []);
 
   // -------- JSX --------
@@ -127,6 +197,7 @@ export default function StampingPanel({
           <input
             type="time"
             value={enteredEndTime}
+            min={timedLog.startTime}
             onChange={(e) => {
               const newEndTime = e.target.value;
               handleChangeEndTimeInput(newEndTime);
