@@ -29,7 +29,7 @@ export default function Histories({
   const [editedLog, setEditedLog] = useState<LogData | null>(null);
 
   // -------- useState：stateの更新管理 --------
-  const trackEditedLog = (targetLog: LogData) => {
+  const trackEditedLog = (targetLog: LogData | null) => {
     setEditedLog(targetLog);
   };
 
