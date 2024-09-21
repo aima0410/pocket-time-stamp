@@ -33,7 +33,9 @@ export const addLogToDailyData = (
       if (data.date === sameDateLog.date) {
         data.timeLine.unshift(newTimeLine);
         // 並び替え
-        data.timeLine = [...sortTimelineDescending(data.timeLine)];
+        const sortedTimeLine: Array<Line> = sortTimelineDescending(data.timeLine);
+        // 隣接したログの統合
+        data.timeLine = mergeAdjacentLogs(sortedTimeLine);
       }
     });
   } else {
@@ -67,3 +69,39 @@ export const exclusionSomeLogInDailyData = (
   }));
   return excludedData;
 };
+
+// --------------------
+
+/**
+ * 隣接するログをマージする関数
+ * @param timeLine ソート済みのタイムライン
+ * @returns マージされたタイムライン
+ */
+export function mergeAdjacentLogs(timeLine: Array<Line>): Array<Line> {
+  const mergedTimeLine: Array<Line> = [];
+
+  for (let i = 0; i < timeLine.length; i++) {
+    const currentLog = timeLine[i];
+
+    if (mergedTimeLine.length === 0) {
+      mergedTimeLine.push(currentLog);
+      continue;
+    }
+
+    const lastMergedLog = mergedTimeLine[mergedTimeLine.length - 1];
+
+    // 現在のログと直前のログのアクティビティが同じで、時間が連続している場合
+    if (
+      lastMergedLog.activity === currentLog.activity &&
+      lastMergedLog.startTime === currentLog.endTime
+    ) {
+      // ログをマージ
+      lastMergedLog.startTime = currentLog.startTime;
+    } else {
+      // マージできない場合は新しいログとして追加
+      mergedTimeLine.push(currentLog);
+    }
+  }
+
+  return mergedTimeLine;
+}
