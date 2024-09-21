@@ -48,28 +48,22 @@ export const addLogToDailyData = (
 // --------------------
 
 /**
- * 特定のログを除外して新しいログを追加する関数
+ * 特定のログを除外する関数
  * @param dailyData 既存の日次データ配列
- * @param newLog 追加する新しいログ
  * @param editedLog 除外する既存のログ
- * @returns 更新された日次データ配列
+ * @returns 特定のログを除外したデータ
  */
-
-export const updateLogInDailyData = (
+export const exclusionSomeLogInDailyData = (
   dailyData: Array<DailyData>,
-  newLog: LogData,
-  editedLog: LogData,
+  someLog: LogData,
 ): Array<DailyData> => {
-  // 既存のデータから編集対象のログを除外
-  const newData: Array<DailyData> = dailyData.map((data) => ({
+  const excludedData: Array<DailyData> = dailyData.map((data) => ({
     date: data.date,
     timeLine: data.timeLine.filter((log) => {
       const logDateTime = `${data.date} ${log.startTime}`;
-      const editedDateTime = `${editedLog.date} ${editedLog.startTime}`;
+      const editedDateTime = `${someLog.date} ${someLog.startTime}`;
       return logDateTime !== editedDateTime;
     }),
   }));
-
-  // 新しいログを追加
-  return addLogToDailyData(newData, newLog);
+  return excludedData;
 };
