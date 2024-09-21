@@ -70,8 +70,10 @@ export default function PocketTimeStamp() {
     }
   };
 
-  const updateDailyData = (newData: Array<DailyData>) => {
-    const sortedNewData = [...sortDailyDataByDate(newData)];
+  const updateDailyData = (newDailyData: Array<DailyData>) => {
+    const copiedDailyData: Array<DailyData> = JSON.parse(JSON.stringify(newDailyData));
+    const sortedNewData = sortDailyDataByDate(copiedDailyData);
+
     setDailyData(sortedNewData);
     !isDemo && localStorage.setItem('dailyData', JSON.stringify(sortedNewData));
   };

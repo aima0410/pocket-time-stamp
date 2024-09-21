@@ -76,7 +76,7 @@ export default function StampingPanel({
     const comparisonStartTime = new Date(`${timedLog.date} ${timedLog.startTime}`).getTime();
 
     let endTime: string = enteredEndTime;
-    let newDailyData: Array<DailyData> = [...dailyData];
+    let entryDailyData: Array<DailyData> = JSON.parse(JSON.stringify(dailyData));
 
     // もし終了時刻が開始時刻より早かった場合は「日付を超えた」と判定
     if (comparisonEndTime < comparisonStartTime) {
@@ -99,7 +99,7 @@ export default function StampingPanel({
         };
 
         // ---- 翌日分の新規ログをエントリデータに追加 ----
-        newDailyData = addLogToDailyData(dailyData, newLog);
+        entryDailyData = addLogToDailyData(dailyData, newLog);
         endTime = '00:00';
       } else {
         return;
@@ -109,10 +109,10 @@ export default function StampingPanel({
     const newLog: LogData = { ...timedLog, endTime: endTime };
 
     // ---- 本日分の新規ログをエントリデータに追加 ----
-    newDailyData = addLogToDailyData(newDailyData, newLog);
+    entryDailyData = addLogToDailyData(entryDailyData, newLog);
 
     // ---- エントリデータを保存 ----
-    updateDailyData(newDailyData);
+    updateDailyData(entryDailyData);
 
     // ---- タイムスタンプ終了の後処理 ----
     trackTimedActivity(null);

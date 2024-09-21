@@ -37,13 +37,17 @@ export function sortTimelineDescending(timeline: Array<Line>): Array<Line> {
 // ========================================
 /**
  * DailyDataの配列を日付順にソートする関数
- * @param dailyDataArray ソートするDailyDataの配列
+ * @param dailyData ソートするDailyDataの配列
  * @returns 日付順にソートされた新しいDailyDataの配列（最新のものが先頭）
  */
-export function sortDailyDataByDate(dailyDataArray: Array<DailyData>): Array<DailyData> {
-  return [...dailyDataArray].sort((a, b) => {
+export function sortDailyDataByDate(dailyData: Array<DailyData>): Array<DailyData> {
+  const copiedDailyData: Array<DailyData> = JSON.parse(JSON.stringify(dailyData));
+
+  const sortedDailyData: Array<DailyData> = copiedDailyData.sort((a, b) => {
     const dateA = new Date(a.date);
     const dateB = new Date(b.date);
     return dateB.getTime() - dateA.getTime(); // 降順（最新が先頭）
   });
+
+  return sortedDailyData;
 }
