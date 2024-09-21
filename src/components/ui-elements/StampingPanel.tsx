@@ -5,7 +5,7 @@ import AppStatus from 'src/types/AppStatus';
 import LogData from 'src/types/LogData';
 import { DailyData, Line } from 'src/types/ReportsData';
 // ---- Utils ----
-import { addLogToDailyData } from '@utils/updateTimeLineUtils';
+import { addLogToDailyData } from '@utils/timeLineUtils';
 import { sortTimelineDescending } from '@utils/sortUtils';
 
 // ========== 型定義 ==========
