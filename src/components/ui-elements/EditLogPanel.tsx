@@ -38,11 +38,13 @@ export default function EditLogPanel({
   const [timeWarning, setTimeWarning] = useState<string>('');
 
   // -------- useState：stateの更新処理 --------
+  // 未確認の新しいログを更新し、時間の検証を行う関数
   const updateUnconfirmedNewLog = (log: LogData) => {
     setUnconfirmedNewLog(log);
     validateTimes(log.startTime, log.endTime);
   };
 
+  // 現在の日付を設定する関数
   const fixCurrentDate = () => {
     const now = new Date();
     const currentDateJP = now.toLocaleDateString('ja-JP', {
@@ -53,7 +55,7 @@ export default function EditLogPanel({
     setCurrentDate(currentDateJP);
   };
 
-  // 時間の検証を行う関数
+  // 開始時間と終了時間の妥当性を検証する関数
   const validateTimes = (startTime: string, endTime: string) => {
     const start = new Date(`1970-01-01T${startTime}`);
     const end = new Date(`1970-01-01T${endTime}`);
@@ -65,6 +67,7 @@ export default function EditLogPanel({
   };
 
   // -------- イベントハンドラ --------
+  // 日付変更時のハンドラー
   const handleChangeDate = (date: string) => {
     const nowDate = new Date().getDate();
     const enteredDate = new Date(date).getDate();
@@ -77,59 +80,52 @@ export default function EditLogPanel({
     updateUnconfirmedNewLog(newLog);
   };
 
+  // 更新ボタンクリック時のハンドラー
   const handleClickUpdateButton = () => {
     const start = new Date(`${unconfirmedNewLog.date} ${unconfirmedNewLog.startTime}`);
-    const end = new Date(`${unconfirmedNewLog.date} ${unconfirmedNewLog.endTime}`);
+    const end = new Date(
+      `${unconfirmedNewLog.date} ${unconfirmedNewLog.endTime === '00:00' ? '24:00' : unconfirmedNewLog.endTime}`,
+    );
 
-    if (end < start) {
-      if (window.confirm('終了時刻が日付を超えていますが、よろしいですか？')) {
-        // 日付をまたぐ処理
-        const nextDay = new Date(start);
-        nextDay.setDate(nextDay.getDate() + 1);
-        const nextDayString = nextDay.toLocaleDateString('ja-JP', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-        });
+    // 既存のデータから編集対象のログを除外します
+    let entryDailyData = exclusionSomeLogInDailyData(dailyData, editedLog);
 
-        const midnightLog: LogData = {
-          ...unconfirmedNewLog,
-          endTime: '24:00',
-        };
-
-        const nextDayLog: LogData = {
-          ...unconfirmedNewLog,
-          date: nextDayString,
-          startTime: '00:00',
-        };
-
-        let updatedDailyData = exclusionSomeLogInDailyData(dailyData, editedLog);
-        updatedDailyData = insertLog({
-          unconfirmedNewLog: midnightLog,
-          existingDailyData: updatedDailyData,
-        });
-        updatedDailyData = insertLog({
-          unconfirmedNewLog: nextDayLog,
-          existingDailyData: updatedDailyData,
-        });
-
-        updateDailyData(updatedDailyData);
-        switchAppStatus('StandbyMode');
-        trackEditedLog(null);
-      }
-    } else {
-      // 新しいデータを作成
-      const existingDailyData = exclusionSomeLogInDailyData(dailyData, editedLog);
-      const insertedDailyData = insertLog({
-        unconfirmedNewLog: unconfirmedNewLog,
-        existingDailyData: existingDailyData,
+    if (end < start && window.confirm('終了時刻が日付を超えていますが、よろしいですか？')) {
+      // 日付をまたぐ場合の処理
+      const nextDay = new Date(start);
+      nextDay.setDate(nextDay.getDate() + 1);
+      const nextDayString = nextDay.toLocaleDateString('ja-JP', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
       });
 
-      // 更新処理
-      updateDailyData(insertedDailyData);
-      switchAppStatus('StandbyMode');
-      trackEditedLog(null);
+      // 日付をまたぐログを2つに分割します
+      const midnightLog: LogData = { ...unconfirmedNewLog, endTime: '00:00' };
+      const nextDayLog: LogData = {
+        ...unconfirmedNewLog,
+        date: nextDayString,
+        startTime: '00:00',
+      };
+
+      // 分割したログをそれぞれinsertLog関数で挿入します
+      entryDailyData = insertLog({
+        unconfirmedNewLog: midnightLog,
+        existingDailyData: entryDailyData,
+      });
+      entryDailyData = insertLog({
+        unconfirmedNewLog: nextDayLog,
+        existingDailyData: entryDailyData,
+      });
+    } else {
+      // 日付をまたがない通常の場合、そのままinsertLog関数で挿入します
+      entryDailyData = insertLog({ unconfirmedNewLog, existingDailyData: entryDailyData });
     }
+
+    // 更新されたデータを親コンポーネントに渡し、アプリの状態を更新します
+    updateDailyData(entryDailyData);
+    switchAppStatus('StandbyMode');
+    trackEditedLog(null);
   };
 
   // -------- useEffect --------
