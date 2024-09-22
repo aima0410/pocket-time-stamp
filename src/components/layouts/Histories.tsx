@@ -15,6 +15,7 @@ interface Props {
   activities: Array<string>;
   dailyData: Array<DailyData>;
   updateDailyData: (newData: Array<DailyData>) => void;
+  displayLogs: Array<LogData>;
 }
 
 // ========== コンポーネント関数 ==========
@@ -24,6 +25,7 @@ export default function Histories({
   activities,
   dailyData,
   updateDailyData,
+  displayLogs,
 }: Props) {
   // -------- useState：宣言 --------
   const [editedLog, setEditedLog] = useState<LogData | null>(null);
@@ -41,6 +43,7 @@ export default function Histories({
           dailyData={dailyData}
           updateDailyData={updateDailyData}
           trackEditedLog={trackEditedLog}
+          displayLogs={displayLogs}
         />
         {appStatus === 'EditLogMode' && editedLog && (
           <EditLogPanel

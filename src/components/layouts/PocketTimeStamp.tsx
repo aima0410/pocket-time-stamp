@@ -28,6 +28,7 @@ import Collection from './Collection';
 // ---- Constants ----
 import defaultPokemonNameList from '@assets/pokemonNamesList';
 import { demoDailyData, demoMonthlyData, demoTotalData } from '@assets/demoLogData';
+import LogData from 'src/types/LogData';
 
 // ========== コンポーネント関数 ==========
 export default function PocketTimeStamp() {
@@ -41,6 +42,7 @@ export default function PocketTimeStamp() {
   const [dailyData, setDailyData] = useState<Array<DailyData>>([]);
   const [monthlyData, setMonthlyData] = useState<Array<MonthlyData>>([]);
   const [totalData, setTotalData] = useState<Array<TotalData>>([]);
+  const [displayLogs, setDisplayLogs] = useState<Array<LogData>>([]);
   // ---- ポケモン情報 ----
   const [pokemonList, setPokemonList] = useState<Array<Pokemon>>([]);
   const [collectionDataList, setCollectionDataList] = useState<Array<CollectionData>>([]);
@@ -78,13 +80,14 @@ export default function PocketTimeStamp() {
     !isDemo && localStorage.setItem('dailyData', JSON.stringify(sortedNewData));
   };
 
-  const updateMonthlyData = (newData: Array<MonthlyData>) => {
-    setMonthlyData(newData);
-    !isDemo && localStorage.setItem('MonthlylyData', JSON.stringify(newData));
+  const updateMonthlyData = (newMonthlyData: Array<MonthlyData>) => {
+    setMonthlyData(newMonthlyData);
+    !isDemo && localStorage.setItem('MonthlyData', JSON.stringify(newMonthlyData));
   };
 
-  const updateTotalData = (newData: Array<TotalData>) => {
-    setTotalData(newData);
+  const updateTotalData = (newTotalData: Array<TotalData>) => {
+    setTotalData(newTotalData);
+    !isDemo && localStorage.setItem('totalData', JSON.stringify(newTotalData));
   };
 
   const getPokemonList = (pokemonList: Array<Pokemon>) => {
@@ -182,6 +185,14 @@ export default function PocketTimeStamp() {
     }
   }, [isDemo]);
 
+  // -------- useEffect：表示用のログデータ作成 --------
+  useEffect(() => {
+    const flattenedLogs: Array<LogData> = dailyData.flatMap((data) =>
+      data.timeLine.map((log) => ({ ...log, date: data.date }) as LogData),
+    );
+    setDisplayLogs(flattenedLogs);
+  }, [dailyData]);
+
   // -------- JSX --------
   return (
     <main>
@@ -240,10 +251,18 @@ export default function PocketTimeStamp() {
                 activities={activities}
                 dailyData={dailyData}
                 updateDailyData={updateDailyData}
+                displayLogs={displayLogs}
               />
             )}
             {currentTab === 'Reports' && (
-              <Reports dailyData={dailyData} monthlyData={monthlyData} totalData={totalData} />
+              <Reports
+                isDemo={isDemo}
+                dailyData={dailyData}
+                monthlyData={monthlyData}
+                updateMonthlyData={updateMonthlyData}
+                totalData={totalData}
+                updateTotalData={updateTotalData}
+              />
             )}
             {currentTab === 'Collection' && (
               <Collection
