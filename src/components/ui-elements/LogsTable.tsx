@@ -25,7 +25,7 @@ export default function LogsTable({
   displayLogs,
 }: Props) {
   // -------- useState：宣言 --------
-  const [visibleItems, setVisibleItems] = useState(50);
+  const [visibleItems, setVisibleItems] = useState<number>(50);
 
   // -------- イベントハンドラ --------
   const handleClickDeleteButton = useCallback(
