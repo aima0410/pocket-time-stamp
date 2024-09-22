@@ -1,4 +1,5 @@
 // ---- React ----
+import { mergeIdenticalActivity } from '@utils/activityUtils';
 import { useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
@@ -15,7 +16,7 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
   // -------- useState：宣言 --------
   const [editedActivity, setEdtiedActivity] = useState<string | null>(null);
   const [isCreateNewActivity, setIsCreateNewActivity] = useState(false);
-  const [isSameActivity, setIsSameActivity] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [isComposition, setIsComposition] = useState(false);
   const [unconfirmedActivityList, setUnconfirmedActivityList] = useState([...activites]);
@@ -35,22 +36,30 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
   };
 
   const handleChangeActivityInput = (newActivityName: string) => {
-    if (editedActivity !== newActivityName) {
-      const isSameData = unconfirmedActivityList.every((a) => a === newActivityName);
-      if (isSameData !== isSameActivity) {
-        setIsSameActivity(isSameData);
-      } //！！！！！！この処理未完成。同じアクティビティを登録できないようにしたい。
+    const trimmedName = newActivityName.trim();
+    const LowerCasedName = trimmedName.toLowerCase();
+    // 編集中の活動名と、新しく入力された活動名が一致しないとき
+
+    // 同じ活動名がすでにエントリーに存在するかどうか
+    const isSameData = unconfirmedActivityList.includes(LowerCasedName);
+
+    if (isSameData && editedActivity !== trimmedName) {
+      setErrorMessage('そのアクティビティはすでに存在しています。');
+    } else {
+      setErrorMessage('');
     }
-    setInputValue(newActivityName);
+    setInputValue(trimmedName);
   };
 
   const handleClickCancelInputButton = () => {
     setEdtiedActivity(null);
+    setInputValue('');
   };
 
   const handleClickAddButton = () => {
     const newActivityList = [...unconfirmedActivityList, inputValue];
-    setUnconfirmedActivityList(newActivityList);
+    const mergedActivities = mergeIdenticalActivity(newActivityList);
+    setUnconfirmedActivityList(mergedActivities);
     setEdtiedActivity(null);
     setInputValue('');
     setIsCreateNewActivity(false);
@@ -63,6 +72,7 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
       const newActivityList = unconfirmedActivityList.map((a) =>
         a === editedActivity ? inputValue : a,
       );
+      setInputValue('');
       setUnconfirmedActivityList(newActivityList);
       setEdtiedActivity(null);
     }
@@ -89,14 +99,15 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
                   onKeyDown={(e) => {
                     !isComposition &&
                       e.key === 'Enter' &&
-                      isSameActivity &&
+                      errorMessage === '' &&
                       handleClickUpdateButton();
                   }}
                 />
-                <button onClick={handleClickUpdateButton} disabled={isSameActivity}>
+                <button onClick={handleClickUpdateButton} disabled={errorMessage !== ''}>
                   更新
                 </button>
                 <button onClick={handleClickCancelInputButton}>キャンセル</button>
+                {errorMessage}
               </li>
             ) : (
               <li key={activity}>
@@ -125,13 +136,15 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
                     !isComposition &&
                       e.key === 'Enter' &&
                       inputValue !== '' &&
+                      errorMessage === '' &&
                       handleClickAddButton();
                   }}
                   autoFocus
                 />
+                {errorMessage}
                 <button
                   onClick={handleClickAddButton}
-                  disabled={inputValue === '' || isSameActivity}
+                  disabled={inputValue === '' || errorMessage !== ''}
                 >
                   追加
                 </button>
