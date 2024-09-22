@@ -67,7 +67,7 @@ export default function PocketTimeStamp() {
     const isSameArr = beforeArr.every((beforeActive, i) => beforeActive === afterArr[i]);
 
     if (!isSameArr) {
-      localStorage.setItem('activities', JSON.stringify(newActivitiesList));
+      !isDemo && localStorage.setItem('activities', JSON.stringify(newActivitiesList));
       setActivities(newActivitiesList);
     }
   };
