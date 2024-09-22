@@ -9,14 +9,14 @@ export interface DailyData {
   timeLine: Array<Line>;
 }
 
-interface ActivityTime {
+export interface RecordedTime {
   activity: string;
   totalTime: number;
 }
 
 export interface MonthlyData {
   date: string;
-  recordedTime: Array<ActivityTime>;
+  recordedTime: Array<RecordedTime>;
 }
 
-export interface TotalData extends ActivityTime {}
+export interface TotalData extends RecordedTime {}
