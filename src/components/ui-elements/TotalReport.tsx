@@ -8,11 +8,12 @@ interface Props {
 
 // ========== コンポーネント関数 ==========
 export default function TotalReport({ totalData }: Props) {
+  // -------- JSX --------
   return (
     <>
       <ol>
-        {totalData.map((data) => (
-          <li>
+        {totalData.map((data, i) => (
+          <li key={i}>
             {data.activity} <span>{data.totalTime}</span>
           </li>
         ))}
