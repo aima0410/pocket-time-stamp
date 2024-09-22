@@ -1,7 +1,22 @@
-export default function TotalReport() {
+// ---- Types ----
+import { TotalData } from 'src/types/ReportsData';
+
+// ========== 型定義 ==========
+interface Props {
+  totalData: Array<TotalData>;
+}
+
+// ========== コンポーネント関数 ==========
+export default function TotalReport({ totalData }: Props) {
   return (
     <>
-      <p>累計</p>
+      <ol>
+        {totalData.map((data) => (
+          <li>
+            {data.activity} <span>{data.totalTime}</span>
+          </li>
+        ))}
+      </ol>
     </>
   );
 }
