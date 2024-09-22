@@ -140,13 +140,14 @@ export default function EditLogPanel({
       <ul>
         <li>
           <select
-            value={unconfirmedNewLog.activity ?? activities[0]}
+            value={unconfirmedNewLog.activity ?? editedLog.activity}
             onChange={(e) => {
               const newSelectedActivity = e.target.value;
               const newLog = { ...unconfirmedNewLog, activity: newSelectedActivity };
               updateUnconfirmedNewLog(newLog);
             }}
           >
+            {!activities.includes(editedLog.activity) && <option>{editedLog.activity}</option>}
             {activities.map((activity) => (
               <option key={activity} value={activity}>
                 {activity}
