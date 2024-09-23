@@ -19,7 +19,7 @@ import { createMonthlyData, createTotalData } from '@utils/createReportDataUtils
 // ---- Components ----
 import Loading from '@layouts/Loading';
 import Tutorial from '@layouts/Tutorial';
-import TodayTimeLine from '@ui-parts/TodayTimeLine';
+import TimeLine from '@ui-parts/TimeLine';
 import TabNav from '@layouts/TabNav';
 import Home from '@layouts/Home';
 import TimeStamp from '@layouts/TimeStamp';
@@ -46,6 +46,7 @@ export default function PocketTimeStamp() {
   const [monthlyData, setMonthlyData] = useState<Array<MonthlyData>>([]);
   const [totalData, setTotalData] = useState<Array<TotalData>>([]);
   const [displayLogs, setDisplayLogs] = useState<Array<LogData>>([]);
+  const [todayData, setTodayData] = useState<DailyData>({ date: '', timeLine: [] });
   // ---- ポケモン情報 ----
   const [pokemonList, setPokemonList] = useState<Array<Pokemon>>([]);
   const [collectionData, setCollectionData] = useState<Array<CollectionData>>([]);
@@ -235,11 +236,22 @@ export default function PocketTimeStamp() {
 
   // -------- useEffect：dailyData更新時 --------
   useEffect(() => {
+    // --------------------
+    const now = new Date();
+    const today = now.toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    const targetDailyData = dailyData.find((data) => data.date === today);
+
+    setTodayData({ date: today, timeLine: targetDailyData?.timeLine ?? [] } as DailyData);
+    // --------------------
     const flattenedLogs = dailyData.flatMap((data) =>
       data.timeLine.map((log) => ({ ...log, date: data.date }) as LogData),
     );
     setDisplayLogs(flattenedLogs);
-
+    // --------------------
     // dailyDataが変更されたときのmonthlyDataおよびtotalDataの連携
     const storedDailyData = localStorage.getItem('dailyData');
     const storedMonthlyData = localStorage.getItem('monthlyData');
@@ -279,7 +291,7 @@ export default function PocketTimeStamp() {
           </button>
           <div>
             本日
-            <TodayTimeLine />
+            <TimeLine date={todayData.date} timeLine={todayData.timeLine} />
           </div>
           <TabNav currentTab={currentTab} />
           <section>

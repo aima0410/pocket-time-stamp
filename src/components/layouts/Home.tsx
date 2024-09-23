@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 // ---- Components ----
 import Message from '@ui-parts/Message';
-import IdealTimeLine from '@ui-parts/IdealTimeLine';
+import TimeLine from '@ui-parts/TimeLine';
 // ---- Types ----
 import CollectionData from 'src/types/CollectionData';
 
@@ -48,7 +48,7 @@ export default function Home({ collectionData }: Props) {
           <p>Now Loading...</p>
         )}
       </div>
-      <IdealTimeLine />
+      <TimeLine date={'理想のタイムライン'} timeLine={[]} />
     </>
   );
 }

@@ -7,7 +7,7 @@ import { DailyData } from 'src/types/ReportsData';
 // ---- Images ----
 import arrowIcon from '@assets/images/arrow.svg';
 // ---- Components ----
-import IdealTimeLine from '@ui-parts/IdealTimeLine';
+import TimeLine from '@ui-parts/TimeLine';
 
 // ========== 型定義 ==========
 interface Props {
@@ -33,21 +33,14 @@ export default function DailyReport({ dailyData }: Props) {
   return (
     <>
       <div>
-        <IdealTimeLine />
+        <TimeLine date={'理想のタイムライン'} timeLine={[]} />
         <button onClick={handleLoadPrev} disabled={visibleItems === 0}>
           <Image src={arrowIcon} alt="前のログを表示" width={14} height={14} />
         </button>
         <ol>
           {dailyData.slice(visibleItems, visibleItems + 5).map((data) => (
             <li key={data.date}>
-              <h3>{data.date}</h3>
-              <div>
-                {data.timeLine.map((log) => (
-                  <span key={`${data.date}-${log.startTime}`}>
-                    開始時刻{log.startTime} / 活動内容{log.activity} / 終了時刻{log.endTime}
-                  </span>
-                ))}
-              </div>
+              <TimeLine date={data.date} timeLine={data.timeLine} />
             </li>
           ))}
         </ol>
