@@ -44,7 +44,7 @@ const fetchPokemonData = async (name: DefaultPokemonName | string) => {
 export const fetchPokemonList = async (
   pokemonNameList: Array<DefaultPokemonName | string>,
   getPokemonList: (pokemonList: Array<Pokemon>) => void,
-  getCollectionDataList: (collectionList: Array<CollectionData>) => void,
+  getCollectionData: (collectionList: Array<CollectionData>) => void,
 ) => {
   const pokemonDataList = await Promise.all(pokemonNameList.map((name) => fetchPokemonData(name)));
 
@@ -63,6 +63,6 @@ export const fetchPokemonList = async (
   );
 
   const sortedDefaultCollection = sortPokemonCollection(filteredDefaultCollection);
-  getCollectionDataList(sortedDefaultCollection);
-  localStorage.setItem('collectionDataList', JSON.stringify(sortedDefaultCollection));
+  getCollectionData(sortedDefaultCollection);
+  localStorage.setItem('collectionData', JSON.stringify(sortedDefaultCollection));
 };
