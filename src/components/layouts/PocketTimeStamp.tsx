@@ -250,8 +250,8 @@ export default function PocketTimeStamp() {
       localStorage.removeItem('totalData');
       updateMonthlyData([]);
       updateTotalData([]);
-    } else if (!storedMonthlyData || !storedTotalData) {
-      // dailyDataはあるのに、monthlyDataおよびtotalDataが存在しないときは計算してセット
+    } else {
+      // dailyDataが存在するときはmonthlyDataとtotalDataを算出してセット
       const calculatedMonthlyData: Array<MonthlyData> = createMonthlyData(
         JSON.parse(storedDailyData),
       );
