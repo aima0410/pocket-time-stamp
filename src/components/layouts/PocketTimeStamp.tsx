@@ -246,13 +246,18 @@ export default function PocketTimeStamp() {
     );
     setDisplayLogs(flattenedLogs);
 
+    // dailyDataが変更されたときのmonthlyDataおよびtotalDataの連携
     const storedDailyData = localStorage.getItem('dailyData');
     const storedMonthlyData = localStorage.getItem('monthlyData');
     const storedTotalData = localStorage.getItem('totalData');
     if (!storedDailyData) {
+      // dailyDataが存在しないときはmonthlyDataおよびtotalDataを削除
       localStorage.removeItem('monthlyData');
       localStorage.removeItem('totalData');
+      updateMonthlyData([]);
+      updateTotalData([]);
     } else if (!storedMonthlyData || !storedTotalData) {
+      // dailyDataはあるのに、monthlyDataおよびtotalDataが存在しないときは計算してセット
       const calculatedMonthlyData: Array<MonthlyData> = createMonthlyData(
         JSON.parse(storedDailyData),
       );
