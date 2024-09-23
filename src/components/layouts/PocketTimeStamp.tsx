@@ -31,20 +31,10 @@ import FinalConfirmationDialog from '@ui-parts/FinalConfirmationDialog';
 import defaultPokemonNameList from '@assets/pokemonNamesList';
 import { demoDailyData, demoMonthlyData, demoTotalData } from '@assets/demoLogData';
 import LogData from 'src/types/LogData';
+import defaultActivities from '@assets/defaultActivities';
 
 // ========== コンポーネント関数 ==========
 export default function PocketTimeStamp() {
-  // -------- constants --------
-  const defaultActivities = [
-    '睡眠',
-    '食事',
-    '運動',
-    '学習',
-    '仕事',
-    '交流',
-    'アウトドア',
-    'SNS/動画/ゲーム',
-  ];
   // -------- useState：宣言 --------
   const [isMounted, setIsMounted] = useState<Boolean>();
   const [isTutorial, setIsTutorial] = useState<Boolean>(true);
@@ -114,12 +104,16 @@ export default function PocketTimeStamp() {
       (data) => data.recordedTime.length !== 0,
     );
     setMonthlyData(deletedEmptyMonthData);
-    !isDemo && localStorage.setItem('monthlyData', JSON.stringify(deletedEmptyMonthData));
+    !isDemo &&
+      deletedEmptyMonthData.length !== 0 &&
+      localStorage.setItem('monthlyData', JSON.stringify(deletedEmptyMonthData));
   };
 
   const updateTotalData = (newTotalData: Array<TotalData>) => {
     setTotalData(newTotalData);
-    !isDemo && localStorage.setItem('totalData', JSON.stringify(newTotalData));
+    !isDemo &&
+      newTotalData.length !== 0 &&
+      localStorage.setItem('totalData', JSON.stringify(newTotalData));
   };
 
   const getPokemonList = (pokemonList: Array<Pokemon>) => {
