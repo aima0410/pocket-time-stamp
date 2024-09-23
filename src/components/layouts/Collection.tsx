@@ -12,40 +12,40 @@ import { sortPokemonCollection } from '@utils/sortUtils';
 // ========== 型定義 ==========
 interface Props {
   pokemonList: Array<Pokemon>;
-  collectionDataList: Array<CollectionData>;
-  updateCollectionDataList: (latestList: Array<CollectionData>) => void;
+  collectionData: Array<CollectionData>;
+  updateCollectionData: (latestList: Array<CollectionData>) => void;
 }
 
 // ========== コンポーネント関数 ==========
 export default function Collection({
   pokemonList,
-  collectionDataList,
-  updateCollectionDataList,
+  collectionData,
+  updateCollectionData,
 }: Props) {
   // -------- useState：宣言 --------
   const [selectedPokemon, setSelectedPokemon] = useState<DefaultPokemonName | string>('');
 
   // -------- useState：state更新処理 --------
   const trackSelectedPokemon = (targetPokemon: DefaultPokemonName | string) => {
-    const updatedCollectionOrder = collectionDataList.map((data) => ({
+    const updatedCollectionOrder = collectionData.map((data) => ({
       ...data,
       selected: data.name === targetPokemon,
     }));
 
-    updateCollectionDataList(updatedCollectionOrder);
+    updateCollectionData(updatedCollectionOrder);
     setSelectedPokemon(targetPokemon);
   };
   // -------- useEffect：初回マウント時 --------
   useEffect(() => {
-    if (collectionDataList.length > 0) {
-      trackSelectedPokemon(collectionDataList[0].name);
+    if (collectionData.length > 0) {
+      trackSelectedPokemon(collectionData[0].name);
     }
   }, []);
 
   return (
     <section>
       <ul>
-        {collectionDataList.map((pokemon) => (
+        {collectionData.map((pokemon) => (
           <li
             key={pokemon.id}
             onClick={() => {

@@ -10,21 +10,21 @@ import CollectionData from 'src/types/CollectionData';
 
 // ========== 型定義 ==========
 interface Props {
-  collectionDataList: Array<CollectionData>;
+  collectionData: Array<CollectionData>;
 }
 
 // ========== コンポーネント関数 ==========
-export default function Home({ collectionDataList }: Props) {
+export default function Home({ collectionData }: Props) {
   // -------- useState：宣言 --------
   const [selectedPokemon, setSelectedPokemon] = useState<CollectionData | null>(null);
 
   // -------- useEffect：現在選択中のポケモンを取得 --------
   useEffect(() => {
-    if (collectionDataList) {
-      const nowSelect = collectionDataList.find((collection) => collection.selected === true);
+    if (collectionData) {
+      const nowSelect = collectionData.find((collection) => collection.selected === true);
       nowSelect && setSelectedPokemon(nowSelect);
     }
-  }, [collectionDataList]);
+  }, [collectionData]);
 
   // -------- JSX --------
   return (
