@@ -12,7 +12,6 @@ import DailyReport from '@ui-elements/DailyReports';
 import MonthlyReport from '@ui-elements/MonthlyReports';
 import TotalReport from '@ui-elements/TotalReport';
 import { createMonthlyData, createTotalData } from '@utils/createReportDataUtils';
-import LogData from 'src/types/LogData';
 
 // =========== 型定義 ==========
 interface Props {
@@ -58,9 +57,6 @@ export default function Reports({
     updateMonthlyData(recalcMonthlyData);
     updateTotalData(recalcTotalData);
   };
-
-  // --------- useEffect：初回マウント時 --------
-  useEffect(() => {}, []);
 
   // -------- JSX --------
   return (
