@@ -59,8 +59,10 @@ export default function EditLogPanel({
   const validateTimes = (startTime: string, endTime: string) => {
     const start = new Date(`1970-01-01T${startTime}`);
     const end = new Date(`1970-01-01T${endTime}`);
-    if (end < start) {
-      setTimeWarning('終了時刻が開始時刻より前になっています。記録は翌日に跨いだ状態です');
+    if (end < start && endTime !== '00:00') {
+      setTimeWarning('終了時刻が日付を超えています。');
+    } else if(endTime === startTime) {
+      setTimeWarning('活動時間が0分なため更新できません。');
     } else {
       setTimeWarning('');
     }
@@ -198,7 +200,12 @@ export default function EditLogPanel({
         </li>
       </ul>
       {timeWarning && <p style={{ color: 'red' }}>{timeWarning}</p>}
-      <button onClick={handleClickUpdateButton}>更新</button>
+      <button
+        onClick={handleClickUpdateButton}
+        disabled={unconfirmedNewLog.endTime === unconfirmedNewLog.startTime}
+      >
+        更新
+      </button>
       <button onClick={() => switchAppStatus('StandbyMode')}>キャンセル</button>
     </section>
   );

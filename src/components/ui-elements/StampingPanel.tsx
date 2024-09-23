@@ -28,6 +28,7 @@ export default function StampingPanel({
   // -------- useState：宣言 --------
   const [isHoverMessage, setIsHoverMessage] = useState(false);
   // {isHoverMessage && <p>記録後に履歴から編集できるよ！</p>}
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [enteredEndTime, setEnteredEndTime] = useState<string>('');
   const [timedLog, setTimedLog] = useState<LogData>({
     date: '',
@@ -165,6 +166,14 @@ export default function StampingPanel({
     trackTimedLogInfo(newLog);
   }, []);
 
+  useEffect(() => {
+    if (timedLog.startTime === enteredEndTime) {
+      setErrorMessage('終了時刻を変更してください。');
+    } else {
+      setErrorMessage('');
+    }
+  }, [enteredEndTime]);
+
   // -------- JSX --------
   return (
     <>
@@ -204,9 +213,15 @@ export default function StampingPanel({
             }}
           />
           <button onClick={handleClickGetNowTimeButton}>いま</button>
+          {errorMessage}
         </div>
         <button onClick={handleClickCancelTimerButton}>キャンセル</button>
-        <button onClick={handleClickCompleteTimerButton}>タイマー終了</button>
+        <button
+          onClick={handleClickCompleteTimerButton}
+          disabled={timedLog.startTime === enteredEndTime}
+        >
+          タイマー終了
+        </button>
       </section>
     </>
   );
