@@ -14,7 +14,7 @@ import CollectionData from 'src/types/CollectionData';
 import getCurrentTab from 'src/utils/getCurrentTab';
 import { fetchPokemonList } from '@utils/fetchPokemonDataUtils';
 import { sortPokemonCollection, sortDailyDataByDate } from '@utils/sortUtils';
-import { createDemoCollection } from '@utils/createCollectionUtils';
+import { createDemoCollection } from '@utils/collectionUtils';
 import { createMonthlyData, createTotalData } from '@utils/createReportDataUtils';
 // ---- Components ----
 import Loading from '@layouts/Loading';
