@@ -2,7 +2,7 @@
 import CollectionData from 'src/types/CollectionData';
 import Pokemon from 'src/types/Pokemon';
 import DefaultPokemonName from 'src/types/PokemonName';
-import { createDefaultCollection } from '@utils/createCollectionUtils';
+import { createDefaultCollection } from '@utils/collectionUtils';
 import { sortPokemonCollection } from '@utils/sortUtils';
 
 const fetchPokemonData = async (name: DefaultPokemonName | string) => {

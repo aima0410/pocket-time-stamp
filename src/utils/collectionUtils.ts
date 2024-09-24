@@ -2,7 +2,13 @@
 import Pokemon from 'src/types/Pokemon';
 import CollectionData from 'src/types/CollectionData';
 import { getRandomInt } from '@utils/calculate';
-import { getRandomLevel, getRandomXP } from '@utils/getLevelInfo';
+import {
+  getRandomLevel,
+  getRandomDemoXP,
+  getRandomXP,
+  getRemainingReqExpForNext,
+} from '@utils/getLevelInfo';
+import levelTable from '@assets/LevelTable';
 
 // -------- コレクションの初期データ --------
 export function createDefaultCollection(defaultPokemon: Array<Pokemon>): Array<CollectionData> {
@@ -27,7 +33,7 @@ export function createDemoCollection(collectionData: Array<CollectionData>): Arr
   const selectedIndex = getRandomInt(0, maxIndex);
   return collectionData.map((data, i) => {
     const level = getRandomLevel();
-    const XP = getRandomXP(level);
+    const XP = getRandomDemoXP(level);
     const collectionData: CollectionData = {
       selected: i === selectedIndex,
       id: data.evolutionChain[0],
@@ -40,4 +46,32 @@ export function createDemoCollection(collectionData: Array<CollectionData>): Arr
     };
     return collectionData;
   });
+}
+
+// ------------- 経験値獲得＆レベルアップ -------------
+export function grownCollection(collectionData: Array<CollectionData>) {
+  const grownCollection: Array<CollectionData> = JSON.parse(JSON.stringify(collectionData));
+
+  const selectedPokemonIndex = collectionData.findIndex((data) => data.selected === true);
+
+  if (selectedPokemonIndex !== -1) {
+    const i = selectedPokemonIndex;
+
+    const currentLevel = grownCollection[i].level;
+
+    const nextTotalXP = levelTable[currentLevel].totalExp;
+
+    const additionalXP = getRandomXP(currentLevel);
+    const currentXP = grownCollection[i].XP;
+    const grownXP = currentXP + additionalXP;
+
+    if (nextTotalXP < grownXP) {
+      // レベルアップ！
+      grownCollection[i].level = currentLevel + 1;
+    }
+    grownCollection[i].XP = grownXP;
+    return grownCollection;
+  } else {
+    return collectionData;
+  }
 }
