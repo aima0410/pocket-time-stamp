@@ -30,7 +30,7 @@ export default function Home({ collectionData }: Props) {
   return (
     <>
       Home
-      {<Message />}
+      {<Message messageMode={'EmptyTodayData'} />}
       <div>
         {selectedPokemon ? (
           <>
