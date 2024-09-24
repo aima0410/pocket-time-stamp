@@ -3,10 +3,13 @@ import { useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 import { DailyData } from 'src/types/ReportsData';
+import Pokemon from 'src/types/Pokemon';
+import CollectionData from 'src/types/CollectionData';
 // ---- Components ----
 import StandbyPanel from '@ui-elements/StandbyPanel';
 import StampingPanel from '@ui-elements/StampingPanel';
 import EditActivityPanel from '@ui-elements/EditActivityPanel';
+import DoneDialog from '@ui-elements/DoneDialog';
 
 interface Props {
   appStatus: AppStatus;
@@ -15,6 +18,10 @@ interface Props {
   updateActivities: (newActivitiesList: Array<string>) => void;
   dailyData: Array<DailyData>;
   updateDailyData: (newData: Array<DailyData>) => void;
+  pokemonList: Array<Pokemon>;
+  collectionData: Array<CollectionData>;
+  updateCollectionData: (newData: Array<CollectionData>) => void;
+  selectedCollectionData: CollectionData;
 }
 
 export default function TimeStamp({
@@ -24,11 +31,20 @@ export default function TimeStamp({
   updateActivities,
   dailyData,
   updateDailyData,
+  pokemonList,
+  collectionData,
+  updateCollectionData,
+  selectedCollectionData,
 }: Props) {
   // ----  ----
   const [timedActivity, setTimedActivity] = useState<string | null>(null);
   const trackTimedActivity = (newTimedActivity: string | null) => {
     setTimedActivity(newTimedActivity);
+  };
+  const [expGained, setExpGained] = useState({ exp: 0, isEvolution: false });
+
+  const trackExpGained = (exp: number, isEvolution: boolean) => {
+    setExpGained({ exp: exp, isEvolution: isEvolution });
   };
 
   return (
@@ -48,6 +64,11 @@ export default function TimeStamp({
             trackTimedActivity={trackTimedActivity}
             dailyData={dailyData}
             updateDailyData={updateDailyData}
+            pokemonList={pokemonList}
+            collectionData={collectionData}
+            updateCollectionData={updateCollectionData}
+            selectedCollectionData={selectedCollectionData}
+            trackExpGained={trackExpGained}
           />
         )}
         {appStatus === 'EditActivitiesMode' && (
@@ -55,6 +76,13 @@ export default function TimeStamp({
             switchAppStatus={switchAppStatus}
             activites={activities}
             updateActivities={updateActivities}
+          />
+        )}
+        {appStatus === 'DoneMode' && (
+          <DoneDialog
+            swithAppStatus={switchAppStatus}
+            selectedCollectionData={selectedCollectionData}
+            expGained={expGained}
           />
         )}
       </section>

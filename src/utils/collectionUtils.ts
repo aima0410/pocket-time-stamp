@@ -28,12 +28,16 @@ export function createDefaultCollection(defaultPokemon: Array<Pokemon>): Array<C
 }
 
 // -------- コレクションのデモデータ --------
-export function createDemoCollection(collectionData: Array<CollectionData>): Array<CollectionData> {
+export function createDemoCollection(
+  collectionData: Array<CollectionData>,
+  pokemonList: Array<Pokemon>,
+): Array<CollectionData> {
   const maxIndex = collectionData.length - 1;
   const selectedIndex = getRandomInt(0, maxIndex);
   return collectionData.map((data, i) => {
     const level = getRandomLevel();
     const XP = getRandomDemoXP(level);
+
     const collectionData: CollectionData = {
       selected: i === selectedIndex,
       id: data.evolutionChain[0],
@@ -44,12 +48,34 @@ export function createDemoCollection(collectionData: Array<CollectionData>): Arr
       XP: XP,
       evolutionChain: data.evolutionChain,
     };
+
+    if (33 <= level) {
+      const secondPokemonIndex = pokemonList.findIndex(
+        (pokemon) => data.evolutionChain[1] === pokemon.name,
+      );
+
+      collectionData.name = pokemonList[secondPokemonIndex].name;
+      collectionData.japaneseName = pokemonList[secondPokemonIndex].japaneseName;
+      collectionData.imageUrl = pokemonList[secondPokemonIndex].imageUrl;
+    } else if (66 <= level) {
+      const thirdPokemonIndex = pokemonList.findIndex(
+        (pokemon) => data.evolutionChain[2] === pokemon.name,
+      );
+
+      collectionData.name = pokemonList[thirdPokemonIndex].name;
+      collectionData.japaneseName = pokemonList[thirdPokemonIndex].japaneseName;
+      collectionData.imageUrl = pokemonList[thirdPokemonIndex].imageUrl;
+    }
+
     return collectionData;
   });
 }
 
-// ------------- 経験値獲得＆レベルアップ -------------
-export function grownCollection(collectionData: Array<CollectionData>) {
+// ------------- 経験値獲得＆レベルアップ＆進化 -------------
+export function grownCollection(
+  collectionData: Array<CollectionData>,
+  pokemonList: Array<Pokemon>,
+) {
   const grownCollection: Array<CollectionData> = JSON.parse(JSON.stringify(collectionData));
 
   const selectedPokemonIndex = collectionData.findIndex((data) => data.selected === true);
@@ -67,7 +93,31 @@ export function grownCollection(collectionData: Array<CollectionData>) {
 
     if (nextTotalXP < grownXP) {
       // レベルアップ！
-      grownCollection[i].level = currentLevel + 1;
+      const nextLevel = currentLevel + 1;
+      grownCollection[i].level = nextLevel;
+
+      if (nextLevel === 33) {
+        const secondPokemonName = grownCollection[i].evolutionChain[1];
+
+        const targetPokemonListIndex = pokemonList.findIndex((pokemon) => {
+          pokemon.name === secondPokemonName;
+        });
+
+        grownCollection[i].name = pokemonList[targetPokemonListIndex].name;
+        grownCollection[i].japaneseName = pokemonList[targetPokemonListIndex].japaneseName;
+        grownCollection[i].imageUrl = pokemonList[targetPokemonListIndex].imageUrl;
+        //
+      } else if (nextLevel === 66) {
+        const thirdPokemonName = grownCollection[i].evolutionChain[2];
+
+        const targetPokemonListIndex = pokemonList.findIndex((pokemon) => {
+          pokemon.name === thirdPokemonName;
+        });
+
+        grownCollection[i].name = pokemonList[targetPokemonListIndex].name;
+        grownCollection[i].japaneseName = pokemonList[targetPokemonListIndex].japaneseName;
+        grownCollection[i].imageUrl = pokemonList[targetPokemonListIndex].imageUrl;
+      }
     }
     grownCollection[i].XP = grownXP;
     return grownCollection;

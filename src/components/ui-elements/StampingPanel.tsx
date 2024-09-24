@@ -3,10 +3,13 @@ import { useState, useEffect } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 import LogData from 'src/types/LogData';
+import Pokemon from 'src/types/Pokemon';
+import CollectionData from 'src/types/CollectionData';
 import { DailyData, Line } from 'src/types/ReportsData';
 // ---- Utils ----
 import { addLogToDailyData } from '@utils/timeLineUtils';
 import { sortTimelineDescending } from '@utils/sortUtils';
+import { grownCollection } from '@utils/collectionUtils';
 
 // ========== 型定義 ==========
 interface Props {
@@ -15,6 +18,11 @@ interface Props {
   trackTimedActivity: (newTimedActivity: string | null) => void;
   dailyData: Array<DailyData>;
   updateDailyData: (newData: Array<DailyData>) => void;
+  pokemonList: Array<Pokemon>;
+  collectionData: Array<CollectionData>;
+  updateCollectionData: (newData: Array<CollectionData>) => void;
+  selectedCollectionData: CollectionData;
+  trackExpGained: (exp: number, isEvolution: boolean) => void;
 }
 
 // ========== コンポーネント関数 ==========
@@ -24,6 +32,11 @@ export default function StampingPanel({
   trackTimedActivity,
   dailyData,
   updateDailyData,
+  pokemonList,
+  collectionData,
+  updateCollectionData,
+  selectedCollectionData,
+  trackExpGained,
 }: Props) {
   // -------- useState：宣言 --------
   const [isHoverMessage, setIsHoverMessage] = useState(false);
@@ -115,9 +128,22 @@ export default function StampingPanel({
     // ---- エントリデータを保存 ----
     updateDailyData(entryDailyData);
 
-    // ---- タイムスタンプ終了の後処理 ----
+    // ---- タイムスタンプ終了の後処理① ----
     trackTimedActivity(null);
-    switchAppStatus('StandbyMode');
+    switchAppStatus('DoneMode');
+
+    // ---- タイムスタンプ終了の後処理②：ポケモンの経験値獲得 ----
+    const grownCollectionData: Array<CollectionData> = grownCollection(collectionData, pokemonList);
+    updateCollectionData(grownCollectionData);
+
+    const targetGrownCollectionData = grownCollectionData.find(
+      (data) => data.id === selectedCollectionData.id,
+    );
+    if (targetGrownCollectionData) {
+      const expGained = targetGrownCollectionData.XP - selectedCollectionData.XP;
+      const isEvolution = targetGrownCollectionData.name !== selectedCollectionData.name;
+      trackExpGained(expGained, isEvolution);
+    }
   };
 
   // -------- useEffect：初回マウント時の処理 --------
