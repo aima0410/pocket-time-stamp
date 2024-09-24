@@ -10,39 +10,28 @@ import CollectionData from 'src/types/CollectionData';
 
 // ========== 型定義 ==========
 interface Props {
-  collectionData: Array<CollectionData>;
+  selectedCollectionData: CollectionData | null;
 }
 
 // ========== コンポーネント関数 ==========
-export default function Home({ collectionData }: Props) {
-  // -------- useState：宣言 --------
-  const [selectedPokemon, setSelectedPokemon] = useState<CollectionData | null>(null);
-
-  // -------- useEffect：現在選択中のポケモンを取得 --------
-  useEffect(() => {
-    if (collectionData) {
-      const nowSelect = collectionData.find((collection) => collection.selected === true);
-      nowSelect && setSelectedPokemon(nowSelect);
-    }
-  }, [collectionData]);
-
+export default function Home({ selectedCollectionData }: Props) {
   // -------- JSX --------
   return (
     <>
       Home
-      {<Message messageMode={'EmptyTodayData'} />}
+      {selectedCollectionData && <Message selectedCollectionData={selectedCollectionData} />}
       <div>
-        {selectedPokemon ? (
+        {selectedCollectionData ? (
           <>
             <Image
-              src={selectedPokemon.imageUrl}
-              alt={selectedPokemon.japaneseName}
+              src={selectedCollectionData.imageUrl}
+              alt={selectedCollectionData.japaneseName}
               width={100}
               height={100}
             />
-            <h3>{selectedPokemon.japaneseName}</h3>
-            <p>レベル{selectedPokemon.level}</p>
-            <div>経験値{selectedPokemon.XP}</div>
+            <h3>{selectedCollectionData.japaneseName}</h3>
+            <p>レベル{selectedCollectionData.level}</p>
+            <div>経験値{selectedCollectionData.XP}</div>
           </>
         ) : (
           <p>Now Loading...</p>
