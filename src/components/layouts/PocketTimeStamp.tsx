@@ -50,7 +50,7 @@ export default function PocketTimeStamp() {
   // ---- ポケモン情報 ----
   const [pokemonList, setPokemonList] = useState<Array<Pokemon>>([]);
   const [collectionData, setCollectionData] = useState<Array<CollectionData>>([]);
-
+  const [selectedCollectionData, setSelectedCollectionData] = useState<CollectionData | null>(null);
   // -------- useState：stateの更新処理 --------
   const toggleTutorialMode = (isTutorial: boolean) => {
     setIsTutorial(isTutorial);
@@ -225,7 +225,9 @@ export default function PocketTimeStamp() {
       updateDailyData(demoDailyData);
       updateMonthlyData(demoMonthlyData);
       updateTotalData(demoTotalData);
-      const demoCollectionData = sortPokemonCollection(createDemoCollection(collectionData));
+      const demoCollectionData = sortPokemonCollection(
+        createDemoCollection(collectionData, pokemonList),
+      );
       updateCollectionData(demoCollectionData);
       updateActivities(defaultActivities);
     } else {
@@ -273,6 +275,14 @@ export default function PocketTimeStamp() {
     }
   }, [dailyData]);
 
+  // -------- useEffect：現在選択中のポケモンを取得 --------
+  useEffect(() => {
+    if (collectionData) {
+      const nowSelect = collectionData.find((collection) => collection.selected === true);
+      nowSelect && setSelectedCollectionData(nowSelect);
+    }
+  }, [collectionData]);
+
   // -------- JSX --------
   return (
     <main>
@@ -295,8 +305,8 @@ export default function PocketTimeStamp() {
           </div>
           <TabNav currentTab={currentTab} />
           <section>
-            {currentTab === 'Home' && <Home collectionData={collectionData} />}
-            {currentTab === 'CreateTimeStamp' && (
+            {currentTab === 'Home' && <Home selectedCollectionData={selectedCollectionData} />}
+            {currentTab === 'CreateTimeStamp' && selectedCollectionData && (
               <TimeStamp
                 appStatus={appStatus}
                 switchAppStatus={switchAppStatus}
@@ -304,6 +314,10 @@ export default function PocketTimeStamp() {
                 updateActivities={updateActivities}
                 dailyData={dailyData}
                 updateDailyData={updateDailyData}
+                pokemonList={pokemonList}
+                collectionData={collectionData}
+                updateCollectionData={updateCollectionData}
+                selectedCollectionData={selectedCollectionData}
               />
             )}
             {currentTab === 'RecentHistories' && (
