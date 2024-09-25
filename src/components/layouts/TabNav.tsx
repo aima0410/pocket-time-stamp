@@ -4,6 +4,8 @@
 import Link from 'next/link';
 // ---- Types ----
 import Tab from 'src/types/Tab';
+// ---- KumaUI ----
+import { css } from '@kuma-ui/core';
 
 interface Props {
   currentTab: Tab;
@@ -19,12 +21,47 @@ export default function TabNav({ currentTab }: Props) {
   ];
 
   return (
-    <nav>
-      <ul>
+    <nav
+      className={css`
+        width: 28%;
+        height: 100%;
+        padding: 10px 0 0;
+        background-color: var(--base-parts-bg-color);
+        border-radius: 20px 0 0 20px;
+      `}
+    >
+      <ul
+        className={css`
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+        `}
+      >
         {tabList.map((tab) => (
-          <li key={tab.type}>
-            <Link href={tab.url} className={currentTab === tab.type ? 'selected-tab' : ''}>
-              {tab.name}
+          <li key={tab.type} className={currentTab === tab.type ? 'selected tab' : 'tab'}>
+            <Link href={tab.url}>
+              <span
+                className={css`
+                  display: block;
+                  width: 100%;
+                  margin-bottom: -6px;
+                  font-family: var(--en);
+                `}
+              >
+                {tab.type}
+              </span>
+              <span
+                className={css`
+                  display: inline-block;
+                  width: 100%;
+                  font-size: 12px;
+                `}
+              >
+                {tab.name}
+              </span>
             </Link>
           </li>
         ))}

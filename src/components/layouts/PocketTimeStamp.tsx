@@ -19,6 +19,7 @@ import { createMonthlyData, createTotalData } from '@utils/createReportDataUtils
 // ---- Components ----
 import Loading from '@layouts/Loading';
 import Tutorial from '@layouts/Tutorial';
+import Header from '@layouts/Header';
 import TimeLine from '@ui-parts/TimeLine';
 import TabNav from '@layouts/TabNav';
 import Home from '@layouts/Home';
@@ -32,6 +33,8 @@ import defaultPokemonNameList from '@assets/pokemonNamesList';
 import { demoDailyData, demoMonthlyData, demoTotalData } from '@assets/demoLogData';
 import LogData from 'src/types/LogData';
 import defaultActivities from '@assets/defaultActivities';
+// ---- KumaUI ----
+import { css } from '@kuma-ui/core';
 
 // ========== コンポーネント関数 ==========
 export default function PocketTimeStamp() {
@@ -287,68 +290,67 @@ export default function PocketTimeStamp() {
   return (
     <main>
       {!isMounted && <Loading />}
-      <h2>
-        {appStatus}
-        <br />
-        {currentTab}
-      </h2>
       {isTutorial ? (
         <Tutorial toggleTutorialMode={toggleTutorialMode} toggleDemo={toggleDemoAndResetData} />
       ) : (
-        <>
-          <button onClick={() => toggleDemoAndResetData(!isDemo)}>
-            {isDemo ? 'デモOFF' : 'デモON'}
-          </button>
-          <div>
-            本日
-            <TimeLine date={todayData.date} timeLine={todayData.timeLine} />
+        <div>
+          {/* ---- Header ---- */}
+          <Header
+            appStatus={appStatus}
+            switchAppStatus={switchAppStatus}
+            isDemo={isDemo}
+            toggleDemoAndResetData={toggleDemoAndResetData}
+            todayData={todayData}
+          />
+          {/* ---- Contents ---- */}
+          <div className="board app">
+            <TabNav currentTab={currentTab} />
+            <section>
+              {currentTab === 'Home' && <Home selectedCollectionData={selectedCollectionData} />}
+              {currentTab === 'CreateTimeStamp' && selectedCollectionData && (
+                <TimeStamp
+                  appStatus={appStatus}
+                  switchAppStatus={switchAppStatus}
+                  activities={activities}
+                  updateActivities={updateActivities}
+                  dailyData={dailyData}
+                  updateDailyData={updateDailyData}
+                  pokemonList={pokemonList}
+                  collectionData={collectionData}
+                  updateCollectionData={updateCollectionData}
+                  selectedCollectionData={selectedCollectionData}
+                />
+              )}
+              {currentTab === 'RecentHistories' && (
+                <Histories
+                  appStatus={appStatus}
+                  switchAppStatus={switchAppStatus}
+                  activities={activities}
+                  dailyData={dailyData}
+                  updateDailyData={updateDailyData}
+                  displayLogs={displayLogs}
+                />
+              )}
+              {currentTab === 'Reports' && (
+                <Reports
+                  isDemo={isDemo}
+                  dailyData={dailyData}
+                  monthlyData={monthlyData}
+                  updateMonthlyData={updateMonthlyData}
+                  totalData={totalData}
+                  updateTotalData={updateTotalData}
+                />
+              )}
+              {currentTab === 'Collection' && (
+                <Collection
+                  pokemonList={pokemonList}
+                  collectionData={collectionData}
+                  updateCollectionData={updateCollectionData}
+                />
+              )}
+            </section>
           </div>
-          <TabNav currentTab={currentTab} />
-          <section>
-            {currentTab === 'Home' && <Home selectedCollectionData={selectedCollectionData} />}
-            {currentTab === 'CreateTimeStamp' && selectedCollectionData && (
-              <TimeStamp
-                appStatus={appStatus}
-                switchAppStatus={switchAppStatus}
-                activities={activities}
-                updateActivities={updateActivities}
-                dailyData={dailyData}
-                updateDailyData={updateDailyData}
-                pokemonList={pokemonList}
-                collectionData={collectionData}
-                updateCollectionData={updateCollectionData}
-                selectedCollectionData={selectedCollectionData}
-              />
-            )}
-            {currentTab === 'RecentHistories' && (
-              <Histories
-                appStatus={appStatus}
-                switchAppStatus={switchAppStatus}
-                activities={activities}
-                dailyData={dailyData}
-                updateDailyData={updateDailyData}
-                displayLogs={displayLogs}
-              />
-            )}
-            {currentTab === 'Reports' && (
-              <Reports
-                isDemo={isDemo}
-                dailyData={dailyData}
-                monthlyData={monthlyData}
-                updateMonthlyData={updateMonthlyData}
-                totalData={totalData}
-                updateTotalData={updateTotalData}
-              />
-            )}
-            {currentTab === 'Collection' && (
-              <Collection
-                pokemonList={pokemonList}
-                collectionData={collectionData}
-                updateCollectionData={updateCollectionData}
-              />
-            )}
-          </section>
-          {appStatus === 'DeleteMode' ? (
+          {appStatus === 'DeleteMode' && (
             <FinalConfirmationDialog
               switchAppStatus={switchAppStatus}
               toggleTutorialMode={toggleTutorialMode}
@@ -358,16 +360,8 @@ export default function PocketTimeStamp() {
               updateCollectionData={updateCollectionData}
               updateActivities={updateActivities}
             />
-          ) : (
-            <button
-              onClick={() => {
-                switchAppStatus('DeleteMode');
-              }}
-            >
-              全データの初期化
-            </button>
           )}
-        </>
+        </div>
       )}
     </main>
   );

@@ -29,7 +29,7 @@ export default function VisitRepositoryButton() {
           padding: 10%;
           background-color: #fff;
           border-radius: 50%;
-          box-shadow: 1px 6px 7px #7dadad;
+          box-shadow: 1px 6px 7px #359d4d5f;
           transition:
             transform 300ms ease-out,
             opacity 300ms ease-out,

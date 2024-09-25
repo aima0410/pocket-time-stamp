@@ -1,20 +1,36 @@
 import type { Metadata } from 'next';
-import { Noto_Sans_JP } from 'next/font/google';
+import { Noto_Sans_JP, Outfit } from 'next/font/google';
+import 'public/reset.css';
 import 'public/globals.css';
-// import "public/reset.css";
-
+// ---- KumaUI ----
+import { css } from '@kuma-ui/core';
 import { KumaRegistry } from '@kuma-ui/next-plugin/registry';
 // ---- Components ----
-import Header from '@layouts/Header';
 import PocketTimeStamp from '@layouts/PocketTimeStamp';
 import VisitRepositoryButton from '@ui-parts/VisitRepositoryButton';
 
-const notoSansJP = Noto_Sans_JP({ subsets: ['latin'] });
-
+// ========== メタデータ ===========
 export const metadata: Metadata = {
   description: '日々の過ごし方を気軽に改善できるポケットタイムスタンプアプリです。',
 };
 
+// ========== CSS宣言 ===========
+const notoSansJP = Noto_Sans_JP({ subsets: ['latin'], weight: ['400', '600'] });
+const outfit = Outfit({ subsets: ['latin'] });
+const baseStyle = css`
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: fit-content;
+  min-height: 100dvh;
+  /* ---font ---- */
+  color: var(--base-color);
+  font-size: var(--base-font-size);
+  text-align: center;
+  letter-spacing: var(--base-letter-spacing);
+`;
+
+// ========== コンポーネント関数 ===========
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,12 +39,24 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <KumaRegistry>
-        <body className={notoSansJP.className}>
-          <Header />
-          <PocketTimeStamp />
+        <body>
+          <div
+            className={`${notoSansJP.className} ${baseStyle}`}
+            style={{ '--en': `${outfit.style.fontFamily}` } as React.CSSProperties}
+          >
+            <PocketTimeStamp />
+            {children}
+          </div>
           {/* ---- 外部リンク ---- */}
           <VisitRepositoryButton />
-          {children}
+          <div
+            className={css`
+              position: fixed;
+              inset: 0;
+              z-index: -999;
+              background-color: var(--base-bg-color);
+            `}
+          ></div>
         </body>
       </KumaRegistry>
     </html>
