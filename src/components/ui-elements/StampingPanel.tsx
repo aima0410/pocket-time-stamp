@@ -10,6 +10,8 @@ import { DailyData, Line } from 'src/types/ReportsData';
 import { addLogToDailyData } from '@utils/timeLineUtils';
 import { sortTimelineDescending } from '@utils/sortUtils';
 import { grownCollection } from '@utils/collectionUtils';
+// ---- KumaUI ----
+import { css } from '@kuma-ui/core';
 
 // ========== 型定義 ==========
 interface Props {
@@ -202,8 +204,8 @@ export default function StampingPanel({
 
   // -------- JSX --------
   return (
-    <>
-      <section>
+    <div className='modal-back'>
+      <div className='modal'>
         <table
           onMouseEnter={() => {
             handleMouseHover(true);
@@ -248,7 +250,7 @@ export default function StampingPanel({
         >
           タイマー終了
         </button>
-      </section>
-    </>
+      </div>
+    </div>
   );
 }

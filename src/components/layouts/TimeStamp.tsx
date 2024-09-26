@@ -51,13 +51,11 @@ export default function TimeStamp({
 
   return (
     <>
-      {appStatus === 'StandbyMode' && (
-        <StandbyPanel
-          switchAppStatus={switchAppStatus}
-          activities={activities}
-          trackTimedActivity={trackTimedActivity}
-        />
-      )}
+      <StandbyPanel
+        switchAppStatus={switchAppStatus}
+        activities={activities}
+        trackTimedActivity={trackTimedActivity}
+      />
       {appStatus === 'PlayMode' && timedActivity !== null && (
         <StampingPanel
           switchAppStatus={switchAppStatus}
