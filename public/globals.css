@@ -4,14 +4,15 @@ html {
 
 :root {
   /* ---- width ---- */
-  --base-max-width: 800px;
+  --base-max-width: 1000px;
   /* ---- width ---- */
   --base-max-height: 800px;
   --base-min-height: 500px;
   /* ---- bg ---- */
   --base-bg-color: #99daab;
-  --base-parts-bg-color: #77c876;
-  --oter-parts-bg-color: #717171;
+  --base-parts-bg-color: #63BF7D;
+  --light-parts-bg-color: #89CD9C;
+  --other-parts-bg-color: #717171;
   --risk-parts-bg-color: #c04343;
   /* ---- font ---- */
   --base-color: #2a2a2a;
@@ -33,6 +34,7 @@ html {
   min-height: var(--base-min-height);
   background-color: #e7f7ec;
   border-radius: 20px;
+  margin-bottom: 50px;
 }
 
 h1 {
@@ -70,15 +72,37 @@ button:hover {
   opacity: 0.7;
 }
 
+button:disabled {
+  background-color: #dedede;
+  color: #9c9c9c;
+}
+
+button:disabled:hover {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+button.repoTab {
+  width: 160px;
+  height: 40px;
+  padding: 0;
+  border-radius: 5px 5px 0 0;
+  margin-right: 10px;
+}
+
+button.repoTab:disabled {
+  background-color: #fff;
+}
+
 .board.app {
   flex-direction: row;
   justify-content: space-between;
+  min-height: 600px;
 }
 
 .tab {
   display: block;
   width: 80%;
-  padding: 20px 0;
   border-radius: 10px;
   margin-bottom: 10px;
 }
@@ -91,11 +115,115 @@ button:hover {
 }
 
 .timeline-board {
+  position: relative;
+  padding: 6px 6px;
   width: 400px;
   height: 60px;
   background-color: #fff;
   border-radius: 5px;
+  border: solid 2px #5d5d5d;
   margin-right: 20px;
+  box-shadow: 2px 2px 6px rgba(84, 84, 84, 0.2);
+}
+
+.timeline-board.undefined {
+  display: grid;
+  place-items: center;
+  background-color: #dedede;
+  border: none;
+  color: #9c9c9c;
+  font-weight: 600;
+}
+
+.hours {
+  padding: 5px 0;
+  width: 4.166%;
+  letter-spacing: 0;
+  color: var(--other-parts-bg-color);
+  text-align: center;
+}
+
+.modal-back {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: rgba(50, 50, 50, 0.728);
+}
+
+.modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  padding: 40px;
+  width: 560px;
+  height: 600px;
+  overflow-y: scroll;
+  border-radius: 10px;
+}
+
+input {
+  display: inline-block;
+  background-color: #dbdbdb;
+  padding: 12px 3px;
+  width: 200px;
+  margin-right: 10px;
+  text-align: left;
+}
+
+button.modalBtn {
+  display: inline-block;
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin-right: 10px;
+}
+
+button.cancel {
+  display: inline-block;
+  background: none;
+  color: #333;
+  width: fit-content;
+  height: fit-content;
+  line-height: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+button.cancel:disabled {
+  opacity: 0.4;
+}
+
+button.cancel.all {
+  position: relative;
+  top: 20px;
+  left: 200px;
+}
+
+button.modalBtn.delete {
+  background-color: #818181;
+}
+
+button.add {
+  background-color: #df9b9b;
+  color: #ffffff;
+}
+
+button.modalBtn.add.change {
+  width: 380px;
+  border: solid 2px #333;
+  margin-right: 0;
+}
+
+button.add:disabled {
+  background-color: #efefef;
+  color: #c7c7c7;
+}
+
+button.modalBtn.add.change:disabled {
+  border: solid 2px #b0b0b0;
 }
 
 /* background-color: #dd8d8d; */

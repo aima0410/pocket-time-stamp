@@ -12,6 +12,8 @@ import DailyReport from '@ui-elements/DailyReports';
 import MonthlyReport from '@ui-elements/MonthlyReports';
 import TotalReport from '@ui-elements/TotalReport';
 import { createMonthlyData, createTotalData } from '@utils/createReportDataUtils';
+// ---- KumaUI ----
+import { css } from '@kuma-ui/core';
 
 // =========== 型定義 ==========
 interface Props {
@@ -61,18 +63,49 @@ export default function Reports({
   // -------- JSX --------
   return (
     <>
-      <section>
-        <button onClick={handleRecalculation}>
-          <Image src={reloadIcon} alt="レポート内容をリロードするボタン" width={17} height={17} />
+      <div
+        className={css`
+          position: relative;
+          width: 100%;
+          height: 100%;
+          padding: 16px 16px 0;
+        `}
+      >
+        <button
+          className={css`
+            display: grid;
+            place-items: center;
+            position: absolute;
+            top: 5px;
+            right: 16px;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+          `}
+          onClick={handleRecalculation}
+        >
+          <Image src={reloadIcon} alt="レポート内容をリロードするボタン" width={14} height={14} />
         </button>
-        <ul>
+        <ul
+          className={css`
+            display: flex;
+            justify-content: left;
+            width: 100%;
+          `}
+        >
           <li>
-            <button onClick={() => trackSelectedTab('DayTab')} disabled={selectedTab === 'DayTab'}>
+            <button
+              className="repoTab"
+              onClick={() => trackSelectedTab('DayTab')}
+              disabled={selectedTab === 'DayTab'}
+            >
               日にちごと
             </button>
           </li>
           <li>
             <button
+              className="repoTab"
               onClick={() => trackSelectedTab('MonthTab')}
               disabled={selectedTab === 'MonthTab'}
             >
@@ -81,6 +114,7 @@ export default function Reports({
           </li>
           <li>
             <button
+              className="repoTab"
               onClick={() => trackSelectedTab('TotalTab')}
               disabled={selectedTab === 'TotalTab'}
             >
@@ -88,10 +122,23 @@ export default function Reports({
             </button>
           </li>
         </ul>
-        {selectedTab === 'DayTab' && <DailyReport dailyData={dailyData} />}
-        {selectedTab === 'MonthTab' && <MonthlyReport monthlyData={monthlyData} />}
-        {selectedTab === 'TotalTab' && <TotalReport totalData={totalData} />}
-      </section>
+        <div
+          className={css`
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 90%;
+            border-radius: 0 10px 10px 10px;
+            background-color: #fff;
+          `}
+        >
+          {selectedTab === 'DayTab' && <DailyReport dailyData={dailyData} />}
+          {selectedTab === 'MonthTab' && <MonthlyReport monthlyData={monthlyData} />}
+          {selectedTab === 'TotalTab' && <TotalReport totalData={totalData} />}
+        </div>
+      </div>
     </>
   );
 }

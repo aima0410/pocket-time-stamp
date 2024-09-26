@@ -11,6 +11,7 @@ import StampingPanel from '@ui-elements/StampingPanel';
 import EditActivityPanel from '@ui-elements/EditActivityPanel';
 import DoneDialog from '@ui-elements/DoneDialog';
 
+// ========== 型定義 ==========
 interface Props {
   appStatus: AppStatus;
   switchAppStatus: (newMode: AppStatus) => void;
@@ -24,6 +25,7 @@ interface Props {
   selectedCollectionData: CollectionData;
 }
 
+// ========== コンポーネント関数 ==========
 export default function TimeStamp({
   appStatus,
   switchAppStatus,
@@ -36,7 +38,7 @@ export default function TimeStamp({
   updateCollectionData,
   selectedCollectionData,
 }: Props) {
-  // ----  ----
+  // ---- useState ----
   const [timedActivity, setTimedActivity] = useState<string | null>(null);
   const trackTimedActivity = (newTimedActivity: string | null) => {
     setTimedActivity(newTimedActivity);
@@ -49,43 +51,41 @@ export default function TimeStamp({
 
   return (
     <>
-      <section>
-        {appStatus === 'StandbyMode' && (
-          <StandbyPanel
-            switchAppStatus={switchAppStatus}
-            activities={activities}
-            trackTimedActivity={trackTimedActivity}
-          />
-        )}
-        {appStatus === 'PlayMode' && timedActivity !== null && (
-          <StampingPanel
-            switchAppStatus={switchAppStatus}
-            timedActivity={timedActivity}
-            trackTimedActivity={trackTimedActivity}
-            dailyData={dailyData}
-            updateDailyData={updateDailyData}
-            pokemonList={pokemonList}
-            collectionData={collectionData}
-            updateCollectionData={updateCollectionData}
-            selectedCollectionData={selectedCollectionData}
-            trackExpGained={trackExpGained}
-          />
-        )}
-        {appStatus === 'EditActivitiesMode' && (
-          <EditActivityPanel
-            switchAppStatus={switchAppStatus}
-            activites={activities}
-            updateActivities={updateActivities}
-          />
-        )}
-        {appStatus === 'DoneMode' && (
-          <DoneDialog
-            swithAppStatus={switchAppStatus}
-            selectedCollectionData={selectedCollectionData}
-            expGained={expGained}
-          />
-        )}
-      </section>
+      {appStatus === 'StandbyMode' && (
+        <StandbyPanel
+          switchAppStatus={switchAppStatus}
+          activities={activities}
+          trackTimedActivity={trackTimedActivity}
+        />
+      )}
+      {appStatus === 'PlayMode' && timedActivity !== null && (
+        <StampingPanel
+          switchAppStatus={switchAppStatus}
+          timedActivity={timedActivity}
+          trackTimedActivity={trackTimedActivity}
+          dailyData={dailyData}
+          updateDailyData={updateDailyData}
+          pokemonList={pokemonList}
+          collectionData={collectionData}
+          updateCollectionData={updateCollectionData}
+          selectedCollectionData={selectedCollectionData}
+          trackExpGained={trackExpGained}
+        />
+      )}
+      {appStatus === 'EditActivitiesMode' && (
+        <EditActivityPanel
+          switchAppStatus={switchAppStatus}
+          activites={activities}
+          updateActivities={updateActivities}
+        />
+      )}
+      {appStatus === 'DoneMode' && (
+        <DoneDialog
+          swithAppStatus={switchAppStatus}
+          selectedCollectionData={selectedCollectionData}
+          expGained={expGained}
+        />
+      )}
     </>
   );
 }

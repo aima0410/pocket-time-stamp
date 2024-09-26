@@ -42,7 +42,14 @@ export default function TabNav({ currentTab }: Props) {
       >
         {tabList.map((tab) => (
           <li key={tab.type} className={currentTab === tab.type ? 'selected tab' : 'tab'}>
-            <Link href={tab.url}>
+            <Link
+              href={tab.url}
+              className={css`
+                display: block;
+                padding: 20px 0;
+                height: 100%;
+              `}
+            >
               <span
                 className={css`
                   display: block;

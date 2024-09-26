@@ -23,6 +23,7 @@ export function getRemainingReqExpForNext(level: number, XP: number) {
     const remainingReqExpForNext = targetNextData.totalExp - XP;
     return remainingReqExpForNext;
   }
+  return 0;
 }
 
 // タイムスタンプ作成時などに獲得する経験値のランダム生成

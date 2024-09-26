@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Noto_Sans_JP, Outfit } from 'next/font/google';
+import { Noto_Sans_JP, Outfit, Yusei_Magic } from 'next/font/google';
 import 'public/reset.css';
 import 'public/globals.css';
 // ---- KumaUI ----
@@ -15,8 +15,10 @@ export const metadata: Metadata = {
 };
 
 // ========== CSS宣言 ===========
-const notoSansJP = Noto_Sans_JP({ subsets: ['latin'], weight: ['400', '600'] });
+const notoSansJP = Noto_Sans_JP({ subsets: ['latin'], weight: ['400', '600', '900'] });
 const outfit = Outfit({ subsets: ['latin'] });
+const yuseiMagic = Yusei_Magic({ subsets: ['latin'], weight: '400' });
+
 const baseStyle = css`
   display: grid;
   place-items: center;
@@ -42,7 +44,12 @@ export default function RootLayout({
         <body>
           <div
             className={`${notoSansJP.className} ${baseStyle}`}
-            style={{ '--en': `${outfit.style.fontFamily}` } as React.CSSProperties}
+            style={
+              {
+                '--en': `${outfit.style.fontFamily}`,
+                '--yusei': `${yuseiMagic.style.fontFamily}`,
+              } as React.CSSProperties
+            }
           >
             <PocketTimeStamp />
             {children}

@@ -305,7 +305,13 @@ export default function PocketTimeStamp() {
           {/* ---- Contents ---- */}
           <div className="board app">
             <TabNav currentTab={currentTab} />
-            <section>
+            <section
+              className={css`
+                padding: 20px 10px;
+                width: 72%;
+                height: 100%;
+              `}
+            >
               {currentTab === 'Home' && <Home selectedCollectionData={selectedCollectionData} />}
               {currentTab === 'CreateTimeStamp' && selectedCollectionData && (
                 <TimeStamp

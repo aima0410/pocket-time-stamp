@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import Pokemon from 'src/types/Pokemon';
 import DefaultPokemonName from 'src/types/PokemonName';
 import CollectionData from 'src/types/CollectionData';
-// ---- Utils ----
-import { sortPokemonCollection } from '@utils/sortUtils';
+// ---- KumaUI ----
+import { css } from '@kuma-ui/core';
 
 // ========== 型定義 ==========
 interface Props {
@@ -17,11 +17,7 @@ interface Props {
 }
 
 // ========== コンポーネント関数 ==========
-export default function Collection({
-  pokemonList,
-  collectionData,
-  updateCollectionData,
-}: Props) {
+export default function Collection({ pokemonList, collectionData, updateCollectionData }: Props) {
   // -------- useState：宣言 --------
   const [selectedPokemon, setSelectedPokemon] = useState<DefaultPokemonName | string>('');
 
@@ -43,21 +39,71 @@ export default function Collection({
   }, []);
 
   return (
-    <section>
-      <ul>
+    <div
+      className={css`
+        height: 100%;
+      `}
+    >
+      <ul
+        className={css`
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+          align-items: flex-start;
+          align-content: space-around;
+          height: 100%;
+        `}
+      >
         {collectionData.map((pokemon) => (
           <li
             key={pokemon.id}
             onClick={() => {
               trackSelectedPokemon(pokemon.name);
             }}
+            className={css`
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              width: 30%;
+              height: 45%;
+              border-radius: 10px;
+            `}
+            style={{
+              backgroundColor: pokemon.selected ? '#d799a1' : '#ddd',
+              color: pokemon.selected ? '#fff' : '',
+            }}
           >
-            <Image src={pokemon.imageUrl} alt={pokemon.japaneseName} width={50} height={50} />
-            <h3>{pokemon.japaneseName}</h3>
-            <p>レベル{pokemon.level}</p>
+            <div
+              className={css`
+                padding: 8px;
+                border-radius: 50%;
+                background-color: #e4e4e45a;
+                margin-bottom: 20px;
+              `}
+            >
+              <Image src={pokemon.imageUrl} alt={pokemon.japaneseName} width={100} height={100} />
+            </div>
+            <h3
+              className={css`
+                font-family: var(--yusei);
+                letter-spacing: 0.04em;
+                font-size: 20px;
+                margin-bottom: 10px;
+              `}
+            >
+              {pokemon.japaneseName}
+            </h3>
+            <p
+              className={css`
+                font-family: var(--yusei);
+              `}
+            >
+              レベル{pokemon.level}
+            </p>
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   );
 }

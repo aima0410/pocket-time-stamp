@@ -3,6 +3,8 @@ import { mergeIdenticalActivity } from '@utils/activityUtils';
 import { useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
+// ---- KumaUI ----
+import { css } from '@kuma-ui/core';
 
 // ========== 型定義 ==========
 interface Props {
@@ -84,46 +86,36 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
   };
 
   return (
-    <>
-      <section>
-        <ul>
-          {unconfirmedActivityList.map((activity) =>
-            editedActivity === activity ? (
-              <li key={activity}>
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => handleChangeActivityInput(e.target.value)}
-                  onCompositionStart={() => setIsComposition(true)}
-                  onCompositionEnd={() => setIsComposition(false)}
-                  onKeyDown={(e) => {
-                    !isComposition &&
-                      e.key === 'Enter' &&
-                      errorMessage === '' &&
-                      handleClickUpdateButton();
-                  }}
-                />
-                <button onClick={handleClickUpdateButton} disabled={errorMessage !== ''}>
-                  更新
-                </button>
-                <button onClick={handleClickCancelInputButton}>キャンセル</button>
-                {errorMessage}
-              </li>
-            ) : (
-              <li key={activity}>
-                <span
-                  onClick={() => {
-                    handleClickEditButton(activity);
-                  }}
-                >
-                  {activity}
-                </span>
-                <button onClick={() => handleClickEditButton(activity)}>編集</button>
-                <button onClick={() => handleClickDeleteButton(activity)}>削除</button>
-              </li>
-            ),
-          )}
-          <li>
+    <div className="modal-back">
+      <section className="modal">
+        <h3
+          className={css`
+            font-size: 30px;
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 30px;
+          `}
+        >
+          アクティビティの編集
+        </h3>
+        <ul
+          className={css`
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 390px;
+          `}
+        >
+          <li
+            className={css`
+              display: flex;
+              width: 100%;
+              margin-bottom: 20px;
+            `}
+          >
             {isCreateNewActivity ? (
               <>
                 <input
@@ -145,6 +137,7 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
                 <button
                   onClick={handleClickAddButton}
                   disabled={inputValue === '' || errorMessage !== ''}
+                  className="modalBtn add"
                 >
                   追加
                 </button>
@@ -153,6 +146,7 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
                     setEdtiedActivity(null);
                     setIsCreateNewActivity(false);
                   }}
+                  className="cancel modalBtn"
                 >
                   キャンセル
                 </button>
@@ -164,19 +158,103 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
                   setIsCreateNewActivity(true);
                 }}
                 disabled={editedActivity !== null}
+                className="modalBtn add change"
               >
                 ＋新規追加
               </button>
             )}
           </li>
+          {unconfirmedActivityList.map((activity) =>
+            editedActivity === activity ? (
+              <li
+                key={activity}
+                className={css`
+                  display: flex;
+                  width: 100%;
+                  margin-bottom: 20px;
+                `}
+              >
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => handleChangeActivityInput(e.target.value)}
+                  onCompositionStart={() => setIsComposition(true)}
+                  onCompositionEnd={() => setIsComposition(false)}
+                  onKeyDown={(e) => {
+                    !isComposition &&
+                      e.key === 'Enter' &&
+                      errorMessage === '' &&
+                      handleClickUpdateButton();
+                  }}
+                  autoFocus
+                />
+                <button
+                  className="modalBtn"
+                  onClick={handleClickUpdateButton}
+                  disabled={errorMessage !== ''}
+                >
+                  更新
+                </button>
+                <button className="modalBtn cancel" onClick={handleClickCancelInputButton}>
+                  キャンセル
+                </button>
+                {errorMessage}
+              </li>
+            ) : (
+              <li
+                key={activity}
+                className={css`
+                  display: flex;
+                  justify-content: flex-start;
+                  margin-bottom: 20px;
+                `}
+              >
+                <span
+                  onClick={() => {
+                    handleClickEditButton(activity);
+                  }}
+                  className={css`
+                    display: block;
+                    width: 200px;
+                    padding: 10px 3px;
+                    text-align: left;
+                    margin-right: 10px;
+                    border: solid 2px #666;
+                  `}
+                >
+                  {activity}
+                </span>
+                <button className="modalBtn" onClick={() => handleClickEditButton(activity)}>
+                  編集
+                </button>
+                <button
+                  className="modalBtn delete"
+                  onClick={() => handleClickDeleteButton(activity)}
+                >
+                  削除
+                </button>
+              </li>
+            ),
+          )}
         </ul>
-        <button onClick={handleClickCompleteButton} disabled={editedActivity !== null}>
+        <button
+          className={css`
+            margin-top: 24px;
+            width: 80%;
+          `}
+          onClick={handleClickCompleteButton}
+          disabled={editedActivity !== null}
+        >
           確定
         </button>
-        <button onClick={() => switchAppStatus('StandbyMode')} disabled={editedActivity !== null}>
+        <button
+          className="cancel all"
+          onClick={() => switchAppStatus('StandbyMode')}
+          disabled={editedActivity !== null}
+        >
           キャンセル
         </button>
       </section>
-    </>
+    </div>
   );
 }

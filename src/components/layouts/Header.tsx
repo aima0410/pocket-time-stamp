@@ -26,8 +26,8 @@ export default function Header({
     <header
       className={css`
         display: flex;
-        justify-content: left;
-        padding: 30px 0 20px;
+        justify-content: space-between;
+        padding: 40px 0 20px;
         text-align: left;
       `}
     >
@@ -35,6 +35,7 @@ export default function Header({
         className={css`
           position: relative;
           bottom: 6px;
+          margin-right: 10px;
         `}
       >
         <h1
@@ -72,7 +73,7 @@ export default function Header({
         </button>
         <button
           className={css`
-            background-color: var(--oter-parts-bg-color);
+            background-color: var(--other-parts-bg-color);
             color: #e7e7e7;
           `}
           onClick={() => {

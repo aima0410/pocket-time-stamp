@@ -63,7 +63,7 @@ export default function Tutorial({ toggleTutorialMode, toggleDemo }: Props) {
         </button>
         <button
           className={css`
-            background-color: var(--oter-parts-bg-color);
+            background-color: var(--other-parts-bg-color);
           `}
           onClick={() => {
             toggleDemo(true);

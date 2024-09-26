@@ -49,15 +49,7 @@ export function createDemoCollection(
       evolutionChain: data.evolutionChain,
     };
 
-    if (33 <= level) {
-      const secondPokemonIndex = pokemonList.findIndex(
-        (pokemon) => data.evolutionChain[1] === pokemon.name,
-      );
-
-      collectionData.name = pokemonList[secondPokemonIndex].name;
-      collectionData.japaneseName = pokemonList[secondPokemonIndex].japaneseName;
-      collectionData.imageUrl = pokemonList[secondPokemonIndex].imageUrl;
-    } else if (66 <= level) {
+    if (66 <= level) {
       const thirdPokemonIndex = pokemonList.findIndex(
         (pokemon) => data.evolutionChain[2] === pokemon.name,
       );
@@ -65,6 +57,14 @@ export function createDemoCollection(
       collectionData.name = pokemonList[thirdPokemonIndex].name;
       collectionData.japaneseName = pokemonList[thirdPokemonIndex].japaneseName;
       collectionData.imageUrl = pokemonList[thirdPokemonIndex].imageUrl;
+    } else if (33 <= level) {
+      const secondPokemonIndex = pokemonList.findIndex(
+        (pokemon) => data.evolutionChain[1] === pokemon.name,
+      );
+
+      collectionData.name = pokemonList[secondPokemonIndex].name;
+      collectionData.japaneseName = pokemonList[secondPokemonIndex].japaneseName;
+      collectionData.imageUrl = pokemonList[secondPokemonIndex].imageUrl;
     }
 
     return collectionData;

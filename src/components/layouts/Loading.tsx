@@ -14,8 +14,9 @@ export default function Loading() {
       className={css`
         display: grid;
         place-items: center;
-        position: absolute;
+        position: fixed;
         inset: 0;
+        z-index: 999;
         background: #49b482;
         color: #fff;
       `}

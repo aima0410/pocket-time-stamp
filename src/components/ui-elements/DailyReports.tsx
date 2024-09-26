@@ -8,6 +8,8 @@ import { DailyData } from 'src/types/ReportsData';
 import arrowIcon from '@assets/images/arrow.svg';
 // ---- Components ----
 import TimeLine from '@ui-parts/TimeLine';
+// ---- KumaUI ----
+import { css } from '@kuma-ui/core';
 
 // ========== 型定義 ==========
 interface Props {
@@ -32,22 +34,70 @@ export default function DailyReport({ dailyData }: Props) {
   // -------- JSX --------
   return (
     <>
-      <div>
-        <TimeLine date={'理想のタイムライン'} timeLine={[]} />
-        <button onClick={handleLoadPrev} disabled={visibleItems === 0}>
-          <Image src={arrowIcon} alt="前のログを表示" width={14} height={14} />
+      <>
+        <button
+          className={css`
+            display: grid;
+            place-items: center;
+            padding: 0;
+            width: 100px;
+            height: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+          `}
+          onClick={handleLoadPrev}
+          disabled={visibleItems === 0}
+        >
+          <Image
+            className={css`
+              display: block;
+              width: 14px;
+              height: 14px;
+            `}
+            src={arrowIcon}
+            alt="前のログを表示"
+            width={14}
+            height={14}
+          />
         </button>
         <ol>
           {dailyData.slice(visibleItems, visibleItems + 5).map((data) => (
-            <li key={data.date}>
+            <li
+              key={data.date}
+              className={css`
+                margin-bottom: 20px;
+              `}
+            >
               <TimeLine date={data.date} timeLine={data.timeLine} />
             </li>
           ))}
         </ol>
-        <button onClick={handleLoadNext} disabled={visibleItems === dailyData.length - 5}>
-          <Image src={arrowIcon} alt="次のログを表示" width={14} height={14} />
+        <button
+          className={css`
+            display: grid;
+            place-items: center;
+            padding: 0;
+            width: 100px;
+            height: 20px;
+            border-radius: 5px;
+          `}
+          onClick={handleLoadNext}
+          disabled={visibleItems === dailyData.length - 5}
+        >
+          <Image
+            src={arrowIcon}
+            className={css`
+              display: block;
+              width: 14px;
+              height: 14px;
+              transform: rotate(180deg);
+            `}
+            alt="次のログを表示"
+            width={14}
+            height={14}
+          />
         </button>
-      </div>
+      </>
     </>
   );
 }
