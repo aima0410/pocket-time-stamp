@@ -6,6 +6,8 @@ import LogData from 'src/types/LogData';
 import { DailyData, Line } from 'src/types/ReportsData';
 // ---- Utils ----
 import { calculateWorkingTime } from '@utils/calculateTimeUtils';
+// ---- KumaUI ----
+import { css } from '@kuma-ui/core';
 
 // ========== 型定義 ==========
 interface Props {
@@ -58,7 +60,7 @@ export default function LogsTable({
   // -------- JSX --------
   return (
     <>
-      <table>
+      <table className="logs">
         <thead>
           <tr>
             <th>日程</th>
@@ -79,16 +81,42 @@ export default function LogsTable({
               <td>{calculateWorkingTime(log)}</td>
               <td>{log.activity}</td>
               <td>
-                <button onClick={() => handleClickEditButton(log)}>編集</button>
+                <button
+                  className={css`
+                    padding: 10px 20px;
+                    font-size: 14px;
+                  `}
+                  onClick={() => handleClickEditButton(log)}
+                >
+                  編集
+                </button>
               </td>
               <td>
-                <button onClick={() => handleClickDeleteButton(log)}>削除</button>
+                <button
+                  className={css`
+                    padding: 10px 20px;
+                    font-size: 14px;
+                    background-color: #333;
+                  `}
+                  onClick={() => handleClickDeleteButton(log)}
+                >
+                  削除
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {visibleItems < displayLogs.length && <button onClick={handleLoadMore}>もっと見る</button>}
+      {visibleItems < displayLogs.length && (
+        <button
+          className={css`
+            margin-bottom: 20px;
+          `}
+          onClick={handleLoadMore}
+        >
+          もっと見る
+        </button>
+      )}
     </>
   );
 }

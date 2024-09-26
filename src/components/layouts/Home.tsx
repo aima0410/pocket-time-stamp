@@ -27,7 +27,7 @@ export default function Home({ selectedCollectionData }: Props) {
           justify-content: center;
           align-items: center;
           height: 100%;
-          padding-top: 90px;
+          padding-top: 100px;
           color: #474747;
           font-family: var(--yusei);
         `}

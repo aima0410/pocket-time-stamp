@@ -21,6 +21,12 @@ interface TimeLineStyle {
 export default function TimeLine({ date, timeLine }: Props) {
   const [displayDate, setDisplayDate] = useState<string>('');
   const [lineStyles, setLineStyles] = useState<Array<TimeLineStyle>>([]);
+  const [hoverInfo, setHoverInfo] = useState({
+    is: false,
+    activity: '',
+    startTime: '',
+    endTime: '',
+  });
 
   useEffect(() => {
     const [year, month, day] = date.split('/').map(Number);
@@ -118,7 +124,7 @@ export default function TimeLine({ date, timeLine }: Props) {
           >
             {lineStyles.map((style, i) => (
               <div
-                key={`${date}-${timeLine[i].startTime}`}
+                key={`${date}-${timeLine[i].startTime}-${i}`}
                 className={css`
                   position: absolute;
                   top: 0;
@@ -137,11 +143,47 @@ export default function TimeLine({ date, timeLine }: Props) {
                   left: `${(style.start / 24) * 100}%`,
                   width: `${((style.end - style.start) / 24) * 100}%`,
                 }}
+                onMouseOver={() =>
+                  setHoverInfo({
+                    is: true,
+                    activity: timeLine[i].activity,
+                    startTime: timeLine[i].startTime,
+                    endTime: timeLine[i].endTime,
+                  })
+                }
+                onMouseLeave={() =>
+                  setHoverInfo({ is: false, activity: '', startTime: '', endTime: '' })
+                }
               >
                 {style.end - style.start > 1 && style.activity}
               </div>
             ))}
           </div>
+          {hoverInfo.is && (
+            <div
+              className={css`
+                position: absolute;
+                z-index: 99;
+                top: 40px;
+                left: 100px;
+                color: #343434;
+                padding: 20px;
+                border-radius: 6px;
+                background-color: #ffffff;
+                white-space: pre-wrap;
+                pointer-events: none;
+                box-shadow: 0 4px 6px #969696;
+                line-height: 1.5em;
+              `}
+            >
+              活動内容：{hoverInfo.activity}
+              <br />
+              開始時刻：{hoverInfo.startTime}
+              <br />
+              終了時刻：
+              {hoverInfo.endTime}
+            </div>
+          )}
         </div>
       )}
     </div>

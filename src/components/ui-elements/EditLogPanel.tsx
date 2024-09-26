@@ -61,7 +61,7 @@ export default function EditLogPanel({
     const end = new Date(`1970-01-01T${endTime}`);
     if (end < start && endTime !== '00:00') {
       setTimeWarning('終了時刻が日付を超えています。');
-    } else if(endTime === startTime) {
+    } else if (endTime === startTime) {
       setTimeWarning('活動時間が0分なため更新できません。');
     } else {
       setTimeWarning('');
@@ -138,75 +138,77 @@ export default function EditLogPanel({
 
   // -------- JSX --------
   return (
-    <section>
-      <ul>
-        <li>
-          <select
-            value={unconfirmedNewLog.activity ?? editedLog.activity}
-            onChange={(e) => {
-              const newSelectedActivity = e.target.value;
-              const newLog = { ...unconfirmedNewLog, activity: newSelectedActivity };
-              updateUnconfirmedNewLog(newLog);
-            }}
-          >
-            {!activities.includes(editedLog.activity) && <option>{editedLog.activity}</option>}
-            {activities.map((activity) => (
-              <option key={activity} value={activity}>
-                {activity}
-              </option>
-            ))}
-          </select>
-        </li>
-        <li>
-          <h3>日程</h3>
-          <div>
-            <input
-              type="date"
-              value={unconfirmedNewLog.date.replaceAll('/', '-')}
-              max={currentDate.replaceAll('/', '-')}
+    <div className="modal-back">
+      <div className="modal">
+        <ul>
+          <li>
+            <select
+              value={unconfirmedNewLog.activity ?? editedLog.activity}
               onChange={(e) => {
-                handleChangeDate(e.target.value);
-              }}
-            />
-          </div>
-        </li>
-        <li>
-          <h3>開始時刻</h3>
-          <div>
-            <input
-              type="time"
-              value={unconfirmedNewLog.startTime}
-              onChange={(e) => {
-                const newStartTime = e.target.value;
-                const newLog = { ...unconfirmedNewLog, startTime: newStartTime };
+                const newSelectedActivity = e.target.value;
+                const newLog = { ...unconfirmedNewLog, activity: newSelectedActivity };
                 updateUnconfirmedNewLog(newLog);
               }}
-            />
-          </div>
-        </li>
-        <li>
-          <h3>終了時刻</h3>
-          <div>
-            <input
-              type="time"
-              value={unconfirmedNewLog.endTime}
-              onChange={(e) => {
-                const newEndTime = e.target.value;
-                const newLog = { ...unconfirmedNewLog, endTime: newEndTime };
-                updateUnconfirmedNewLog(newLog);
-              }}
-            />
-          </div>
-        </li>
-      </ul>
-      {timeWarning && <p style={{ color: 'red' }}>{timeWarning}</p>}
-      <button
-        onClick={handleClickUpdateButton}
-        disabled={unconfirmedNewLog.endTime === unconfirmedNewLog.startTime}
-      >
-        更新
-      </button>
-      <button onClick={() => switchAppStatus('StandbyMode')}>キャンセル</button>
-    </section>
+            >
+              {!activities.includes(editedLog.activity) && <option>{editedLog.activity}</option>}
+              {activities.map((activity) => (
+                <option key={activity} value={activity}>
+                  {activity}
+                </option>
+              ))}
+            </select>
+          </li>
+          <li>
+            <h3>日程</h3>
+            <div>
+              <input
+                type="date"
+                value={unconfirmedNewLog.date.replaceAll('/', '-')}
+                max={currentDate.replaceAll('/', '-')}
+                onChange={(e) => {
+                  handleChangeDate(e.target.value);
+                }}
+              />
+            </div>
+          </li>
+          <li>
+            <h3>開始時刻</h3>
+            <div>
+              <input
+                type="time"
+                value={unconfirmedNewLog.startTime}
+                onChange={(e) => {
+                  const newStartTime = e.target.value;
+                  const newLog = { ...unconfirmedNewLog, startTime: newStartTime };
+                  updateUnconfirmedNewLog(newLog);
+                }}
+              />
+            </div>
+          </li>
+          <li>
+            <h3>終了時刻</h3>
+            <div>
+              <input
+                type="time"
+                value={unconfirmedNewLog.endTime}
+                onChange={(e) => {
+                  const newEndTime = e.target.value;
+                  const newLog = { ...unconfirmedNewLog, endTime: newEndTime };
+                  updateUnconfirmedNewLog(newLog);
+                }}
+              />
+            </div>
+          </li>
+        </ul>
+        {timeWarning && <p style={{ color: 'red' }}>{timeWarning}</p>}
+        <button
+          onClick={handleClickUpdateButton}
+          disabled={unconfirmedNewLog.endTime === unconfirmedNewLog.startTime}
+        >
+          更新
+        </button>
+        <button onClick={() => switchAppStatus('StandbyMode')}>キャンセル</button>
+      </div>
+    </div>
   );
 }

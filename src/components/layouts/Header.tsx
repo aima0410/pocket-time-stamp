@@ -45,7 +45,9 @@ export default function Header({
             font-size: clamp(16px, 3vw, 36px);
           `}
         >
-          Pocket<span></span>Time<span></span>Stamp
+          <a href="/">
+            Pocket<span></span>Time<span></span>Stamp
+          </a>
         </h1>
         <p
           className={css`

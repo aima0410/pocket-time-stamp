@@ -7,6 +7,8 @@ import LogData from 'src/types/LogData';
 import LogsTable from '@ui-elements/LogsTable';
 import EditLogPanel from '@ui-elements/EditLogPanel';
 import { DailyData } from 'src/types/ReportsData';
+// ---- KumaUI ---
+import { css } from '@kuma-ui/core';
 
 // ========== 型定義 ==========
 interface Props {
@@ -37,7 +39,14 @@ export default function Histories({
 
   return (
     <>
-      <section>
+      <div
+        className={css`
+          width: 100%;
+          height: 100%;
+          padding: 0 10px;
+          overflow-y: scroll;
+        `}
+      >
         <LogsTable
           switchAppStatus={switchAppStatus}
           dailyData={dailyData}
@@ -55,7 +64,7 @@ export default function Histories({
             trackEditedLog={trackEditedLog}
           />
         )}
-      </section>
+      </div>
     </>
   );
 }
