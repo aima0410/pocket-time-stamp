@@ -7,6 +7,8 @@ import { DailyData, Line } from 'src/types/ReportsData';
 // ---- Utils ----
 import { exclusionSomeLogInDailyData } from '@utils/timeLineUtils';
 import insertLog from '@utils/insertLog';
+// ---- KumaUI ----
+import { css } from '@kuma-ui/core';
 
 // ========== 型定義 ==========
 interface Props {
@@ -141,8 +143,15 @@ export default function EditLogPanel({
     <div className="modal-back">
       <div className="modal">
         <ul>
-          <li>
+          <li className="editLogList">
             <select
+              className={css`
+                padding: 20px 30px;
+                font-size: 20px;
+                font-weight: 600;
+                border: solid 2px #333;
+                border-radius: 6px;
+              `}
               value={unconfirmedNewLog.activity ?? editedLog.activity}
               onChange={(e) => {
                 const newSelectedActivity = e.target.value;
@@ -158,7 +167,7 @@ export default function EditLogPanel({
               ))}
             </select>
           </li>
-          <li>
+          <li className="editLogList">
             <h3>日程</h3>
             <div>
               <input
@@ -171,7 +180,7 @@ export default function EditLogPanel({
               />
             </div>
           </li>
-          <li>
+          <li className="editLogList">
             <h3>開始時刻</h3>
             <div>
               <input
@@ -185,9 +194,14 @@ export default function EditLogPanel({
               />
             </div>
           </li>
-          <li>
+          <li className="editLogList">
             <h3>終了時刻</h3>
-            <div>
+            <div
+              className={css`
+                position: relative;
+                width: 460px;
+              `}
+            >
               <input
                 type="time"
                 value={unconfirmedNewLog.endTime}
@@ -197,17 +211,39 @@ export default function EditLogPanel({
                   updateUnconfirmedNewLog(newLog);
                 }}
               />
+              <div
+                className={css`
+                  position: relative;
+                `}
+              >
+                {timeWarning && (
+                  <p
+                    className={css`
+                      position: absolute;
+                      top: 5px;
+                      left: 0;
+                      text-align: center;
+                      color: red;
+                      width: 100%;
+                      font-size: 13px;
+                    `}
+                  >
+                    {timeWarning}
+                  </p>
+                )}
+              </div>
             </div>
           </li>
         </ul>
-        {timeWarning && <p style={{ color: 'red' }}>{timeWarning}</p>}
         <button
           onClick={handleClickUpdateButton}
           disabled={unconfirmedNewLog.endTime === unconfirmedNewLog.startTime}
         >
           更新
         </button>
-        <button onClick={() => switchAppStatus('StandbyMode')}>キャンセル</button>
+        <button className="cancel" onClick={() => switchAppStatus('StandbyMode')}>
+          キャンセル
+        </button>
       </div>
     </div>
   );

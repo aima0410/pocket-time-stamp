@@ -204,53 +204,149 @@ export default function StampingPanel({
 
   // -------- JSX --------
   return (
-    <div className='modal-back'>
-      <div className='modal'>
-        <table
-          onMouseEnter={() => {
-            handleMouseHover(true);
-          }}
-          onMouseLeave={() => {
-            handleMouseHover(false);
-          }}
+    <>
+      <div className="modal-back">
+        <div
+          className={`modal ${css`
+            justify-content: center;
+            align-items: center;
+            padding-top: 80px;
+            overflow-y: hidden;
+          `}`}
         >
-          <tbody>
-            <tr>
-              <th>活動内容</th>
-              <td>{timedActivity}</td>
-            </tr>
-            <tr>
-              <th>日　　程</th>
-              <td>{timedLog.date}</td>
-            </tr>
-            <tr>
-              <th>開始時刻</th>
-              <td>{timedLog.startTime}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div>
-          <p>終了時刻</p>
-          <input
-            type="time"
-            value={enteredEndTime}
-            min={timedLog.startTime}
-            onChange={(e) => {
-              const newEndTime = e.target.value;
-              handleChangeEndTimeInput(newEndTime);
-            }}
-          />
-          <button onClick={handleClickGetNowTimeButton}>いま</button>
-          {errorMessage}
+          {isHoverMessage && (
+            <div
+              className={css`
+                position: absolute;
+                top: 16px;
+                right: 16px;
+                color: #4d4d4d;
+                z-index: 9999;
+                padding: 30px;
+                box-shadow: 0 3px 6px #3333339c;
+                background-color: #ffb0d8;
+                line-height: 1.7em;
+                border-radius: 10px;
+              `}
+            >
+              作成後にRecentHistoriesから編集できるよ！
+            </div>
+          )}
+          <div
+            className={css`
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              border-radius: 10px;
+              padding: 50px 70px;
+              border: solid 1px #333;
+              margin-bottom: 30px;
+            `}
+          >
+            <table
+              onMouseOver={() => {
+                handleMouseHover(true);
+              }}
+              onMouseLeave={() => {
+                handleMouseHover(false);
+              }}
+              className={css`
+                position: relative;
+                padding-top: 30px;
+                margin-bottom: 30px;
+              `}
+            >
+              <tbody className="stampMode">
+                <tr>
+                  <th>活動内容</th>
+                  <td>{timedActivity}</td>
+                </tr>
+                <tr>
+                  <th>日　　程</th>
+                  <td>{timedLog.date}</td>
+                </tr>
+                <tr>
+                  <th>開始時刻</th>
+                  <td>{timedLog.startTime}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div>
+              <h3
+                className={css`
+                  padding-top: 10px;
+                  font-size: 20px;
+                  font-weight: 600;
+                  margin-bottom: 16px;
+                  color: #545454;
+                `}
+              >
+                終了時刻
+              </h3>
+              <div
+                className={css`
+                  display: flex;
+                  justify-content: center;
+                  position: relative;
+                  left: 25px;
+                  margin-bottom: 10px;
+                `}
+              >
+                <input
+                  type="time"
+                  value={enteredEndTime}
+                  min={timedLog.startTime}
+                  onChange={(e) => {
+                    const newEndTime = e.target.value;
+                    handleChangeEndTimeInput(newEndTime);
+                  }}
+                  className={css`
+                    width: 100px;
+                    text-align: center;
+                    font-size: 20px;
+                    padding-left: 8px;
+                    margin-right: 10px;
+                  `}
+                  autoFocus
+                />
+                <button
+                  className={css`
+                    display: block;
+                    width: 60px;
+                    height: 60px;
+                    padding: 0;
+                    margin: 0;
+                    font-size: 12px;
+                    border-radius: 50%;
+                  `}
+                  onClick={handleClickGetNowTimeButton}
+                >
+                  いま
+                </button>
+              </div>
+              <div
+                className={css`
+                  margin-bottom: 10px;
+                  color: #ea4b4b;
+                  font-size: 13px;
+                `}
+              >
+                {errorMessage}
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={handleClickCompleteTimerButton}
+            disabled={timedLog.startTime === enteredEndTime}
+          >
+            タイマー終了
+          </button>
+          <button className="cancel" onClick={handleClickCancelTimerButton}>
+            キャンセル
+          </button>
         </div>
-        <button onClick={handleClickCancelTimerButton}>キャンセル</button>
-        <button
-          onClick={handleClickCompleteTimerButton}
-          disabled={timedLog.startTime === enteredEndTime}
-        >
-          タイマー終了
-        </button>
       </div>
-    </div>
+    </>
   );
 }
