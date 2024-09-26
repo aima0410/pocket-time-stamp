@@ -82,7 +82,7 @@ export default function DailyReport({ dailyData }: Props) {
             border-radius: 5px;
           `}
           onClick={handleLoadNext}
-          disabled={visibleItems === dailyData.length - 5}
+          disabled={visibleItems === dailyData.length - 5 || dailyData.length <= 5}
         >
           <Image
             src={arrowIcon}

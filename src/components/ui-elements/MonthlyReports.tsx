@@ -87,7 +87,7 @@ export default function MonthlyReport({ monthlyData }: Props) {
           margin: 0 20px;
         `}
         onClick={handleLoadPrev}
-        disabled={visibleItems === monthlyData.length - 3}
+        disabled={visibleItems === monthlyData.length - 3 || monthlyData.length <= 3}
       >
         <Image
           className={css`
@@ -192,7 +192,7 @@ export default function MonthlyReport({ monthlyData }: Props) {
                   >
                     {log.activity}
                   </span>
-                  <span>{log.totalTime}</span>
+                  <span>{Math.floor(log.totalTime / 60)}</span>
                 </li>
               ))}
             </ol>

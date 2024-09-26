@@ -234,14 +234,15 @@ button.modalBtn.add.change:disabled {
 }
 
 
-table.logs {
+.logs {
   border-radius: 20px;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow-y: scroll;
   background-color: #fff;
   margin-bottom: 30px;
 }
+
 
 .logs th,
 .logs td {
@@ -285,10 +286,12 @@ table.logs {
   text-align: center;
   border-radius: 7px;
 }
+
 .editLogList input[type="time"] {
   text-align: right;
   padding-right: 50px;
 }
+
 .editLogList h3 {
   font-weight: 600;
   margin-bottom: 14px;

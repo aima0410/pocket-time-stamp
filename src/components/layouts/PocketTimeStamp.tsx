@@ -259,8 +259,6 @@ export default function PocketTimeStamp() {
     // --------------------
     // dailyDataが変更されたときのmonthlyDataおよびtotalDataの連携
     const storedDailyData = localStorage.getItem('dailyData');
-    const storedMonthlyData = localStorage.getItem('monthlyData');
-    const storedTotalData = localStorage.getItem('totalData');
     if (!storedDailyData) {
       // dailyDataが存在しないときはmonthlyDataおよびtotalDataを削除
       localStorage.removeItem('monthlyData');

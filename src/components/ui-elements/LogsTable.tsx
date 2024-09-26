@@ -59,8 +59,13 @@ export default function LogsTable({
 
   // -------- JSX --------
   return (
-    <>
-      <table className="logs">
+    <div className="logs">
+      <table
+        className={css`
+          overflow-y: scroll;
+          width: 100%;
+        `}
+      >
         <thead>
           <tr>
             <th>日程</th>
@@ -110,6 +115,7 @@ export default function LogsTable({
       {visibleItems < displayLogs.length && (
         <button
           className={css`
+            margin-top: 20px;
             margin-bottom: 20px;
           `}
           onClick={handleLoadMore}
@@ -117,6 +123,6 @@ export default function LogsTable({
           もっと見る
         </button>
       )}
-    </>
+    </div>
   );
 }

@@ -54,7 +54,7 @@ export default function TotalReport({ totalData }: Props) {
                 margin-bottom: 5px;
               `}
             >
-              {data.activity} {data.totalTime}時間
+              {data.activity} {Math.floor(data.totalTime / 60)}時間
             </div>
             <div
               className={css`
