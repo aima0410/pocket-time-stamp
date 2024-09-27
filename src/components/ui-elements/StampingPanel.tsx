@@ -170,27 +170,33 @@ export default function StampingPanel({
     let overlappingTimeLine: Array<Line> | undefined = undefined;
 
     if (targetData) {
+      // 同じ日付のTimeLineから、終了時刻が現在時刻より大きいLogデータのみfilterして配列を返す。
       const filteredTargetTimeLine = targetData.timeLine.filter((log: Line) => {
-        const pastStartTime = new Date(`${date} ${log.startTime}`).getTime();
+        // const pastStartTime = new Date(`${date} ${log.startTime}`).getTime();
         const pastEndTime = new Date(`${date} ${log.endTime}`).getTime();
-        return pastStartTime < currentTime && currentTime < pastEndTime;
-      }) as Array<Line> | undefined;
-      overlappingTimeLine = filteredTargetTimeLine
-        ? sortTimelineDescending(filteredTargetTimeLine)
-        : undefined;
+        return currentTime < pastEndTime;
+      }) as Array<Line>;
+      // filterで獲得したデータがあればソートしてoverlappingTimeLineに追加。
+      // なければundefinedを返す。
+      overlappingTimeLine =
+        filteredTargetTimeLine.length === 0
+          ? undefined
+          : sortTimelineDescending(filteredTargetTimeLine);
     }
 
     // 開始時刻を「現在時刻」または「既存の最新ログの終了時刻」に設定
     const startTime = overlappingTimeLine ? overlappingTimeLine[0].endTime : defaultTime;
+    const endTime = startTime;
 
     const newLog: LogData = {
       ...timedLog,
       date: date,
       activity: timedActivity,
       startTime: startTime,
+      endTime: endTime,
     };
 
-    updateEnteredEndTime(defaultTime);
+    updateEnteredEndTime(endTime);
     trackTimedLogInfo(newLog);
   }, []);
 

@@ -154,7 +154,6 @@ export default function PocketTimeStamp() {
     const storedDailyData = localStorage.getItem('dailyData');
     const storedMonthlyData = localStorage.getItem('monthlyData');
     const storedTotalData = localStorage.getItem('totalData');
-    const storedPokemonList = localStorage.getItem('pokemonList');
     const storedCollectionData = localStorage.getItem('collectionData');
     const storedActivities = localStorage.getItem('activities');
 

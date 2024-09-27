@@ -24,7 +24,6 @@ export default function FinalConfirmationDialog({
   switchAppStatus,
   toggleTutorialMode,
   isDemo,
-  toggleDemoAndResetData,
   defaultActivities,
   updateDailyData,
   updateCollectionData,
@@ -83,8 +82,10 @@ export default function FinalConfirmationDialog({
             !isDemo && localStorage.setItem('activities', JSON.stringify(defaultActivities));
 
             !isDemo && toggleTutorialMode(true);
+
             switchAppStatus('StandbyMode');
             // toggleDemoAndResetData(false);
+            !isDemo && window.location.reload();
           }}
           className={css`
             margin-right: 10px;

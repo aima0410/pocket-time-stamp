@@ -30,13 +30,13 @@ export default function TimeLine({ date, timeLine }: Props) {
 
   useEffect(() => {
     const [year, month, day] = date.split('/').map(Number);
-    const today = new Date();
-    const thisDate = new Date(year, month - 1, day);
+    const nowDate = new Date();
+    const processingDate = new Date(year, month - 1, day);
 
     if (
-      today.getFullYear() === thisDate.getFullYear() &&
-      today.getMonth() === thisDate.getMonth() &&
-      today.getDate() === thisDate.getDate()
+      nowDate.getFullYear() === processingDate.getFullYear() &&
+      nowDate.getMonth() === processingDate.getMonth() &&
+      nowDate.getDate() === processingDate.getDate()
     ) {
       setDisplayDate('本日');
     } else if (date === '') {
@@ -48,7 +48,7 @@ export default function TimeLine({ date, timeLine }: Props) {
   }, [date]);
 
   useEffect(() => {
-    const styles = timeLine.map((log) => {
+    const styles: Array<TimeLineStyle> = timeLine.map((log) => {
       const [startHour, startMinutes] = log.startTime.split(':').map(Number);
 
       const [endHour, endMinutes] =
@@ -124,7 +124,7 @@ export default function TimeLine({ date, timeLine }: Props) {
           >
             {lineStyles.map((style, i) => (
               <div
-                key={`${date}-${timeLine[i].startTime}-${i}`}
+                key={`${date}-${style.start}-${i}`}
                 className={css`
                   position: absolute;
                   top: 0;
@@ -146,7 +146,7 @@ export default function TimeLine({ date, timeLine }: Props) {
                 onMouseOver={() =>
                   setHoverInfo({
                     is: true,
-                    activity: timeLine[i].activity,
+                    activity: style.activity,
                     startTime: timeLine[i].startTime,
                     endTime: timeLine[i].endTime,
                   })
