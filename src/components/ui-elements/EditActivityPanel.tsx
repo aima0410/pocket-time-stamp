@@ -109,61 +109,6 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
             width: 390px;
           `}
         >
-          <li
-            className={css`
-              display: flex;
-              width: 100%;
-              margin-bottom: 20px;
-            `}
-          >
-            {isCreateNewActivity ? (
-              <>
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => handleChangeActivityInput(e.target.value)}
-                  onCompositionStart={() => setIsComposition(true)}
-                  onCompositionEnd={() => setIsComposition(false)}
-                  onKeyDown={(e) => {
-                    !isComposition &&
-                      e.key === 'Enter' &&
-                      inputValue !== '' &&
-                      errorMessage === '' &&
-                      handleClickAddButton();
-                  }}
-                  autoFocus
-                />
-                {errorMessage}
-                <button
-                  onClick={handleClickAddButton}
-                  disabled={inputValue === '' || errorMessage !== ''}
-                  className="modalBtn add"
-                >
-                  追加
-                </button>
-                <button
-                  onClick={() => {
-                    setEdtiedActivity(null);
-                    setIsCreateNewActivity(false);
-                  }}
-                  className="cancel modalBtn"
-                >
-                  キャンセル
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={() => {
-                  setEdtiedActivity('');
-                  setIsCreateNewActivity(true);
-                }}
-                disabled={editedActivity !== null}
-                className="modalBtn add change"
-              >
-                ＋新規追加
-              </button>
-            )}
-          </li>
           {unconfirmedActivityList.map((activity) =>
             editedActivity === activity ? (
               <li
@@ -236,6 +181,61 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
               </li>
             ),
           )}
+          <li
+            className={css`
+              display: flex;
+              width: 100%;
+              margin-bottom: 20px;
+            `}
+          >
+            {isCreateNewActivity ? (
+              <>
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => handleChangeActivityInput(e.target.value)}
+                  onCompositionStart={() => setIsComposition(true)}
+                  onCompositionEnd={() => setIsComposition(false)}
+                  onKeyDown={(e) => {
+                    !isComposition &&
+                      e.key === 'Enter' &&
+                      inputValue !== '' &&
+                      errorMessage === '' &&
+                      handleClickAddButton();
+                  }}
+                  autoFocus
+                />
+                {errorMessage}
+                <button
+                  onClick={handleClickAddButton}
+                  disabled={inputValue === '' || errorMessage !== ''}
+                  className="modalBtn add"
+                >
+                  追加
+                </button>
+                <button
+                  onClick={() => {
+                    setEdtiedActivity(null);
+                    setIsCreateNewActivity(false);
+                  }}
+                  className="cancel modalBtn"
+                >
+                  キャンセル
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  setEdtiedActivity('');
+                  setIsCreateNewActivity(true);
+                }}
+                disabled={editedActivity !== null}
+                className="modalBtn add change"
+              >
+                ＋新規追加
+              </button>
+            )}
+          </li>
         </ul>
         <button
           className={css`
