@@ -12,6 +12,7 @@ interface Props {
   switchAppStatus: (newMode: AppStatus) => void;
   toggleTutorialMode: (isTutorial: boolean) => void;
   isDemo: boolean;
+  toggleDemoAndResetData: (isDemo: boolean) => void;
   defaultActivities: Array<string>;
   updateDailyData: (newDailyData: Array<DailyData>) => void;
   updateCollectionData: (newCollection: Array<CollectionData>) => void;
@@ -23,6 +24,7 @@ export default function FinalConfirmationDialog({
   switchAppStatus,
   toggleTutorialMode,
   isDemo,
+  toggleDemoAndResetData,
   defaultActivities,
   updateDailyData,
   updateCollectionData,
@@ -41,7 +43,7 @@ export default function FinalConfirmationDialog({
       >
         <h3
           className={css`
-          margin-top: 30px;
+            margin-top: 30px;
             margin-bottom: 50px;
             font-size: 30px;
             font-weight: 600;
@@ -80,8 +82,9 @@ export default function FinalConfirmationDialog({
 
             !isDemo && localStorage.setItem('activities', JSON.stringify(defaultActivities));
 
-            toggleTutorialMode(true);
+            !isDemo && toggleTutorialMode(true);
             switchAppStatus('StandbyMode');
+            // toggleDemoAndResetData(false);
           }}
           className={css`
             margin-right: 10px;

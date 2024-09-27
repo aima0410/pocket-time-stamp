@@ -59,6 +59,7 @@ export const fetchPokemonList = async (
   pokemonNameList: Array<DefaultPokemonName | string>,
   getPokemonList: (pokemonList: Array<Pokemon>) => void,
   getCollectionData: (collectionList: Array<CollectionData>) => void,
+  isDemo: boolean,
 ) => {
   // すべてのポケモンデータを非同期で取得
   const pokemonDataList = await Promise.all(pokemonNameList.map((name) => fetchPokemonData(name)));
@@ -79,7 +80,7 @@ export const fetchPokemonList = async (
   // コレクションをソートし、状態を更新してローカルストレージに保存
   const sortedDefaultCollection = sortPokemonCollection(filteredDefaultCollection);
   getCollectionData(sortedDefaultCollection);
-  localStorage.setItem('collectionData', JSON.stringify(sortedDefaultCollection));
+  !isDemo && localStorage.setItem('collectionData', JSON.stringify(sortedDefaultCollection));
 
   const allEvolutionNameList: Array<string> = [];
 
@@ -106,5 +107,5 @@ export const fetchPokemonList = async (
 
   // フィルタリングされたポケモンリストで状態を更新し、ローカルストレージに保存
   getPokemonList(allPokemonDataList);
-  localStorage.setItem('pokemonList', JSON.stringify(allPokemonDataList));
+  !isDemo && localStorage.setItem('pokemonList', JSON.stringify(allPokemonDataList));
 };

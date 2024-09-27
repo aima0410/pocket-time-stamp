@@ -132,13 +132,16 @@ export default function PocketTimeStamp() {
   const updateCollectionData = (newCollectionData: Array<CollectionData>) => {
     const sortedCollectionData = sortPokemonCollection(newCollectionData);
 
-    newCollectionData.length === 0
-      ? fetchPokemonList(defaultPokemonNameList, getPokemonList, getCollectionData)
-      : setCollectionData(sortedCollectionData);
+    setCollectionData(sortedCollectionData);
+
+    if (isDemo && newCollectionData.length === 0) {
+      fetchPokemonList(defaultPokemonNameList, getPokemonList, getCollectionData, isDemo);
+    }
 
     if (!isDemo) {
-      newCollectionData.length === 0 && localStorage.removeItem('collectionData');
-      localStorage.setItem('collectionData', JSON.stringify(sortedCollectionData));
+      appStatus === 'DeleteMode' && newCollectionData.length === 0
+        ? localStorage.removeItem('collectionData')
+        : localStorage.setItem('collectionData', JSON.stringify(sortedCollectionData));
     }
   };
 
@@ -175,8 +178,8 @@ export default function PocketTimeStamp() {
     // ---- ポケモンのデータをセット ----
     if (storedCollectionData) {
       getCollectionData(JSON.parse(storedCollectionData));
-    } else if (storedPokemonList) {
-      fetchPokemonList(defaultPokemonNameList, getPokemonList, getCollectionData);
+    } else {
+      fetchPokemonList(defaultPokemonNameList, getPokemonList, getCollectionData, isDemo);
     }
 
     // ---- アクティビティのデータをセット ----
@@ -207,7 +210,7 @@ export default function PocketTimeStamp() {
       // あり：ローカルストレージのデータをセット
       getPokemonList(JSON.parse(storedPokemonList));
     } else {
-      fetchPokemonList(defaultPokemonNameList, getPokemonList, getCollectionData);
+      fetchPokemonList(defaultPokemonNameList, getPokemonList, getCollectionData, isDemo);
     }
 
     // ---- その他のローカルデータをセット ----
@@ -361,6 +364,7 @@ export default function PocketTimeStamp() {
               switchAppStatus={switchAppStatus}
               toggleTutorialMode={toggleTutorialMode}
               isDemo={isDemo}
+              toggleDemoAndResetData={toggleDemoAndResetData}
               defaultActivities={defaultActivities}
               updateDailyData={updateDailyData}
               updateCollectionData={updateCollectionData}

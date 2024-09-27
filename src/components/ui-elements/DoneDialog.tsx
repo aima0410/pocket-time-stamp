@@ -144,7 +144,6 @@ export default function DoneDialog({ swithAppStatus, selectedCollectionData, exp
           `}
           onClick={() => {
             swithAppStatus('StandbyMode');
-            router.refresh();
             router.push('/');
           }}
         >
