@@ -73,34 +73,35 @@ export default function Reports({
         `}
       >
         {dailyData.length === 0 ? (
-          <>
-            <p
+          <p
+            className={css`
+              font-size: 20px;
+              font-weight: 900;
+              color: #828282;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
+              height: 100%;
+              line-height: 1.7em;
+            `}
+          >
+            <span
               className={css`
-                font-size: 20px;
-                font-weight: 900;
-                color: #828282;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
+                display: block;
               `}
             >
-              <span
-                className={css`
-                  display: block;
-                `}
-              >
-                まだ記録がありません。
-              </span>
-              <span
-                className={css`
-                  display: block;
-                `}
-              >
-                最初のタイムスタンプを作成してください。
-              </span>
-            </p>
-          </>
+              まだ記録がありません。
+            </span>
+            <span
+              className={css`
+                display: block;
+              `}
+            >
+              最初のタイムスタンプを作成してください。
+            </span>
+          </p>
         ) : (
           <>
             <button
