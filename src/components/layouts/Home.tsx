@@ -4,8 +4,6 @@ import Image from 'next/image';
 import Message from '@ui-parts/Message';
 // ---- Types ----
 import CollectionData from 'src/types/CollectionData';
-// ---- Utils ----
-import { getRemainingReqExpForNext } from '@utils/getLevelInfo';
 // ---- Constants ----
 import levelTable from '@assets/LevelTable';
 // ---- KumaUI ----

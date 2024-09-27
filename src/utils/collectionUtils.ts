@@ -36,7 +36,7 @@ export function createDemoCollection(
   const selectedIndex = getRandomInt(0, maxIndex);
   return collectionData.map((data, i) => {
     const level = getRandomLevel();
-    const XP = getRandomDemoXP(level);
+    const XP = getRandomDemoXP(level) + levelTable[level - 1].totalExp;
 
     const collectionData: CollectionData = {
       selected: i === selectedIndex,
