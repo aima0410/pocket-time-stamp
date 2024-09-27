@@ -1,8 +1,9 @@
-# done-logger
+# PocketTimeStamp
 
 ```sh
 npx create-next-app@latest
 ```
+
 | 項目 |  |
 | -- | -- |
 | フレームワーク | `Next.js（App Router）` |
@@ -17,6 +18,14 @@ npx create-next-app@latest
 ```sh
 src/
 ├── app/
+│   ├── time-stamp/
+│   │   └── page.tsx
+│   ├── histories/
+│   │   └── page.tsx
+│   ├── reports/
+│   │   └── page.tsx
+│   ├── collection/
+│   │   └── page.tsx
 │   ├── layout.tsx
 │   └── page.tsx
 ├── assets/
