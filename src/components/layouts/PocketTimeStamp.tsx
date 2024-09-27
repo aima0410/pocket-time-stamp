@@ -287,6 +287,14 @@ export default function PocketTimeStamp() {
       nowSelect && setSelectedCollectionData(nowSelect);
     }
   }, [collectionData]);
+  // -------- useEffect：アクティビティが全消去されたとき --------
+  useEffect(() => {
+    if (activities.length === 0) {
+      // 初期のデモデータをセット
+      localStorage.setItem('activities', JSON.stringify(defaultActivities));
+      setActivities(defaultActivities);
+    }
+  }, [activities]);
 
   // -------- JSX --------
   return (
