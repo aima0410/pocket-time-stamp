@@ -2,12 +2,7 @@
 import Pokemon from 'src/types/Pokemon';
 import CollectionData from 'src/types/CollectionData';
 import { getRandomInt } from '@utils/calculate';
-import {
-  getRandomLevel,
-  getRandomDemoXP,
-  getRandomXP,
-  getRemainingReqExpForNext,
-} from '@utils/getLevelInfo';
+import { getRandomLevel, getRandomDemoXP, getRandomXP } from '@utils/getLevelInfo';
 import levelTable from '@assets/LevelTable';
 
 // -------- コレクションの初期データ --------
