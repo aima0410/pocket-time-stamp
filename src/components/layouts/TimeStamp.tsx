@@ -43,10 +43,10 @@ export default function TimeStamp({
   const trackTimedActivity = (newTimedActivity: string | null) => {
     setTimedActivity(newTimedActivity);
   };
-  const [expGained, setExpGained] = useState({ exp: 0, isEvolution: false });
+  const [expGained, setExpGained] = useState({ exp: 0, isEvolution: false, isLevelUp: false });
 
-  const trackExpGained = (exp: number, isEvolution: boolean) => {
-    setExpGained({ exp: exp, isEvolution: isEvolution });
+  const trackExpGained = (newInfo: { exp: number; isEvolution: boolean; isLevelUp: boolean }) => {
+    setExpGained(newInfo);
   };
 
   return (

@@ -6,6 +6,8 @@ import Message from '@ui-parts/Message';
 import CollectionData from 'src/types/CollectionData';
 // ---- Utils ----
 import { getRemainingReqExpForNext } from '@utils/getLevelInfo';
+// ---- Constants ----
+import levelTable from '@assets/LevelTable';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
 
@@ -88,7 +90,8 @@ export default function Home({ selectedCollectionData }: Props) {
                       letter-spacing: 0.1em;
                     `}
                   >
-                    {selectedCollectionData.XP}
+                    {selectedCollectionData.XP -
+                      levelTable[selectedCollectionData.level - 1].totalExp}
                   </span>
                 </span>
                 <span
@@ -100,12 +103,9 @@ export default function Home({ selectedCollectionData }: Props) {
                   `}
                   style={{
                     width: `${
-                      (selectedCollectionData.XP /
-                        (selectedCollectionData.XP +
-                          getRemainingReqExpForNext(
-                            selectedCollectionData.level,
-                            selectedCollectionData.XP,
-                          ))) *
+                      ((selectedCollectionData.XP -
+                        levelTable[selectedCollectionData.level - 1].totalExp) /
+                        levelTable[selectedCollectionData.level].requiredExp) *
                       100
                     }%`,
                   }}

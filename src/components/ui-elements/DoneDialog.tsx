@@ -8,12 +8,14 @@ import CollectionData from 'src/types/CollectionData';
 import { css } from '@kuma-ui/core';
 // ---- Utisl ----
 import { getRemainingReqExpForNext } from '@utils/getLevelInfo';
+// ---- Constans ----
+import levelTable from '@assets/LevelTable';
 
 // ========== 型定義 ===========
 interface Props {
   swithAppStatus: (newMode: AppStatus) => void;
   selectedCollectionData: CollectionData;
-  expGained: { exp: number; isEvolution: boolean };
+  expGained: { exp: number; isEvolution: boolean; isLevelUp: boolean };
 }
 
 // ========== コンポーネント関数 ===========
@@ -31,6 +33,8 @@ export default function DoneDialog({ swithAppStatus, selectedCollectionData, exp
             font-size: 40px;
             font-family: var(--yusei);
             line-height: 1.5em;
+            font-weight: 600;
+            font-family: var(--yusei);
             color: #666;
           `}
         >
@@ -42,9 +46,20 @@ export default function DoneDialog({ swithAppStatus, selectedCollectionData, exp
             </>
           ) : (
             <>
-              経験値を獲得！
-              <br />
-              やったね！
+              {expGained.isLevelUp ? (
+                <>
+                  おめでとう！
+                  <br />
+                  レベル{selectedCollectionData.level}
+                  になったよ！
+                </>
+              ) : (
+                <>
+                  経験値を獲得！
+                  <br />
+                  やったね！
+                </>
+              )}
             </>
           )}
         </h3>
@@ -70,8 +85,8 @@ export default function DoneDialog({ swithAppStatus, selectedCollectionData, exp
             className={css`
               display: inline-block;
               padding: 10px 15px;
-              color: #fff;
-              background-color: #999999;
+              color: #ffaa00;
+              background-color: #f7ff17;
               font-weight: 600;
               margin-right: 10px;
               border-radius: 6px;
@@ -81,7 +96,7 @@ export default function DoneDialog({ swithAppStatus, selectedCollectionData, exp
           </span>
           <span
             className={css`
-              color: #666;
+              color: #ffaa00;
               font-weight: 600;
             `}
           >
@@ -115,7 +130,7 @@ export default function DoneDialog({ swithAppStatus, selectedCollectionData, exp
                 letter-spacing: 0.1em;
               `}
             >
-              {selectedCollectionData.XP}
+              {selectedCollectionData.XP - levelTable[selectedCollectionData.level - 1].totalExp}
             </span>
           </span>
           <span
@@ -127,12 +142,9 @@ export default function DoneDialog({ swithAppStatus, selectedCollectionData, exp
             `}
             style={{
               width: `${
-                (selectedCollectionData.XP /
-                  (selectedCollectionData.XP +
-                    getRemainingReqExpForNext(
-                      selectedCollectionData.level,
-                      selectedCollectionData.XP,
-                    ))) *
+                ((selectedCollectionData.XP -
+                  levelTable[selectedCollectionData.level - 1].totalExp) /
+                  levelTable[selectedCollectionData.level].requiredExp) *
                 100
               }%`,
             }}

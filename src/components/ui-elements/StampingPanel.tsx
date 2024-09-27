@@ -24,7 +24,7 @@ interface Props {
   collectionData: Array<CollectionData>;
   updateCollectionData: (newData: Array<CollectionData>) => void;
   selectedCollectionData: CollectionData;
-  trackExpGained: (exp: number, isEvolution: boolean) => void;
+  trackExpGained: (newInfo: { exp: number; isEvolution: boolean; isLevelUp: boolean }) => void;
 }
 
 // ========== コンポーネント関数 ==========
@@ -144,7 +144,8 @@ export default function StampingPanel({
     if (targetGrownCollectionData) {
       const expGained = targetGrownCollectionData.XP - selectedCollectionData.XP;
       const isEvolution = targetGrownCollectionData.name !== selectedCollectionData.name;
-      trackExpGained(expGained, isEvolution);
+      const isLevelUp = targetGrownCollectionData.level !== selectedCollectionData.level;
+      trackExpGained({ exp: expGained, isEvolution, isLevelUp });
     }
   };
 
