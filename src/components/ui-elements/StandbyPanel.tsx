@@ -49,6 +49,7 @@ export default function StandbyPanel({ switchAppStatus, activities, trackTimedAc
           flex-direction: column;
           text-align: left;
           padding: 40px;
+          width: 100%;
           height: 100%;
         `}
       >
