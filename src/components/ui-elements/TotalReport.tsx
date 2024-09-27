@@ -63,7 +63,7 @@ export default function TotalReport({ totalData }: Props) {
               `}
               style={{
                 width: `${(data.totalTime / totalData[0].totalTime) * 100}%`,
-                backgroundColor: activityColors[i],
+                backgroundColor: activityColors[i] || '#7f7f7f',
               }}
             ></div>
           </li>
