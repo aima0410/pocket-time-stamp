@@ -17,8 +17,11 @@ interface TimeLineStyle {
   activity: string;
 }
 
+
+
 // ========== コンポーネント関数 ==========
 export default function TimeLine({ date, timeLine }: Props) {
+  // -------- useState：宣言 --------
   const [displayDate, setDisplayDate] = useState<string>('');
   const [lineStyles, setLineStyles] = useState<Array<TimeLineStyle>>([]);
   const [hoverInfo, setHoverInfo] = useState({
@@ -28,11 +31,13 @@ export default function TimeLine({ date, timeLine }: Props) {
     endTime: '',
   });
 
+  // -------- useEffect：date更新時 --------
   useEffect(() => {
     const [year, month, day] = date.split('/').map(Number);
     const nowDate = new Date();
     const processingDate = new Date(year, month - 1, day);
 
+    // タイムラインの見出し文を決める
     if (
       nowDate.getFullYear() === processingDate.getFullYear() &&
       nowDate.getMonth() === processingDate.getMonth() &&
@@ -47,10 +52,11 @@ export default function TimeLine({ date, timeLine }: Props) {
     }
   }, [date]);
 
+  // -------- useState：timeLine更新時 --------
   useEffect(() => {
+    // タイムラインのバーをスタイルするための情報を作成
     const styles: Array<TimeLineStyle> = timeLine.map((log) => {
       const [startHour, startMinutes] = log.startTime.split(':').map(Number);
-
       const [endHour, endMinutes] =
         log.endTime === '00:00' ? [24, 0] : log.endTime.split(':').map(Number);
 
@@ -59,9 +65,11 @@ export default function TimeLine({ date, timeLine }: Props) {
 
       return { start, end, activity: log.activity };
     });
+
     setLineStyles(styles);
   }, [timeLine]);
 
+  // -------- JSX --------
   return (
     <div
       className={css`

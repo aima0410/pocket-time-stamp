@@ -1,10 +1,13 @@
-// ---- Images ----
+// ---- Next ----
 import Image from 'next/image';
+// ---- Images ----
 import githubLogo from '@images/githubLogo.svg';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
 
+// ========== コンポーネント関数 ==========
 export default function VisitRepositoryButton() {
+  // -------- JSX --------
   return (
     <article>
       <a
