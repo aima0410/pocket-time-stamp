@@ -17,7 +17,64 @@ interface TimeLineStyle {
   activity: string;
 }
 
+// ========== CSS宣言 ==========
+const headingStyle = css`
+  display: grid;
+  place-items: center;
+  padding: 2px;
+  width: 56px;
+  height: 56px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: solid 2px #5d5d5d;
+  margin-right: 10px;
+  box-shadow: 2px 2px 6px rgba(84, 84, 84, 0.2);
+  text-align: center;
+  color: #424242;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1em;
+  white-space: pre-wrap;
+`;
 
+const timeScaleContainerStyle = css`
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  margin-bottom: 3px;
+  font-size: 10px;
+  list-style-type: none;
+`;
+
+const barStyle = css`
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background-color: #7a7a7a;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const hoverInfoStyle = css`
+  position: absolute;
+  z-index: 99;
+  top: 40px;
+  left: 100px;
+  color: #343434;
+  padding: 20px;
+  border-radius: 6px;
+  background-color: #ffffff;
+  white-space: pre-wrap;
+  pointer-events: none;
+  box-shadow: 0 4px 6px #969696;
+  line-height: 1.5em;
+`;
 
 // ========== コンポーネント関数 ==========
 export default function TimeLine({ date, timeLine }: Props) {
@@ -78,26 +135,7 @@ export default function TimeLine({ date, timeLine }: Props) {
       `}
     >
       {displayDate !== '' && (
-        <h3
-          className={css`
-            display: grid;
-            place-items: center;
-            padding: 2px;
-            width: 56px;
-            height: 56px;
-            background-color: #fff;
-            border-radius: 50%;
-            border: solid 2px #5d5d5d;
-            margin-right: 10px;
-            box-shadow: 2px 2px 6px rgba(84, 84, 84, 0.2);
-            text-align: center;
-            color: #424242;
-            font-size: 12px;
-            font-weight: 600;
-            line-height: 1em;
-            white-space: pre-wrap;
-          `}
-        >
+        <h3 className={headingStyle}>
           <span>{displayDate}</span>
         </h3>
       )}
@@ -105,18 +143,17 @@ export default function TimeLine({ date, timeLine }: Props) {
         <div className="timeline-board undefined">まだ記録がありません。</div>
       ) : (
         <div className="timeline-board">
-          <ol
-            className={css`
-              display: flex;
-              justify-content: space-between;
-              font-size: 10px;
-              margin-bottom: 3px;
-              padding: 0;
-              list-style-type: none;
-            `}
-          >
+          <ol className={timeScaleContainerStyle}>
             {Array.from({ length: 25 }, (_, i) => (
-              <li key={i} className={`hours ${i < 10 ? 'one' : 'ten'}`}>
+              <li
+                key={i}
+                className={`hours ${
+                  i === 24 &&
+                  css`
+                    text-align: right;
+                  `
+                }`}
+              >
                 {i}
               </li>
             ))}
@@ -126,27 +163,13 @@ export default function TimeLine({ date, timeLine }: Props) {
               position: relative;
               width: 100%;
               height: 20px;
-              /* background-color: #f0f0f0; */
               border-radius: 3px;
             `}
           >
             {lineStyles.map((style, i) => (
               <div
                 key={`${date}-${style.start}-${i}`}
-                className={css`
-                  position: absolute;
-                  top: 0;
-                  height: 100%;
-                  background-color: #7a7a7a;
-                  border-radius: 3px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  color: #fff;
-                  font-size: 12px;
-                  overflow: hidden;
-                  white-space: nowrap;
-                `}
+                className={barStyle}
                 style={{
                   left: `${(style.start / 24) * 100}%`,
                   width: `${((style.end - style.start) / 24) * 100}%`,
@@ -168,22 +191,7 @@ export default function TimeLine({ date, timeLine }: Props) {
             ))}
           </div>
           {hoverInfo.is && (
-            <div
-              className={css`
-                position: absolute;
-                z-index: 99;
-                top: 40px;
-                left: 100px;
-                color: #343434;
-                padding: 20px;
-                border-radius: 6px;
-                background-color: #ffffff;
-                white-space: pre-wrap;
-                pointer-events: none;
-                box-shadow: 0 4px 6px #969696;
-                line-height: 1.5em;
-              `}
-            >
+            <div className={hoverInfoStyle}>
               活動内容：{hoverInfo.activity}
               <br />
               開始時刻：{hoverInfo.startTime}
