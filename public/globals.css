@@ -90,18 +90,6 @@ button:disabled:hover {
   cursor: not-allowed;
 }
 
-button.repoTab {
-  width: 160px;
-  height: 40px;
-  padding: 0;
-  border-radius: 5px 5px 0 0;
-  margin-right: 10px;
-}
-
-button.repoTab:disabled {
-  background-color: #fff;
-}
-
 button.modalBtn {
   display: inline-block;
   border-radius: 6px;

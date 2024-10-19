@@ -1,3 +1,5 @@
+'use client';
+
 // ---- React ----
 import { useState } from 'react';
 // ---- Types ----
@@ -38,17 +40,19 @@ export default function TimeStamp({
   updateCollectionData,
   selectedCollectionData,
 }: Props) {
-  // ---- useState ----
+  // -------- useState：宣言 --------
   const [timedActivity, setTimedActivity] = useState<string | null>(null);
   const trackTimedActivity = (newTimedActivity: string | null) => {
     setTimedActivity(newTimedActivity);
   };
   const [expGained, setExpGained] = useState({ exp: 0, isEvolution: false, isLevelUp: false });
 
+  // -------- useState：stateの更新処理 --------
   const trackExpGained = (newInfo: { exp: number; isEvolution: boolean; isLevelUp: boolean }) => {
     setExpGained(newInfo);
   };
 
+  // -------- JSX --------
   return (
     <>
       <StandbyPanel

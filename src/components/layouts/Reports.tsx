@@ -1,7 +1,9 @@
+'use client';
+
 // ---- Next ----
 import Image from 'next/image';
 // ---- React ----
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 // ---- Types ----
 import ReportTab from 'src/types/ReportTab';
 import { DailyData, MonthlyData, TotalData } from 'src/types/ReportsData';
@@ -14,9 +16,69 @@ import TotalReport from '@ui-elements/TotalReport';
 import { createMonthlyData, createTotalData } from '@utils/createReportDataUtils';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
-import { ApiError } from 'next/dist/server/api-utils';
 
-// =========== 型定義 ==========
+// ========== CSS宣言 ==========
+const wrapperStyle = css`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 16px 16px 0;
+`;
+
+const noDataStyle = css`
+  font-size: 20px;
+  font-weight: 900;
+  color: #828282;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  line-height: 1.7em;
+`;
+
+const reloadButtonStyle = css`
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 5px;
+  right: 16px;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+`;
+
+const tabWrapperStyle = css`
+  display: flex;
+  justify-content: left;
+  width: 100%;
+`;
+
+const tabButtonStyle = css`
+  width: 160px;
+  height: 40px;
+  padding: 0;
+  border-radius: 5px 5px 0 0;
+  margin-right: 10px;
+  &:disabled {
+    background-color: #fff;
+  }
+`;
+
+const reportWrapperStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 90%;
+  border-radius: 0 10px 10px 10px;
+  background-color: #fff;
+`;
+
+// ========== 型定義 ==========
 interface Props {
   isDemo: boolean;
   dailyData: Array<DailyData>;
@@ -64,60 +126,15 @@ export default function Reports({
   // -------- JSX --------
   return (
     <>
-      <div
-        className={css`
-          position: relative;
-          width: 100%;
-          height: 100%;
-          padding: 16px 16px 0;
-        `}
-      >
+      <div className={wrapperStyle}>
         {dailyData.length === 0 ? (
-          <p
-            className={css`
-              font-size: 20px;
-              font-weight: 900;
-              color: #828282;
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              width: 100%;
-              height: 100%;
-              line-height: 1.7em;
-            `}
-          >
-            <span
-              className={css`
-                display: block;
-              `}
-            >
-              まだ記録がありません。
-            </span>
-            <span
-              className={css`
-                display: block;
-              `}
-            >
-              最初のタイムスタンプを作成してください。
-            </span>
+          <p className={noDataStyle}>
+            <span style={{ display: 'block' }}>まだ記録がありません。</span>
+            <span style={{ display: 'block' }}>最初のタイムスタンプを作成してください。</span>
           </p>
         ) : (
           <>
-            <button
-              className={css`
-                display: grid;
-                place-items: center;
-                position: absolute;
-                top: 5px;
-                right: 16px;
-                padding: 0;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-              `}
-              onClick={handleRecalculation}
-            >
+            <button className={reloadButtonStyle} onClick={handleRecalculation}>
               <Image
                 src={reloadIcon}
                 alt="レポート内容をリロードするボタン"
@@ -125,16 +142,10 @@ export default function Reports({
                 height={14}
               />
             </button>
-            <ul
-              className={css`
-                display: flex;
-                justify-content: left;
-                width: 100%;
-              `}
-            >
+            <ul className={tabWrapperStyle}>
               <li>
                 <button
-                  className="repoTab"
+                  className={tabButtonStyle}
                   onClick={() => trackSelectedTab('DayTab')}
                   disabled={selectedTab === 'DayTab'}
                 >
@@ -143,7 +154,7 @@ export default function Reports({
               </li>
               <li>
                 <button
-                  className="repoTab"
+                  className={tabButtonStyle}
                   onClick={() => trackSelectedTab('MonthTab')}
                   disabled={selectedTab === 'MonthTab'}
                 >
@@ -152,7 +163,7 @@ export default function Reports({
               </li>
               <li>
                 <button
-                  className="repoTab"
+                  className={tabButtonStyle}
                   onClick={() => trackSelectedTab('TotalTab')}
                   disabled={selectedTab === 'TotalTab'}
                 >
@@ -160,18 +171,7 @@ export default function Reports({
                 </button>
               </li>
             </ul>
-            <div
-              className={css`
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                width: 100%;
-                height: 90%;
-                border-radius: 0 10px 10px 10px;
-                background-color: #fff;
-              `}
-            >
+            <div className={reportWrapperStyle}>
               {selectedTab === 'DayTab' && <DailyReport dailyData={dailyData} />}
               {selectedTab === 'MonthTab' && <MonthlyReport monthlyData={monthlyData} />}
               {selectedTab === 'TotalTab' && <TotalReport totalData={totalData} />}

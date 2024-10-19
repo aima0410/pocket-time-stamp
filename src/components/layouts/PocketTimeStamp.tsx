@@ -20,7 +20,6 @@ import { createMonthlyData, createTotalData } from '@utils/createReportDataUtils
 import Loading from '@layouts/Loading';
 import Tutorial from '@layouts/Tutorial';
 import Header from '@layouts/Header';
-import TimeLine from '@ui-parts/TimeLine';
 import TabNav from '@layouts/TabNav';
 import Home from '@layouts/Home';
 import TimeStamp from '@layouts/TimeStamp';
@@ -383,32 +382,3 @@ export default function PocketTimeStamp() {
     </main>
   );
 }
-
-// ---- ポケモンIDのメモ ----
-// -- ピックアップ --
-// ラルトス280、281、282
-// ヒノアラシ155、156、157
-// ゴース92、93、94
-// ココドラ304、305、306
-// ポッチャマ393、394、395
-// フカマル443、444、445445
-
-// -- 別候補 --
-// ホゲータ909、910、911
-// ヒトモシ607、608、609
-// フシギダネ1、2，3
-// ヒトカゲ４，５，６
-// ゼニガメ７、８，９
-// イシツブテ74、75、76
-// ユニラン577、578、579
-// キバゴ610、611、612
-// フォッコ653、654、655
-// ケロマツ656、657、658
-// ヤヤマコ661、662、663
-// コフキムシ664、665、666
-// ジャラコ782、783、784
-// パも921、922、923
-// メッソン816、817、818
-// ココガラ821、822、823
-// アマカジ761、762、763
-// ヌメラ704、705、706

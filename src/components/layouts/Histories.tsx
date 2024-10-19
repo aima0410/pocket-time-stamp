@@ -1,5 +1,7 @@
+'use client';
+
 // ---- React ----
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 import LogData from 'src/types/LogData';
@@ -9,6 +11,13 @@ import EditLogPanel from '@ui-elements/EditLogPanel';
 import { DailyData } from 'src/types/ReportsData';
 // ---- KumaUI ---
 import { css } from '@kuma-ui/core';
+
+// ========== CSS宣言 ==========
+const wrapperStyle = css`
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+`;
 
 // ========== 型定義 ==========
 interface Props {
@@ -37,16 +46,10 @@ export default function Histories({
     setEditedLog(targetLog);
   };
 
+  // -------- JSX --------
   return (
     <>
-      <div
-        className={css`
-          width: 100%;
-          height: 100%;
-          padding: 0 10px;
-          overflow-y: scroll;
-        `}
-      >
+      <div className={wrapperStyle}>
         <LogsTable
           switchAppStatus={switchAppStatus}
           dailyData={dailyData}

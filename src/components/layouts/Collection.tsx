@@ -1,3 +1,5 @@
+'use client';
+
 // ---- Next ----
 import Image from 'next/image';
 // ---- React ----
@@ -8,6 +10,40 @@ import DefaultPokemonName from 'src/types/PokemonName';
 import CollectionData from 'src/types/CollectionData';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
+
+// ========== CSS宣言 ==========
+const wrapperStyle = css`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+  align-content: space-around;
+  height: 100%;
+`;
+
+const collectionStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  height: 45%;
+  border-radius: 10px;
+`;
+
+const imageBackgroundStyle = css`
+  padding: 8px;
+  border-radius: 50%;
+  background-color: #e4e4e45a;
+  margin-bottom: 20px;
+`;
+
+const pokemonNameStyle = css`
+  font-family: var(--yusei);
+  letter-spacing: 0.04em;
+  font-size: 20px;
+  margin-bottom: 10px;
+`;
 
 // ========== 型定義 ==========
 interface Props {
@@ -31,6 +67,7 @@ export default function Collection({ pokemonList, collectionData, updateCollecti
     updateCollectionData(updatedCollectionOrder);
     setSelectedPokemon(targetPokemon);
   };
+
   // -------- useEffect：初回マウント時 --------
   useEffect(() => {
     if (collectionData.length > 0) {
@@ -38,69 +75,27 @@ export default function Collection({ pokemonList, collectionData, updateCollecti
     }
   }, []);
 
+  // -------- JSX --------
   return (
-    <div
-      className={css`
-        height: 100%;
-      `}
-    >
-      <ul
-        className={css`
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-around;
-          align-items: flex-start;
-          align-content: space-around;
-          height: 100%;
-        `}
-      >
+    <div style={{ height: '100%' }}>
+      <ul className={wrapperStyle}>
         {collectionData.map((pokemon) => (
           <li
             key={pokemon.id}
             onClick={() => {
               trackSelectedPokemon(pokemon.name);
             }}
-            className={css`
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              width: 30%;
-              height: 45%;
-              border-radius: 10px;
-            `}
+            className={collectionStyle}
             style={{
               backgroundColor: pokemon.selected ? '#d799a1' : '#ddd',
               color: pokemon.selected ? '#fff' : '',
             }}
           >
-            <div
-              className={css`
-                padding: 8px;
-                border-radius: 50%;
-                background-color: #e4e4e45a;
-                margin-bottom: 20px;
-              `}
-            >
+            <div className={imageBackgroundStyle}>
               <Image src={pokemon.imageUrl} alt={pokemon.japaneseName} width={100} height={100} />
             </div>
-            <h3
-              className={css`
-                font-family: var(--yusei);
-                letter-spacing: 0.04em;
-                font-size: 20px;
-                margin-bottom: 10px;
-              `}
-            >
-              {pokemon.japaneseName}
-            </h3>
-            <p
-              className={css`
-                font-family: var(--yusei);
-              `}
-            >
-              レベル{pokemon.level}
-            </p>
+            <h3 className={pokemonNameStyle}>{pokemon.japaneseName}</h3>
+            <p style={{ fontFamily: 'var(--yusei)' }}>レベル{pokemon.level}</p>
           </li>
         ))}
       </ul>

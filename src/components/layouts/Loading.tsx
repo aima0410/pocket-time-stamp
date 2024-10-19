@@ -1,13 +1,17 @@
+'use client';
+
 // ---- React ----
 import { useRef } from 'react';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
 
+// ========== コンポーネント関数 ==========
 export default function Loading() {
   // -------- useRef --------
   const backScreenRef = useRef(null);
   const loadingRef = useRef(null);
 
+  // --------- JSX --------
   return (
     <div
       ref={backScreenRef}
