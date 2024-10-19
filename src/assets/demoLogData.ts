@@ -1,7 +1,7 @@
 // ---- Types ----
 import { DailyData, MonthlyData, TotalData } from 'src/types/ReportsData';
 
-// ========== 日ごと ==========
+// ========== デモデータ：日ごと ==========
 export const demoDailyData: Array<DailyData> = [
   // -------- 9月分の記録 --------
   {

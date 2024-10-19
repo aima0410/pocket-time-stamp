@@ -1,6 +1,7 @@
 // ---- Types ----
 import ExperienceTable from "src/types/Level";
 
+// ========== レベルデータ ==========
 const levelTable: ExperienceTable = [
   { level: 1, requiredExp: 0, totalExp: 0 },
   { level: 2, requiredExp: 200, totalExp: 200 },

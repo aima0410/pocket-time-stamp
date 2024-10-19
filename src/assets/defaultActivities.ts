@@ -1,3 +1,4 @@
+// ========== 初期のアクティビティリスト ==========
 const defaultActivities: Array<string> = [
   '睡眠',
   '食事',
