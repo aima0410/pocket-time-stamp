@@ -41,9 +41,11 @@ const timeScaleContainerStyle = css`
   display: flex;
   justify-content: space-between;
   padding: 0;
+  width: calc((100% / 24) + 100%);
   margin-bottom: 3px;
   font-size: 10px;
   list-style-type: none;
+  transform: translateX(calc(100% / 25 / 2 / -1));
 `;
 
 const barStyle = css`
@@ -154,7 +156,7 @@ export default function TimeLine({ date, timeLine }: Props) {
                   `
                 }`}
               >
-                {i}
+                {i !== 0 && i !== 24 && i}
               </li>
             ))}
           </ol>
