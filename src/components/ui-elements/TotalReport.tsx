@@ -1,3 +1,5 @@
+'use client';
+
 // ---- Types ----
 import { TotalData } from 'src/types/ReportsData';
 // ---- KumaUI ----
@@ -44,16 +46,12 @@ export default function TotalReport({ totalData }: Props) {
             className={css`
               width: 100%;
               margin-bottom: 10px;
+              font-size: 13px;
+              color: #3e3e3e;
               text-align: left;
             `}
           >
-            <div
-              className={css`
-                font-size: 13px;
-                color: #3e3e3e;
-                margin-bottom: 5px;
-              `}
-            >
+            <div style={{ marginBottom: '5px' }}>
               {data.activity} {Math.floor(data.totalTime / 60)}時間
             </div>
             <div

@@ -1,14 +1,35 @@
+'use client';
+
 // ---- React ----
 import { useEffect, useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 import LogData from 'src/types/LogData';
-import { DailyData, Line } from 'src/types/ReportsData';
+import { DailyData } from 'src/types/ReportsData';
 // ---- Utils ----
 import { exclusionSomeLogInDailyData } from '@utils/timeLineUtils';
 import insertLog from '@utils/insertLog';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
+
+// ==========  ==========
+const selectStyle = css`
+  padding: 20px 30px;
+  font-size: 20px;
+  font-weight: 600;
+  border: solid 2px #333;
+  border-radius: 6px;
+`;
+
+const warningTxtStyle = css`
+  position: absolute;
+  top: 5px;
+  left: 0;
+  text-align: center;
+  color: red;
+  width: 100%;
+  font-size: 13px;
+`;
 
 // ========== 型定義 ==========
 interface Props {
@@ -132,7 +153,7 @@ export default function EditLogPanel({
     trackEditedLog(null);
   };
 
-  // -------- useEffect --------
+  // -------- useEffect：初回マウント時 --------
   useEffect(() => {
     fixCurrentDate();
     validateTimes(unconfirmedNewLog.startTime, unconfirmedNewLog.endTime);
@@ -145,13 +166,7 @@ export default function EditLogPanel({
         <ul>
           <li className="editLogList">
             <select
-              className={css`
-                padding: 20px 30px;
-                font-size: 20px;
-                font-weight: 600;
-                border: solid 2px #333;
-                border-radius: 6px;
-              `}
+              className={selectStyle}
               value={unconfirmedNewLog.activity ?? editedLog.activity}
               onChange={(e) => {
                 const newSelectedActivity = e.target.value;
@@ -216,21 +231,7 @@ export default function EditLogPanel({
                   position: relative;
                 `}
               >
-                {timeWarning && (
-                  <p
-                    className={css`
-                      position: absolute;
-                      top: 5px;
-                      left: 0;
-                      text-align: center;
-                      color: red;
-                      width: 100%;
-                      font-size: 13px;
-                    `}
-                  >
-                    {timeWarning}
-                  </p>
-                )}
+                {timeWarning && <p className={warningTxtStyle}>{timeWarning}</p>}
               </div>
             </div>
           </li>

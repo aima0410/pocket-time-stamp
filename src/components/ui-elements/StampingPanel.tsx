@@ -1,3 +1,5 @@
+'use client';
+
 // ---- React ----
 import { useState, useEffect } from 'react';
 // ---- Types ----
@@ -12,6 +14,20 @@ import { sortTimelineDescending } from '@utils/sortUtils';
 import { grownCollection } from '@utils/collectionUtils';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
+
+// ========== CSS宣言 ==========
+const hoverMessageStyle = css`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  color: #4d4d4d;
+  z-index: 9999;
+  padding: 30px;
+  box-shadow: 0 3px 6px #3333339c;
+  background-color: #ffb0d8;
+  line-height: 1.7em;
+  border-radius: 10px;
+`;
 
 // ========== 型定義 ==========
 interface Props {
@@ -212,32 +228,10 @@ export default function StampingPanel({
   // -------- JSX --------
   return (
     <>
-      <div className="modal-back">
-        <div
-          className={`modal ${css`
-            justify-content: center;
-            align-items: center;
-            padding-top: 80px;
-            overflow-y: hidden;
-          `}`}
-        >
+      <div className="modal-back stamping-panel">
+        <div className="modal">
           {isHoverMessage && (
-            <div
-              className={css`
-                position: absolute;
-                top: 16px;
-                right: 16px;
-                color: #4d4d4d;
-                z-index: 9999;
-                padding: 30px;
-                box-shadow: 0 3px 6px #3333339c;
-                background-color: #ffb0d8;
-                line-height: 1.7em;
-                border-radius: 10px;
-              `}
-            >
-              作成後にRecentHistoriesから編集できるよ！
-            </div>
+            <div className={hoverMessageStyle}>作成後にRecentHistoriesから編集できるよ！</div>
           )}
           <div
             className={css`

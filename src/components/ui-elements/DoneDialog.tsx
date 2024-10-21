@@ -1,3 +1,5 @@
+'use client';
+
 // ---- Next ----
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -6,10 +8,66 @@ import AppStatus from 'src/types/AppStatus';
 import CollectionData from 'src/types/CollectionData';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
-// ---- Utisl ----
-import { getRemainingReqExpForNext } from '@utils/getLevelInfo';
 // ---- Constans ----
 import levelTable from '@assets/LevelTable';
+
+// ========== CSS宣言 ==========
+const headingStyle = css`
+  font-size: 40px;
+  font-family: var(--yusei);
+  line-height: 1.5em;
+  font-weight: 600;
+  font-family: var(--yusei);
+  color: #666;
+`;
+
+const pokemonImgStyle = css`
+  margin-top: 30px;
+  margin-bottom: 30px;
+  width: 100px;
+  height: 100px;
+`;
+
+const expTxtWrapperStyle = css`
+  margin-bottom: 30px;
+  font-size: 30px;
+  color: #ffaa00;
+`;
+
+const expTxtStyle = css`
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #f7ff17;
+  font-weight: 600;
+  margin-right: 10px;
+  border-radius: 6px;
+`;
+
+const expBarWrapperStyle = css`
+  position: relative;
+  width: 450px;
+  height: 50px;
+  background-color: #bfbfbf;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 30px;
+`;
+
+const expBarCaptionStyle = css`
+  position: absolute;
+  top: 16px;
+  left: 30px;
+  display: block;
+  color: #fff;
+  margin-bottom: 10px;
+`;
+
+const expBarStyle = css`
+  display: block;
+  background-color: #d07e9c;
+  height: 50px;
+  border-radius: 10px;
+`;
 
 // ========== 型定義 ===========
 interface Props {
@@ -20,24 +78,14 @@ interface Props {
 
 // ========== コンポーネント関数 ===========
 export default function DoneDialog({ swithAppStatus, selectedCollectionData, expGained }: Props) {
+  // -------- useRouter --------
   const router = useRouter();
+
+  // -------- JSX --------
   return (
     <div className="modal-back">
-      <div
-        className={`modal ${css`
-          justify-content: center;
-        `}`}
-      >
-        <h3
-          className={css`
-            font-size: 40px;
-            font-family: var(--yusei);
-            line-height: 1.5em;
-            font-weight: 600;
-            font-family: var(--yusei);
-            color: #666;
-          `}
-        >
+      <div className="modal" style={{ justifyContent: 'center' }}>
+        <h3 className={headingStyle}>
           {expGained.isEvolution ? (
             <>
               おめでとう！
@@ -68,78 +116,21 @@ export default function DoneDialog({ swithAppStatus, selectedCollectionData, exp
           alt={selectedCollectionData.japaneseName}
           width={100}
           height={100}
-          className={css`
-            margin-top: 30px;
-            margin-bottom: 30px;
-            width: 100px;
-            height: 100px;
-          `}
+          className={pokemonImgStyle}
         />
-        <div
-          className={css`
-            margin-bottom: 30px;
-            font-size: 30px;
-          `}
-        >
-          <span
-            className={css`
-              display: inline-block;
-              padding: 10px 15px;
-              color: #ffaa00;
-              background-color: #f7ff17;
-              font-weight: 600;
-              margin-right: 10px;
-              border-radius: 6px;
-            `}
-          >
-            EXP
-          </span>
-          <span
-            className={css`
-              color: #ffaa00;
-              font-weight: 600;
-            `}
-          >
-            ＋{expGained.exp}
-          </span>
+        <div className={expTxtWrapperStyle}>
+          <span className={expTxtStyle}>EXP</span>
+          <span style={{ fontWeight: 600 }}>＋{expGained.exp}</span>
         </div>
-        <div
-          className={css`
-            position: relative;
-            width: 450px;
-            height: 50px;
-            background-color: #bfbfbf;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 30px;
-          `}
-        >
-          <span
-            className={css`
-              position: absolute;
-              top: 16px;
-              left: 30px;
-              display: block;
-              color: #fff;
-              margin-bottom: 10px;
-            `}
-          >
+        <div className={expBarWrapperStyle}>
+          <span className={expBarCaptionStyle}>
             新しい経験値：
-            <span
-              className={css`
-                letter-spacing: 0.1em;
-              `}
-            >
+            <span style={{ letterSpacing: '0.1em' }}>
               {selectedCollectionData.XP - levelTable[selectedCollectionData.level - 1].totalExp}
             </span>
           </span>
           <span
-            className={css`
-              display: block;
-              background-color: #d07e9c;
-              height: 50px;
-              border-radius: 10px;
-            `}
+            className={expBarStyle}
             style={{
               width: `${
                 ((selectedCollectionData.XP -
@@ -148,12 +139,10 @@ export default function DoneDialog({ swithAppStatus, selectedCollectionData, exp
                 100
               }%`,
             }}
-          ></span>
+          />
         </div>
         <button
-          className={css`
-            background-color: #e096b2;
-          `}
+          style={{ backgroundColor: '#e096b2' }}
           onClick={() => {
             swithAppStatus('StandbyMode');
             router.push('/');

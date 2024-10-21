@@ -104,7 +104,7 @@ export default function Home({ selectedCollectionData }: Props) {
                       100
                     }%`,
                   }}
-                ></span>
+                />
               </div>
             </div>
           </>

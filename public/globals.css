@@ -36,6 +36,7 @@ html {
   border-radius: 20px;
   margin-bottom: 50px;
 }
+
 .board.app {
   flex-direction: row;
   justify-content: space-between;
@@ -214,6 +215,13 @@ nav {
   height: 600px;
   overflow-y: scroll;
   border-radius: 10px;
+}
+
+.stamping-panel .modal {
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
+  overflow-y: hidden;
 }
 
 /* ========== 入力 ========== */

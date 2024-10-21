@@ -1,3 +1,5 @@
+'use client';
+
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 // ---- KumaUI ----
@@ -40,6 +42,7 @@ export default function StandbyPanel({ switchAppStatus, activities, trackTimedAc
     );
   });
 
+  // -------- JSX --------
   return (
     <>
       <div

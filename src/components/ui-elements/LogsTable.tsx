@@ -1,13 +1,26 @@
+'use client';
+
 // ---- React ----
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 import LogData from 'src/types/LogData';
-import { DailyData, Line } from 'src/types/ReportsData';
+import { DailyData } from 'src/types/ReportsData';
 // ---- Utils ----
 import { calculateWorkingTime } from '@utils/calculateTimeUtils';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
+
+// ========== CSS宣言 ==========
+const tableStyle = css`
+  overflow-y: scroll;
+  width: 100%;
+`;
+
+const buttonStyle = css`
+  padding: 10px 20px;
+  font-size: 14px;
+`;
 
 // ========== 型定義 ==========
 interface Props {
@@ -60,12 +73,7 @@ export default function LogsTable({
   // -------- JSX --------
   return (
     <div className="logs">
-      <table
-        className={css`
-          overflow-y: scroll;
-          width: 100%;
-        `}
-      >
+      <table className={tableStyle}>
         <thead>
           <tr>
             <th>日程</th>
@@ -86,23 +94,14 @@ export default function LogsTable({
               <td>{calculateWorkingTime(log)}</td>
               <td>{log.activity}</td>
               <td>
-                <button
-                  className={css`
-                    padding: 10px 20px;
-                    font-size: 14px;
-                  `}
-                  onClick={() => handleClickEditButton(log)}
-                >
+                <button className={buttonStyle} onClick={() => handleClickEditButton(log)}>
                   編集
                 </button>
               </td>
               <td>
                 <button
-                  className={css`
-                    padding: 10px 20px;
-                    font-size: 14px;
-                    background-color: #333;
-                  `}
+                  className={buttonStyle}
+                  style={{ backgroundColor: '#333' }}
                   onClick={() => handleClickDeleteButton(log)}
                 >
                   削除
@@ -113,13 +112,7 @@ export default function LogsTable({
         </tbody>
       </table>
       {visibleItems < displayLogs.length && (
-        <button
-          className={css`
-            margin-top: 20px;
-            margin-bottom: 20px;
-          `}
-          onClick={handleLoadMore}
-        >
+        <button style={{ margin: '20px 0' }} onClick={handleLoadMore}>
           もっと見る
         </button>
       )}

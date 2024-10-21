@@ -1,3 +1,5 @@
+'use client';
+
 // ---- Next ----
 import Image from 'next/image';
 // ---- React ----
@@ -8,6 +10,89 @@ import { MonthlyData } from 'src/types/ReportsData';
 import arrowIcon from '@assets/images/arrow.svg';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
+
+// ========== CSS宣言 ==========
+const wrapperStyle = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const monthlyOlStyle = css`
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  height: 100%;
+`;
+
+const monthWrapperStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: calc(1 / 3 * 100%);
+  height: 80%;
+  border-left: solid 1px #333;
+`;
+
+const heading3Style = css`
+  font-size: 20px;
+  font-weight: 600;
+  color: #666;
+  text-align: center;
+  margin-bottom: 30px;
+`;
+
+const recordOlStyle = css`
+  margin-top: 10px;
+  text-align: justify;
+  width: 180px;
+  height: 40%;
+  overflow-y: scroll;
+`;
+
+const recordListStyle = css`
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 5px;
+  width: 100%;
+  font-size: 13px;
+`;
+
+const arrowButtonStyle = css`
+  display: grid;
+  place-items: center;
+  padding: 0;
+  width: 20px;
+  height: 100px;
+  border-radius: 5px;
+  margin: 0 20px;
+`;
+
+const arrowImgStyle = css`
+  display: block;
+  width: 14px;
+  height: 14px;
+`;
+
+const colorCircleStyle = css`
+  position: relative;
+  top: 2px;
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  margin-right: 5px;
+`;
+
+const activityNameStyle = css`
+  display: inline-block;
+  width: 70%;
+`;
 
 // ========== 型定義 ==========
 interface Props {
@@ -50,6 +135,7 @@ export default function MonthlyReport({ monthlyData }: Props) {
       height: '150px',
       borderRadius: '50%',
       background: `conic-gradient(${gradientStops.join(', ')})`,
+      marginBottom: '20px',
     };
   };
 
@@ -67,35 +153,15 @@ export default function MonthlyReport({ monthlyData }: Props) {
 
   // -------- JSX --------
   return (
-    <div
-      className={css`
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-      `}
-    >
+    <div className={wrapperStyle}>
       <button
-        className={css`
-          display: grid;
-          place-items: center;
-          padding: 0;
-          width: 20px;
-          height: 100px;
-          border-radius: 5px;
-          margin: 0 20px;
-        `}
+        className={arrowButtonStyle}
         onClick={handleLoadPrev}
         disabled={visibleItems === monthlyData.length - 3 || monthlyData.length <= 3}
       >
         <Image
-          className={css`
-            display: block;
-            width: 14px;
-            height: 14px;
-            transform: rotate(-90deg);
-          `}
+          className={arrowImgStyle}
+          style={{ transform: 'rotate(-90deg)' }}
           src={arrowIcon}
           alt="前のログを表示"
           width={14}
@@ -103,47 +169,17 @@ export default function MonthlyReport({ monthlyData }: Props) {
         />
       </button>
 
-      <ol
-        className={css`
-          display: flex;
-          flex-direction: row-reverse;
-          justify-content: space-between;
-          align-items: center;
-          width: 80%;
-          height: 100%;
-        `}
-      >
+      <ol className={monthlyOlStyle}>
         {monthlyData.slice(visibleItems, visibleItems + 3).map((data, i) => (
           <li
-            className={css`
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-start;
-              align-items: center;
-              width: calc(1 / 3 * 100%);
-              height: 80%;
-              border-left: solid 1px #333;
-            `}
+            className={monthWrapperStyle}
             key={data.date}
             style={{ borderRight: i === 0 ? 'solid 1px #333' : 'none' }}
           >
-            <h3
-              className={css`
-                font-size: 20px;
-                font-weight: 600;
-                color: #666;
-                text-align: center;
-                margin-bottom: 30px;
-              `}
-            >
-              {data.date}
-            </h3>
+            <h3 className={heading3Style}>{data.date}</h3>
 
             {/* CSS円グラフの追加 */}
             <div
-              className={css`
-                margin-bottom: 20px;
-              `}
               style={generatePieChart(
                 data.recordedTime.map((log, i) => ({
                   activity: log.activity,
@@ -152,46 +188,14 @@ export default function MonthlyReport({ monthlyData }: Props) {
                 })),
               )}
             />
-            <ol
-              className={css`
-                margin-top: 10px;
-                text-align: justify;
-                width: 180px;
-                height: 40%;
-                overflow-y: scroll;
-              `}
-            >
+            <ol className={recordOlStyle}>
               {data.recordedTime.map((log, i) => (
-                <li
-                  key={`${data.date}-${log.activity}`}
-                  className={css`
-                    display: flex;
-                    justify-content: flex-start;
-                    margin-bottom: 5px;
-                    width: 100%;
-                    font-size: 13px;
-                  `}
-                >
+                <li key={`${data.date}-${log.activity}`} className={recordListStyle}>
                   <span
-                    className={css`
-                      position: relative;
-                      top: 2px;
-                      display: block;
-                      width: 13px;
-                      height: 13px;
-                      border-radius: 50%;
-                      margin-right: 5px;
-                    `}
+                    className={colorCircleStyle}
                     style={{ backgroundColor: activityColors[i] || '#CCCCCC' }}
                   />
-                  <span
-                    className={css`
-                      display: inline-block;
-                      width: 70%;
-                    `}
-                  >
-                    {log.activity}
-                  </span>
+                  <span className={activityNameStyle}>{log.activity}</span>
                   <span>{Math.floor(log.totalTime / 60)}</span>
                 </li>
               ))}
@@ -200,26 +204,10 @@ export default function MonthlyReport({ monthlyData }: Props) {
         ))}
       </ol>
 
-      <button
-        className={css`
-          display: grid;
-          place-items: center;
-          padding: 0;
-          width: 20px;
-          height: 100px;
-          border-radius: 5px;
-          margin: 0 20px;
-        `}
-        onClick={handleLoadNext}
-        disabled={visibleItems === 0}
-      >
+      <button className={arrowButtonStyle} onClick={handleLoadNext} disabled={visibleItems === 0}>
         <Image
-          className={css`
-            display: block;
-            width: 14px;
-            height: 14px;
-            transform: rotate(90deg);
-          `}
+          className={arrowImgStyle}
+          style={{ transform: 'rotate(90deg)' }}
           src={arrowIcon}
           alt="次のログを表示"
           width={14}

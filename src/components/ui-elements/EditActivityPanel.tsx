@@ -1,10 +1,51 @@
+'use client';
+
 // ---- React ----
-import { mergeIdenticalActivity } from '@utils/activityUtils';
 import { useState } from 'react';
+// ---- Utils ----
+import { mergeIdenticalActivity } from '@utils/activityUtils';
 // ---- Types ----
 import AppStatus from 'src/types/AppStatus';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
+
+// ========== CSS宣言 ===========
+const heading3Style = css`
+  font-size: 30px;
+  text-align: center;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 30px;
+`;
+
+const ulStyle = css`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 390px;
+`;
+
+const liStyle = css`
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+const activityTxtStyle = css`
+  display: block;
+  width: 200px;
+  padding: 10px 3px;
+  text-align: left;
+  margin-right: 10px;
+  border: solid 2px #666;
+`;
+
+const confirmButtonStyle = css`
+  margin-top: 24px;
+  width: 80%;
+`;
 
 // ========== 型定義 ==========
 interface Props {
@@ -85,40 +126,15 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
     switchAppStatus('StandbyMode');
   };
 
+  // -------- JSX --------
   return (
     <div className="modal-back">
       <section className="modal">
-        <h3
-          className={css`
-            font-size: 30px;
-            text-align: center;
-            font-weight: 600;
-            color: #666;
-            margin-bottom: 30px;
-          `}
-        >
-          アクティビティの編集
-        </h3>
-        <ul
-          className={css`
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            width: 390px;
-          `}
-        >
+        <h3 className={heading3Style}>アクティビティの編集</h3>
+        <ul className={ulStyle}>
           {unconfirmedActivityList.map((activity) =>
             editedActivity === activity ? (
-              <li
-                key={activity}
-                className={css`
-                  display: flex;
-                  width: 100%;
-                  margin-bottom: 20px;
-                `}
-              >
+              <li key={activity} className={liStyle}>
                 <input
                   type="text"
                   value={inputValue}
@@ -146,26 +162,12 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
                 {errorMessage}
               </li>
             ) : (
-              <li
-                key={activity}
-                className={css`
-                  display: flex;
-                  justify-content: flex-start;
-                  margin-bottom: 20px;
-                `}
-              >
+              <li key={activity} className={liStyle} style={{ justifyContent: 'flex-start' }}>
                 <span
                   onClick={() => {
                     handleClickEditButton(activity);
                   }}
-                  className={css`
-                    display: block;
-                    width: 200px;
-                    padding: 10px 3px;
-                    text-align: left;
-                    margin-right: 10px;
-                    border: solid 2px #666;
-                  `}
+                  className={activityTxtStyle}
                 >
                   {activity}
                 </span>
@@ -181,13 +183,7 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
               </li>
             ),
           )}
-          <li
-            className={css`
-              display: flex;
-              width: 100%;
-              margin-bottom: 20px;
-            `}
-          >
+          <li className={liStyle}>
             {isCreateNewActivity ? (
               <>
                 <input
@@ -238,10 +234,7 @@ export default function EditActivityPanel({ switchAppStatus, activites, updateAc
           </li>
         </ul>
         <button
-          className={css`
-            margin-top: 24px;
-            width: 80%;
-          `}
+          className={confirmButtonStyle}
           onClick={handleClickCompleteButton}
           disabled={editedActivity !== null}
         >
