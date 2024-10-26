@@ -29,6 +29,63 @@ const hoverMessageStyle = css`
   border-radius: 10px;
 `;
 
+const containerStyle = css`
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+border-radius: 10px;
+padding: 50px 70px;
+border: solid 1px #333;
+margin-bottom: 30px;
+`;
+
+const tableStyle = css`
+  position: relative;
+  padding-top: 30px;
+  margin-bottom: 30px;
+`;
+
+const h3Style = css`
+  padding-top: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #545454;
+`;
+
+const inputWrapperStyle = css`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  left: 25px;
+  margin-bottom: 10px;
+`;
+
+const endTimeInputStyle = css`
+  width: 100px;
+  text-align: center;
+  font-size: 20px;
+  padding-left: 8px;
+  margin-right: 10px;
+`;
+
+const nowTimeButtonStyle = css`
+  display: block;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  border-radius: 50%;
+`;
+
+const errorMessageStyle = css`
+  margin-bottom: 10px;
+  color: #ea4b4b;
+  font-size: 13px;
+`;
+
 // ========== 型定義 ==========
 interface Props {
   switchAppStatus: (newMode: AppStatus) => void;
@@ -217,6 +274,7 @@ export default function StampingPanel({
     trackTimedLogInfo(newLog);
   }, []);
 
+  // -------- useEffect --------
   useEffect(() => {
     if (timedLog.startTime === enteredEndTime) {
       setErrorMessage('終了時刻を変更してください。');
@@ -227,127 +285,69 @@ export default function StampingPanel({
 
   // -------- JSX --------
   return (
-    <>
-      <div className="modal-back stamping-panel">
-        <div className="modal">
-          {isHoverMessage && (
-            <div className={hoverMessageStyle}>作成後にRecentHistoriesから編集できるよ！</div>
-          )}
-          <div
-            className={css`
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              border-radius: 10px;
-              padding: 50px 70px;
-              border: solid 1px #333;
-              margin-bottom: 30px;
-            `}
+    <div className="modal-back stamping-panel">
+      <div className="modal">
+        {isHoverMessage && (
+          <div className={hoverMessageStyle}>作成後にRecentHistoriesから編集できるよ！</div>
+        )}
+        <div
+          className={containerStyle}
+        >
+          <table
+            onMouseOver={() => {
+              handleMouseHover(true);
+            }}
+            onMouseLeave={() => {
+              handleMouseHover(false);
+            }}
+            className={tableStyle}
           >
-            <table
-              onMouseOver={() => {
-                handleMouseHover(true);
-              }}
-              onMouseLeave={() => {
-                handleMouseHover(false);
-              }}
-              className={css`
-                position: relative;
-                padding-top: 30px;
-                margin-bottom: 30px;
-              `}
-            >
-              <tbody className="stampMode">
-                <tr>
-                  <th>活動内容</th>
-                  <td>{timedActivity}</td>
-                </tr>
-                <tr>
-                  <th>日　　程</th>
-                  <td>{timedLog.date}</td>
-                </tr>
-                <tr>
-                  <th>開始時刻</th>
-                  <td>{timedLog.startTime}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div>
-              <h3
-                className={css`
-                  padding-top: 10px;
-                  font-size: 20px;
-                  font-weight: 600;
-                  margin-bottom: 16px;
-                  color: #545454;
-                `}
-              >
-                終了時刻
-              </h3>
-              <div
-                className={css`
-                  display: flex;
-                  justify-content: center;
-                  position: relative;
-                  left: 25px;
-                  margin-bottom: 10px;
-                `}
-              >
-                <input
-                  type="time"
-                  value={enteredEndTime}
-                  min={timedLog.startTime}
-                  onChange={(e) => {
-                    const newEndTime = e.target.value;
-                    handleChangeEndTimeInput(newEndTime);
-                  }}
-                  className={css`
-                    width: 100px;
-                    text-align: center;
-                    font-size: 20px;
-                    padding-left: 8px;
-                    margin-right: 10px;
-                  `}
-                  autoFocus
-                />
-                <button
-                  className={css`
-                    display: block;
-                    width: 60px;
-                    height: 60px;
-                    padding: 0;
-                    margin: 0;
-                    font-size: 12px;
-                    border-radius: 50%;
-                  `}
-                  onClick={handleClickGetNowTimeButton}
-                >
-                  いま
-                </button>
-              </div>
-              <div
-                className={css`
-                  margin-bottom: 10px;
-                  color: #ea4b4b;
-                  font-size: 13px;
-                `}
-              >
-                {errorMessage}
-              </div>
+            <tbody className="stampMode">
+              <tr>
+                <th>活動内容</th>
+                <td>{timedActivity}</td>
+              </tr>
+              <tr>
+                <th>日　　程</th>
+                <td>{timedLog.date}</td>
+              </tr>
+              <tr>
+                <th>開始時刻</th>
+                <td>{timedLog.startTime}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            <h3 className={h3Style}>終了時刻</h3>
+            <div className={inputWrapperStyle}>
+              <input
+                type="time"
+                value={enteredEndTime}
+                min={timedLog.startTime}
+                onChange={(e) => {
+                  const newEndTime = e.target.value;
+                  handleChangeEndTimeInput(newEndTime);
+                }}
+                className={endTimeInputStyle}
+                autoFocus
+              />
+              <button className={nowTimeButtonStyle} onClick={handleClickGetNowTimeButton}>
+                いま
+              </button>
             </div>
+            <div className={errorMessageStyle}>{errorMessage}</div>
           </div>
-          <button
-            onClick={handleClickCompleteTimerButton}
-            disabled={timedLog.startTime === enteredEndTime}
-          >
-            タイマー終了
-          </button>
-          <button className="cancel" onClick={handleClickCancelTimerButton}>
-            キャンセル
-          </button>
         </div>
+        <button
+          onClick={handleClickCompleteTimerButton}
+          disabled={timedLog.startTime === enteredEndTime}
+        >
+          タイマー終了
+        </button>
+        <button className="cancel" onClick={handleClickCancelTimerButton}>
+          キャンセル
+        </button>
       </div>
-    </>
+    </div>
   );
 }
