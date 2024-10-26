@@ -5,6 +5,46 @@ import AppStatus from 'src/types/AppStatus';
 // ---- KumaUI ----
 import { css } from '@kuma-ui/core';
 
+// ========== CSS宣言 ==========
+const wrapperStyle = css`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 40px;
+  width: 100%;
+  height: 100%;
+`;
+
+const h2Style = css`
+  padding-left: 3px;
+  margin-bottom: 40px;
+  color: #464646;
+  font-size: 30px;
+  font-weight: 600;
+`;
+
+const ulStyle = css`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  align-items: flex-start;
+  align-content: flex-start;
+  width: 100%;
+  height: 80%;
+  overflow-y: scroll;
+`;
+
+const aStyle = css`
+  position: absolute;
+  left: 45px;
+  bottom: 20px;
+  color: #577dde;
+  &:hover {
+    color: #8aa6ed;
+  }
+`;
+
 // ========== 型定義 ===========
 interface Props {
   switchAppStatus: (newMode: AppStatus) => void;
@@ -45,57 +85,16 @@ export default function StandbyPanel({ switchAppStatus, activities, trackTimedAc
   // -------- JSX --------
   return (
     <>
-      <div
-        className={css`
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          text-align: left;
-          padding: 40px;
-          width: 100%;
-          height: 100%;
-        `}
-      >
-        <h2
-          className={css`
-            padding-left: 3px;
-            margin-bottom: 40px;
-            color: #464646;
-            font-size: 30px;
-            font-weight: 600;
-          `}
-        >
-          新規タイムスタンプを作成
-        </h2>
-        <ul
-          className={css`
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: left;
-            align-items: flex-start;
-            align-content: flex-start;
-            width: 100%;
-            height: 80%;
-            overflow-y: scroll;
-          `}
-        >
-          {activitiesList}
-        </ul>
+      <div className={wrapperStyle}>
+        <h2 className={h2Style}>新規タイムスタンプを作成</h2>
+        <ul className={ulStyle}>{activitiesList}</ul>
         <a
           href=""
           onClick={(e) => {
             e.preventDefault();
             switchAppStatus('EditActivitiesMode');
           }}
-          className={css`
-            position: absolute;
-            left: 45px;
-            bottom: 20px;
-            color: #577dde;
-            &:hover {
-              color: #8aa6ed;
-            }
-          `}
+          className={aStyle}
         >
           アクティビティを編集する
         </a>
